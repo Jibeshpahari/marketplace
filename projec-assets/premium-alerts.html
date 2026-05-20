@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Premium Alerts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #0f0f11;
+    --surface:   #18181c;
+    --surface2:  #222228;
+    --border:    rgba(255,255,255,.08);
+    --border2:   rgba(255,255,255,.14);
+    --text:      #f0f0f2;
+    --muted:     #888896;
+    --hint:      #55555e;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 26px;
+    --font:      'DM Sans', system-ui, sans-serif;
+    --mono:      'DM Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding:2.5rem 1.5rem}
+  h1{font-size:15px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.5rem}
+
+  /* ── Trigger grid ───────────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:3rem}
+  .trig{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;cursor:pointer;text-align:left;transition:border-color .18s,transform .12s,background .18s;position:relative;overflow:hidden}
+  .trig::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s}
+  .trig:hover{border-color:var(--border2);transform:translateY(-2px)}
+  .trig:hover::before{opacity:1}
+  .trig:active{transform:scale(.97)}
+  .t-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:18px}
+  .t-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+  .t-desc{font-size:11px;color:var(--hint);line-height:1.4}
+  .t-shortcut{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:10px;color:var(--hint);background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 5px}
+
+  /* ── Overlay ─────────────────────────────────── */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none;transition:background .25s;padding:1rem}
+  .overlay.open{background:rgba(0,0,0,.7);pointer-events:all;backdrop-filter:blur(4px)}
+
+  /* ── Popup ───────────────────────────────────── */
+  .popup{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem 1.75rem 1.5rem;max-width:370px;width:100%;text-align:center;transform:scale(.86) translateY(12px);opacity:0;transition:transform .28s cubic-bezier(.34,1.52,.64,1),opacity .2s;position:relative;overflow:hidden}
+  .overlay.open .popup{transform:scale(1) translateY(0);opacity:1}
+  .popup-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;opacity:.06;pointer-events:none}
+
+  /* Badge */
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:.05em;padding:4px 11px;border-radius:99px;margin-bottom:16px;text-transform:uppercase}
+
+  /* Icon ring */
+  .icon-ring{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px;position:relative}
+  .icon-ring::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px dashed currentColor;opacity:.2;animation:spin 12s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .popup h2{font-size:20px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.25}
+  .popup p{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:1.5rem}
+
+  /* Progress */
+  .progress-wrap{background:var(--surface2);border-radius:99px;height:5px;margin-bottom:1.25rem;overflow:hidden}
+  .progress-bar{height:100%;border-radius:99px;position:relative;overflow:hidden}
+  .progress-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 1.5s infinite}
+  @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+  /* Checklist */
+  .checklist{text-align:left;margin-bottom:1.25rem;display:flex;flex-direction:column;gap:6px}
+  .check-row{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);padding:8px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border)}
+  .check-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px}
+
+  /* Tags */
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:1.25rem}
+  .tag{font-size:12px;font-weight:500;padding:5px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
+  .tag.on{border-color:transparent}
+
+  /* Input */
+  .field{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 13px;font-size:13px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s;margin-bottom:.875rem}
+  .field:focus{border-color:#7c6af7}
+  .field-label{display:block;font-size:11px;font-weight:600;color:var(--hint);letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px;text-align:left}
+
+  /* Steps */
+  .step-track{display:flex;align-items:center;gap:0;margin-bottom:1.5rem;justify-content:center}
+  .step-node{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;border:1.5px solid var(--border);color:var(--hint);background:var(--surface2);flex-shrink:0}
+  .step-node.done{background:#7c6af7;border-color:#7c6af7;color:#fff}
+  .step-node.active{border-color:#7c6af7;color:#7c6af7}
+  .step-line{flex:1;height:1.5px;background:var(--border);max-width:40px}
+  .step-line.done{background:#7c6af7}
+
+  /* Radio plan */
+  .plan-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;text-align:left}
+  .plan{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;cursor:pointer;transition:border-color .15s}
+  .plan:hover{border-color:var(--border2)}
+  .plan.sel{border-color:#c084fc}
+  .plan-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+  .plan.sel .plan-radio{border-color:#c084fc}
+  .plan-dot{width:8px;height:8px;border-radius:50%;background:#c084fc;display:none}
+  .plan.sel .plan-dot{display:block}
+  .plan-name{font-size:13px;font-weight:500;color:var(--text);flex:1}
+  .plan-price{font-size:12px;color:var(--muted);font-family:var(--mono)}
+  .plan-hot{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;background:rgba(192,132,252,.15);color:#c084fc;border:1px solid rgba(192,132,252,.3)}
+
+  /* Buttons */
+  .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .btn{padding:10px 22px;border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:opacity .15s,transform .1s,filter .15s;letter-spacing:.01em;display:inline-flex;align-items:center;gap:7px}
+  .btn:active{transform:scale(.97)}
+  .btn:hover{filter:brightness(1.1)}
+  .btn-ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--border2)}
+  .btn-ghost:hover{filter:brightness(1.3)}
+  .btn-close{position:absolute;top:14px;right:14px;background:var(--surface2);border:1px solid var(--border);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;transition:background .15s}
+  .btn-close:hover{background:var(--surface2);color:var(--text)}
+
+  /* Divider */
+  .divider{height:1px;background:var(--border);margin:1rem 0}
+
+  /* Stat row */
+  .stat-row{display:flex;gap:8px;margin-bottom:1.25rem}
+  .stat{flex:1;background:var(--surface2);border-radius:var(--radius-sm);padding:10px;border:1px solid var(--border)}
+  .stat-val{font-size:18px;font-weight:600;color:var(--text);font-family:var(--mono)}
+  .stat-key{font-size:10px;color:var(--hint);letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+
+  /* Toast preview strip */
+  .toast-strip{position:fixed;top:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:200;pointer-events:none}
+  .toast{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-md);padding:12px 16px;min-width:260px;max-width:320px;display:flex;align-items:center;gap:12px;transform:translateX(120%);opacity:0;transition:transform .3s cubic-bezier(.34,1.4,.64,1),opacity .25s;pointer-events:all}
+  .toast.show{transform:translateX(0);opacity:1}
+  .toast-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .toast-body{flex:1}
+  .toast-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+  .toast-msg{font-size:12px;color:var(--muted)}
+  .toast-close{color:var(--hint);font-size:13px;cursor:pointer;flex-shrink:0;padding:2px}
+  .toast-progress{position:absolute;bottom:0;left:0;height:2.5px;border-radius:0 0 var(--radius-md) var(--radius-md);animation:drain 3s linear forwards}
+  @keyframes drain{from{width:100%}to{width:0}}
+</style>
+</head>
+<body>
+
+<h1>Alert library</h1>
+<div class="grid" id="grid"></div>
+
+<div class="overlay" id="overlay" onclick="handleBg(event)">
+  <div class="popup" id="popup">
+    <button class="btn-close" onclick="close_()">✕</button>
+  </div>
+</div>
+
+<div class="toast-strip" id="toasts"></div>
+
+<script>
+const ALERTS = {
+  success:{
+    badge:'Completed', badgeStyle:'background:rgba(99,153,34,.15);color:#97C459;border:1px solid rgba(99,153,34,.3)',
+    glow:'#639922', ring:'rgba(99,153,34,.12)', ringColor:'#97C459',
+    icon:'✓', accent:'#639922', accentTxt:'#fff',
+    title:'Payment successful!', text:'Your order #4821 has been confirmed. A receipt has been sent to your email.',
+    progress:.78, progressColor:'linear-gradient(90deg,#3B6D11,#97C459)',
+    extra:'checklist',
+    checks:[{label:'Order placed',done:true},{label:'Payment verified',done:true},{label:'Shipping arranged',done:false}],
+    stats:[{v:'$48.20',k:'Total'},{v:'2–3d',k:'Delivery'},{v:'#4821',k:'Order'}],
+    primary:{label:'View order',color:'#639922'}, ghost:'Close'
+  },
+  error:{
+    badge:'Error', badgeStyle:'background:rgba(226,75,74,.12);color:#F09595;border:1px solid rgba(226,75,74,.25)',
+    glow:'#E24B4A', ring:'rgba(226,75,74,.1)', ringColor:'#F09595',
+    icon:'✕', accent:'#E24B4A', accentTxt:'#fff',
+    title:'Upload failed', text:'We couldn\'t process your file. The format may be unsupported or the file may be corrupted.',
+    extra:'error-detail',
+    primary:{label:'Try again',color:'#E24B4A'}, ghost:'Cancel'
+  },
+  warning:{
+    badge:'Warning', badgeStyle:'background:rgba(186,117,23,.12);color:#EF9F27;border:1px solid rgba(186,117,23,.3)',
+    glow:'#BA7517', ring:'rgba(186,117,23,.1)', ringColor:'#EF9F27',
+    icon:'⚠', accent:'#BA7517', accentTxt:'#fff',
+    title:'Unsaved changes', text:'You have unsaved edits. Leaving now will discard everything you\'ve worked on.',
+    extra:'warning-timer',
+    primary:{label:'Stay on page',color:'#BA7517'}, ghost:'Leave anyway'
+  },
+  info:{
+    badge:'What\'s new', badgeStyle:'background:rgba(55,138,221,.12);color:#85B7EB;border:1px solid rgba(55,138,221,.25)',
+    glow:'#378ADD', ring:'rgba(55,138,221,.1)', ringColor:'#85B7EB',
+    icon:'✦', accent:'#378ADD', accentTxt:'#fff',
+    title:'Version 3.4 is here', text:'Dark mode, keyboard shortcuts, a refreshed dashboard, and 12 bug fixes.',
+    extra:'tags',
+    tags:['Dark mode','Shortcuts','Dashboard','Export','Webhooks','Fixes'],
+    selTags:[0,1,2],
+    primary:{label:'See changelog',color:'#378ADD'}, ghost:'Maybe later'
+  },
+  confirm:{
+    badge:'Destructive', badgeStyle:'background:rgba(226,75,74,.1);color:#F09595;border:1px solid rgba(226,75,74,.2)',
+    glow:'#E24B4A', ring:'rgba(127,119,221,.1)', ringColor:'#AFA9EC',
+    icon:'⌫', accent:'#E24B4A', accentTxt:'#fff',
+    title:'Delete workspace?', text:'This will permanently remove all 14 projects, 238 files, and 6 members. There is absolutely no undo.',
+    extra:'confirm-check',
+    primary:{label:'Yes, delete everything',color:'#E24B4A'}, ghost:'Keep it safe'
+  },
+  input:{
+    badge:'Rename', badgeStyle:'background:rgba(124,106,247,.12);color:#AFA9EC;border:1px solid rgba(124,106,247,.25)',
+    glow:'#7c6af7', ring:'rgba(124,106,247,.1)', ringColor:'#AFA9EC',
+    icon:'✏', accent:'#7c6af7', accentTxt:'#fff',
+    title:'Rename this file', text:'A descriptive name helps your team find it quickly.',
+    extra:'input-field',
+    primary:{label:'Save name',color:'#7c6af7'}, ghost:'Cancel'
+  },
+  wizard:{
+    badge:'Step 2 of 3', badgeStyle:'background:rgba(124,106,247,.12);color:#AFA9EC;border:1px solid rgba(124,106,247,.25)',
+    glow:'#7c6af7', ring:'rgba(124,106,247,.1)', ringColor:'#AFA9EC',
+    icon:'◈', accent:'#7c6af7', accentTxt:'#fff',
+    title:'Tell us about yourself', text:'This helps us personalise your workspace and suggested templates.',
+    extra:'wizard',
+    primary:{label:'Next step →',color:'#7c6af7'}, ghost:'← Back'
+  },
+  plan:{
+    badge:'Choose plan', badgeStyle:'background:rgba(192,132,252,.1);color:#c084fc;border:1px solid rgba(192,132,252,.25)',
+    glow:'#c084fc', ring:'rgba(192,132,252,.08)', ringColor:'#c084fc',
+    icon:'★', accent:'#7c3aed', accentTxt:'#fff',
+    title:'Pick your plan', text:'All plans include a 14-day free trial. No credit card required to start.',
+    extra:'plans',
+    primary:{label:'Confirm plan',color:'#7c3aed'}, ghost:'Maybe later'
+  },
+};
+
+const ICONS = {
+  success:'✓', error:'✕', warning:'⚠', info:'✦', confirm:'⌫', input:'✏', wizard:'◈', plan:'★'
+};
+const NAMES = {success:'Success',error:'Error',warning:'Warning',info:'Info',confirm:'Confirm',input:'Input',wizard:'Wizard',plan:'Plan'};
+const DESCS = {success:'Action completed',error:'Something failed',warning:'Heads up first',info:'New features',confirm:'Delete action',input:'Text prompt',wizard:'Multi-step flow',plan:'Pick a tier'};
+const SHORTCUTS = {success:'S',error:'E',warning:'W',info:'I',confirm:'C',input:'T',wizard:'Z',plan:'P'};
+
+let activeKey = null;
+let selPlan = 1;
+let confirmChecked = false;
+
+function buildGrid(){
+  const g = document.getElementById('grid');
+  Object.keys(ALERTS).forEach(k => {
+    const a = ALERTS[k];
+    const d = document.createElement('div');
+    d.className = 'trig';
+    d.innerHTML = `
+      <div class="t-icon" style="background:${a.ring}">
+        <span style="color:${a.ringColor};font-size:18px">${a.icon}</span>
+      </div>
+      <div class="t-name">${NAMES[k]}</div>
+      <div class="t-desc">${DESCS[k]}</div>
+      <div class="t-shortcut">${SHORTCUTS[k]}</div>`;
+    d.onclick = () => open_(k);
+    g.appendChild(d);
+  });
+}
+
+function open_(k){
+  activeKey = k;
+  confirmChecked = false;
+  const a = ALERTS[k];
+  let extra = '';
+
+  if(a.extra === 'checklist'){
+    const items = a.checks.map(c=>`
+      <div class="check-row">
+        <div class="check-dot" style="background:${c.done?'rgba(99,153,34,.2)':'rgba(255,255,255,.04)'};color:${c.done?'#97C459':'#555'}">${c.done?'✓':'○'}</div>
+        <span style="color:${c.done?'var(--text)':'var(--hint)'}">${c.label}</span>
+        ${c.done?'<span style="margin-left:auto;font-size:10px;color:#639922;font-weight:600">Done</span>':'<span style="margin-left:auto;font-size:10px;color:var(--hint)">Pending</span>'}
+      </div>`).join('');
+    const stats = (a.stats||[]).map(s=>`<div class="stat"><div class="stat-val">${s.v}</div><div class="stat-key">${s.k}</div></div>`).join('');
+    extra = `<div class="checklist">${items}</div>${stats?`<div class="stat-row">${stats}</div>`:''}`;
+  } else if(a.extra === 'error-detail'){
+    extra = `
+      <div style="background:var(--surface2);border:1px solid rgba(226,75,74,.2);border-radius:var(--radius-sm);padding:12px;margin-bottom:1.25rem;text-align:left">
+        <div style="font-family:var(--mono);font-size:11px;color:#F09595;margin-bottom:6px">ERROR_CODE: MIME_TYPE_INVALID</div>
+        <div style="font-size:12px;color:var(--muted)">Accepted: .jpg .png .webp .svg .pdf</div>
+        <div style="font-size:12px;color:var(--muted)">Max size: 10 MB</div>
+      </div>`;
+  } else if(a.extra === 'warning-timer'){
+    extra = `
+      <div style="background:rgba(186,117,23,.08);border:1px solid rgba(186,117,23,.2);border-radius:var(--radius-sm);padding:12px;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">⏱</span>
+        <div style="text-align:left">
+          <div style="font-size:12px;font-weight:600;color:#EF9F27">Auto-saving in 10 seconds</div>
+          <div style="font-size:11px;color:var(--muted)">A draft will be saved if you leave</div>
+        </div>
+      </div>`;
+  } else if(a.extra === 'tags'){
+    const tags = (a.tags||[]).map((t,i)=>{
+      const on = (a.selTags||[]).includes(i);
+      return `<span class="tag${on?' on':''}" onclick="toggleTag(this,${i},'${k}')" style="${on?'background:rgba(55,138,221,.15);color:#85B7EB;border-color:rgba(55,138,221,.35)':''}">${t}</span>`;
+    }).join('');
+    extra = `<div class="tag-row">${tags}</div>`;
+  } else if(a.extra === 'confirm-check'){
+    extra = `
+      <div onclick="toggleConfirm()" id="confirmCheckRow" style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;margin-bottom:1.25rem;cursor:pointer;text-align:left">
+        <div id="confirmBox" style="width:18px;height:18px;border-radius:4px;border:1.5px solid rgba(226,75,74,.5);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#F09595;transition:background .15s"></div>
+        <span style="font-size:13px;color:var(--muted)">I understand this cannot be undone</span>
+      </div>`;
+  } else if(a.extra === 'input-field'){
+    extra = `
+      <label class="field-label">New file name</label>
+      <input class="field" type="text" placeholder="e.g. Q3-sales-report-final" id="renameInput" />
+      <label class="field-label" style="margin-top:4px">File type</label>
+      <input class="field" type="text" value=".pdf" readonly style="color:var(--hint)" />`;
+  } else if(a.extra === 'wizard'){
+    extra = `
+      <div class="step-track">
+        <div class="step-node done">✓</div>
+        <div class="step-line done"></div>
+        <div class="step-node active">2</div>
+        <div class="step-line"></div>
+        <div class="step-node">3</div>
+      </div>
+      <label class="field-label">Your role</label>
+      <input class="field" type="text" placeholder="e.g. Product designer" />
+      <label class="field-label">Team size</label>
+      <select class="field" style="appearance:none;cursor:pointer">
+        <option>Just me</option>
+        <option>2–10 people</option>
+        <option selected>11–50 people</option>
+        <option>50+ people</option>
+      </select>`;
+  } else if(a.extra === 'plans'){
+    const plans = [
+      {name:'Starter',price:'Free',hot:false},
+      {name:'Pro',price:'$12/mo',hot:true},
+      {name:'Team',price:'$49/mo',hot:false},
+    ];
+    extra = `<div class="plan-list" id="planList">${plans.map((p,i)=>`
+      <div class="plan${i===selPlan?' sel':''}" onclick="selectPlan(${i})">
+        <div class="plan-radio"><div class="plan-dot"></div></div>
+        <span class="plan-name">${p.name}</span>
+        ${p.hot?'<span class="plan-hot">Popular</span>':''}
+        <span class="plan-price">${p.price}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  const prog = a.progress != null ? `
+    <div class="progress-wrap">
+      <div class="progress-bar" style="width:${Math.round(a.progress*100)}%;background:${a.progressColor}"></div>
+    </div>` : '';
+
+  document.getElementById('popup').innerHTML = `
+    <button class="btn-close" onclick="close_()">✕</button>
+    <div class="popup-glow" style="background:${a.glow}"></div>
+    <span class="badge" style="${a.badgeStyle}">${a.badge}</span>
+    <div class="icon-ring" style="background:${a.ring};color:${a.ringColor}">
+      <span style="font-size:26px">${a.icon}</span>
+    </div>
+    <h2>${a.title}</h2>
+    <p>${a.text}</p>
+    ${prog}${extra}
+    <div class="btn-row">
+      <button class="btn" id="primaryBtn" style="background:${a.accent};color:${a.accentTxt}">${a.primary.label}</button>
+      <button class="btn btn-ghost" onclick="close_()">${a.ghost}</button>
+    </div>`;
+
+  document.getElementById('primaryBtn').onclick = () => {
+    if(k === 'confirm' && !confirmChecked){ shakePopup(); return; }
+    close_();
+    fireToast(k);
+  };
+
+  document.getElementById('overlay').classList.add('open');
+}
+
+function close_(){
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function handleBg(e){
+  if(e.target === document.getElementById('overlay')) close_();
+}
+
+function toggleTag(el, i, k){
+  el.classList.toggle('on');
+  if(el.classList.contains('on')){
+    el.style.background='rgba(55,138,221,.15)';
+    el.style.color='#85B7EB';
+    el.style.borderColor='rgba(55,138,221,.35)';
+  } else {
+    el.style.background='';
+    el.style.color='';
+    el.style.borderColor='';
+  }
+}
+
+function toggleConfirm(){
+  confirmChecked = !confirmChecked;
+  const box = document.getElementById('confirmBox');
+  const row = document.getElementById('confirmCheckRow');
+  box.style.background = confirmChecked ? 'rgba(226,75,74,.2)' : '';
+  box.textContent = confirmChecked ? '✓' : '';
+  row.style.borderColor = confirmChecked ? 'rgba(226,75,74,.4)' : '';
+}
+
+function selectPlan(i){
+  selPlan = i;
+  document.querySelectorAll('.plan').forEach((el,j)=>el.classList.toggle('sel',j===i));
+}
+
+function shakePopup(){
+  const p = document.getElementById('popup');
+  p.style.animation='none';
+  p.offsetHeight;
+  p.style.animation='shake .4s ease';
+}
+
+const shakeStyle = document.createElement('style');
+shakeStyle.textContent = '@keyframes shake{0%,100%{transform:translateX(0) scale(1)}20%{transform:translateX(-8px) scale(1)}40%{transform:translateX(8px) scale(1)}60%{transform:translateX(-5px) scale(1)}80%{transform:translateX(5px) scale(1)}}';
+document.head.appendChild(shakeStyle);
+
+function fireToast(k){
+  const a = ALERTS[k];
+  const strip = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.style.position = 'relative';
+  t.style.overflow = 'hidden';
+  t.innerHTML = `
+    <div class="toast-icon" style="background:${a.ring};color:${a.ringColor}">${a.icon}</div>
+    <div class="toast-body">
+      <div class="toast-title">${NAMES[k]}</div>
+      <div class="toast-msg">${a.title}</div>
+    </div>
+    <div class="toast-close" onclick="this.closest('.toast').remove()">✕</div>
+    <div class="toast-progress" style="background:${a.accent}"></div>`;
+  strip.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200);
+}
+
+document.addEventListener('keydown', e => {
+  Object.entries(SHORTCUTS).forEach(([k,s])=>{
+    if(e.key.toUpperCase()===s && !document.getElementById('overlay').classList.contains('open')) open_(k);
+  });
+  if(e.key==='Escape') close_();
+});
+
+buildGrid();
+</script>
+</body>
+</html>
