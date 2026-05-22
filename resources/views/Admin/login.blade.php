@@ -46,7 +46,7 @@
         <label class="form-label" for="email">Email address</label>
         <div class="input-group-custom">
           <i class="bi bi-envelope input-icon"></i>
-          <input type="email" id="email" class="form-control-custom" placeholder="admin@yourproject.com" autocomplete="email" required />
+          <input type="email" id="email" name="email" class="form-control-custom" placeholder="user@example.com" autocomplete="email" required />
         </div>
       </div>
 
@@ -54,7 +54,7 @@
         <label class="form-label" for="password">Password</label>
         <div class="input-group-custom">
           <i class="bi bi-lock input-icon"></i>
-          <input type="password" id="password" class="form-control-custom has-toggle" placeholder="••••••••••" autocomplete="current-password" required />
+          <input type="password" id="password" name="password" class="form-control-custom has-toggle" placeholder="•••••••••••••••" autocomplete="current-password" required />
           <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">
             <i class="bi bi-eye" id="toggleIcon"></i>
           </button>
