@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/global/images/favicon-32x32.png') }}" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/global/images/favicon-16x16.png') }}" />
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/global/images/apple-touch-icon.png') }}" />
-  <link rel="manifest" href="{{ asset('site.webmanifest') }}" />
+  {{-- <link rel="manifest" href="{{ asset('site.webmanifest') }}" /> --}}
 
   <title>Admin Login</title>
 
@@ -40,7 +40,8 @@
       <span id="alertMsg">Invalid email or password.</span>
     </div>
 
-    <form id="loginForm" novalidate>
+    <form id="loginForm" action="{{ route('admin.login.post') }}" method="POST" novalidate>
+      @csrf
 
       <div class="form-group">
         <label class="form-label" for="email">Email address</label>
@@ -111,7 +112,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  {{-- <script>
     const togglePw   = document.getElementById('togglePw');
     const pwInput    = document.getElementById('password');
     const toggleIcon = document.getElementById('toggleIcon');
@@ -157,6 +158,6 @@
         else { alertMsg.textContent = data.message || 'Login failed.'; alertBox.classList.add('show'); }
       */
     });
-  </script>
+  </script> --}}
 </body>
 </html>

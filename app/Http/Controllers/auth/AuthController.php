@@ -10,4 +10,9 @@ class AuthController extends Controller
     public function adminLoginView(){
         return view('admin.login');
     }
+
+    public function adminLoginPost(Request $request){
+        dd($request->input());
+    }
+
 }
