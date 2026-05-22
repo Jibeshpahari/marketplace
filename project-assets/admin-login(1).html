@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --radius-input:   10px;
+      --font-display:   'Syne', sans-serif;
+      --font-body:      'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: #ffffff;
+      color: #111111;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .card-header-text { margin-bottom: 2.5rem; }
+    .card-header-text h2 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #111111;
+      margin-bottom: 0.4rem;
+    }
+    .card-header-text p {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    /* Alert */
+    .alert-custom {
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: var(--radius-input);
+      color: #dc2626;
+      font-size: 0.85rem;
+      padding: 0.7rem 1rem;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      display: none;
+    }
+    .alert-custom.show { display: flex; }
+
+    /* Labels */
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #6b7280;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* Inputs */
+    .form-group { margin-bottom: 1.25rem; }
+    .input-group-custom { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .form-control-custom {
+      width: 100%;
+      background: #f9fafb;
+      border: 1.5px solid #e5e7eb;
+      border-radius: var(--radius-input);
+      color: #111111;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.7rem 1rem 0.7rem 2.75rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .form-control-custom::placeholder { color: #9ca3af; }
+    .form-control-custom:focus {
+      border-color: #111111;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+      background: #ffffff;
+    }
+    .form-control-custom.has-toggle { padding-right: 3rem; }
+
+    .toggle-pw {
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: #9ca3af; cursor: pointer;
+      font-size: 1rem; padding: 0;
+      transition: color 0.15s;
+    }
+    .toggle-pw:hover { color: #6b7280; }
+
+    /* Options row */
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+    .custom-check {
+      display: flex; align-items: center;
+      gap: 8px; cursor: pointer; user-select: none;
+    }
+    .custom-check input[type="checkbox"] {
+      appearance: none; -webkit-appearance: none;
+      width: 17px; height: 17px;
+      background: #f9fafb;
+      border: 1.5px solid #d1d5db;
+      border-radius: 5px;
+      cursor: pointer; position: relative;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .custom-check input:checked {
+      background: #111111;
+      border-color: #111111;
+    }
+    .custom-check input:checked::after {
+      content: '';
+      position: absolute;
+      left: 5px; top: 1.5px;
+      width: 5px; height: 9px;
+      border: 2px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+    .check-label { font-size: 0.85rem; color: #6b7280; }
+
+    .forgot-link {
+      font-size: 0.85rem;
+      color: #111111;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .forgot-link:hover { color: #444444; text-decoration: underline; }
+
+    /* Submit button */
+    .btn-login {
+      width: 100%;
+      padding: 0.82rem 1.5rem;
+      background: #111111;
+      border: none;
+      border-radius: var(--radius-input);
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .btn-login::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .btn-login:hover { background: #2d2d2d; }
+    .btn-login:active { transform: scale(0.99); }
+    .btn-login:disabled { opacity: 0.55; cursor: default; }
+
+    /* Divider */
+    .divider {
+      display: flex; align-items: center;
+      gap: 12px; margin: 1.75rem 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: #e5e7eb;
+    }
+    .divider span { font-size: 0.78rem; color: #9ca3af; white-space: nowrap; }
+
+    /* SSO buttons */
+    .sso-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-sso {
+      display: flex; align-items: center;
+      justify-content: center; gap: 9px;
+      padding: 0.65rem 1rem;
+      background: #ffffff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: var(--radius-input);
+      color: #374151;
+      font-family: var(--font-body);
+      font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .btn-sso:hover {
+      background: #f9fafb;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .btn-sso.google:hover { border-color: #4285F4; }
+    .btn-sso.microsoft:hover { border-color: #00A4EF; }
+    .btn-sso svg { flex-shrink: 0; }
+
+    /* Footer */
+    .form-footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 2rem;
+      line-height: 1.6;
+    }
+    .form-footer a {
+      color: #6b7280;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.15s;
+    }
+    .form-footer a:hover { color: #111111; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+
+    <div class="card-header-text">
+      <h2>Welcome back</h2>
+      <p>Sign in to your admin account to continue.</p>
+    </div>
+
+    <div class="alert-custom" id="loginAlert" role="alert">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      <span id="alertMsg">Invalid email or password.</span>
+    </div>
+
+    <form id="loginForm" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <div class="input-group-custom">
+          <i class="bi bi-envelope input-icon"></i>
+          <input type="email" id="email" class="form-control-custom" placeholder="admin@yourproject.com" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-group-custom">
+          <i class="bi bi-lock input-icon"></i>
+          <input type="password" id="password" class="form-control-custom has-toggle" placeholder="••••••••••" autocomplete="current-password" required />
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">
+            <i class="bi bi-eye" id="toggleIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="custom-check">
+          <input type="checkbox" id="remember" />
+          <span class="check-label">Keep me signed in</span>
+        </label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn-login" id="submitBtn">
+        <span id="btnText">Sign in to dashboard</span>
+        <i class="bi bi-arrow-right" id="btnIcon"></i>
+        <span id="btnSpinner" style="display:none; align-items:center; gap:6px;">
+          <i class="bi bi-arrow-repeat" style="animation: spin 0.8s linear infinite; display:inline-block;"></i>
+          Signing in…
+        </span>
+      </button>
+
+    </form>
+
+    <div class="divider"><span>or continue with</span></div>
+
+    <div class="sso-grid">
+      <a href="#" class="btn-sso google">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+          <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Google
+      </a>
+      <a href="#" class="btn-sso microsoft">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0"  y="0"  width="8.5" height="8.5" fill="#F25022"/>
+          <rect x="9.5" y="0"  width="8.5" height="8.5" fill="#7FBA00"/>
+          <rect x="0"  y="9.5" width="8.5" height="8.5" fill="#00A4EF"/>
+          <rect x="9.5" y="9.5" width="8.5" height="8.5" fill="#FFB900"/>
+        </svg>
+        Microsoft
+      </a>
+    </div>
+
+    <div class="form-footer">
+      Protected by 2FA &amp; end-to-end encryption.<br />
+      Need access? <a href="#">Contact your administrator</a>.
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const togglePw   = document.getElementById('togglePw');
+    const pwInput    = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+    togglePw.addEventListener('click', () => {
+      const isText = pwInput.type === 'text';
+      pwInput.type = isText ? 'password' : 'text';
+      toggleIcon.className = isText ? 'bi bi-eye' : 'bi bi-eye-slash';
+    });
+
+    const form      = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText   = document.getElementById('btnText');
+    const btnIcon   = document.getElementById('btnIcon');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const alertBox  = document.getElementById('loginAlert');
+    const alertMsg  = document.getElementById('alertMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.classList.remove('show');
+      const email = document.getElementById('email').value.trim();
+      const pw    = document.getElementById('password').value;
+      if (!email || !pw) {
+        alertMsg.textContent = 'Please fill in both fields.';
+        alertBox.classList.add('show');
+        return;
+      }
+      btnText.style.display    = 'none';
+      btnIcon.style.display    = 'none';
+      btnSpinner.style.display = 'flex';
+      submitBtn.disabled = true;
+      await new Promise(r => setTimeout(r, 1800));
+      btnText.style.display    = '';
+      btnIcon.style.display    = '';
+      btnSpinner.style.display = 'none';
+      submitBtn.disabled = false;
+      alertMsg.textContent = 'Invalid credentials. Please try again.';
+      alertBox.classList.add('show');
+      /*
+        const res  = await fetch('/api/admin/login', { method:'POST', body: JSON.stringify({email, pw}), headers:{'Content-Type':'application/json'} });
+        const data = await res.json();
+        if (res.ok) { window.location.href = data.redirectTo || '/dashboard'; }
+        else { alertMsg.textContent = data.message || 'Login failed.'; alertBox.classList.add('show'); }
+      */
+    });
+  </script>
+</body>
+</html>
