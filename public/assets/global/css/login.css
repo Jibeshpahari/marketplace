@@ -43,7 +43,7 @@ body {
 
 .card-header-text p {
     font-size: 0.9rem;
-    color: #6b7280;
+    color: #333;
 }
 
 /* Alert */
@@ -68,7 +68,7 @@ body {
 .form-label {
     font-size: 0.82rem;
     font-weight: 500;
-    color: #6b7280;
+    color: #333;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
@@ -135,7 +135,7 @@ body {
 }
 
 .toggle-pw:hover {
-    color: #6a7588;;
+    color: #555;
 }
 
 /* Options row */
@@ -188,7 +188,7 @@ body {
 
 .check-label {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: #333;
 }
 
 .forgot-link {
@@ -320,7 +320,7 @@ body {
 }
 
 .form-footer a {
-    color: #6b7280;
+    color: #333;
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 0.15s;
