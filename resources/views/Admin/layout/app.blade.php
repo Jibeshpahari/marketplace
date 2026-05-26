@@ -60,13 +60,25 @@
 
     <!-- App Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}?v={{ time() }}" />
-    <link href="{{ asset('assets/global/css/login.css') }}" rel="stylesheet" />
 
     @stack('cdn')
     @stack('css')
 </head>
 <body>
 
+    <!-- ═══════════════ SIDEBAR ═══════════════ -->
+    @include('admin.layout.inc.sidebar')
+
+    <!-- ═══════════════ MAIN AREA ═══════════════ -->
+    <div id="main">
+        <!-- TOP SEARCH BAR -->
+        @include('admin.layout.inc.searchbar')
+        <!-- SUB NAVBAR -->
+        @include('admin.layout.inc.navbar')
+        <!-- BOTTOM PROGRESS/STATUS BAR -->
+        @include('admin.layout.inc.statusbar')
+        
+    </div>    
     @stack('modal')
 
     @stack('js')
