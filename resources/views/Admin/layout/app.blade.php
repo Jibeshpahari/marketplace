@@ -67,16 +67,16 @@
 <body>
 
     <!-- ═══════════════ SIDEBAR ═══════════════ -->
-    @include('admin.layout.inc.sidebar')
+    @include('admin.layout.components.sidebar')
 
     <!-- ═══════════════ MAIN AREA ═══════════════ -->
     <div id="main">
         <!-- TOP SEARCH BAR -->
-        @include('admin.layout.inc.searchbar')
+        @include('admin.layout.components.searchbar')
         <!-- SUB NAVBAR -->
-        @include('admin.layout.inc.navbar')
+        @include('admin.layout.components.navbar')
         <!-- BOTTOM PROGRESS/STATUS BAR -->
-        @include('admin.layout.inc.statusbar')
+        @include('admin.layout.components.statusbar')
         
     </div>    
     @stack('modal')
