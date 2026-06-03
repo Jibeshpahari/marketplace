@@ -14,7 +14,6 @@
         <span class="nav-text">Dashboard</span>
       </div>
 
-      <!-- Analytics with sub-menu -->
       <div class="nav-item has-sub" data-tip="Analytics">
         <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
         <span class="nav-text">Analytics</span>
@@ -26,7 +25,6 @@
         <div class="sub-item"><span class="sub-dot"></span>Real-time</div>
       </div>
 
-      <!-- Products with sub-menu -->
       <div class="nav-item has-sub" data-tip="Products">
         <span class="nav-icon"><i class="fa-solid fa-box-open"></i></span>
         <span class="nav-text">Products</span>
@@ -52,7 +50,6 @@
 
       <div class="nav-label" style="margin-top:12px;">Management</div>
 
-      <!-- Settings with sub-menu -->
       <div class="nav-item has-sub" data-tip="Settings">
         <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
         <span class="nav-text">Settings</span>
@@ -72,21 +69,50 @@
 
       <div class="nav-item" data-tip="Support">
         <span class="nav-icon"><i class="fa-regular fa-circle-question"></i></span>
-        <span class="nav-text">Help & Support</span>
-      </div>
-
-      <div class="nav-label" style="margin-top:12px;">Default</div>
-
-      <div class="nav-item" data-tip="Support">
-        <span class="nav-icon"><i class="fa-solid fa-blender-phone"></i></span>
-        <span class="nav-text">Help & Support</span>
+        <span class="nav-text">Help &amp; Support</span>
       </div>
 
     </nav>
 
+    <div class="sidebar-profile">
+      <div class="profile-avatar">JD</div>
+      <div class="profile-info">
+        <div class="profile-name">John Doe</div>
+        <div class="profile-role">Administrator</div>
+      </div>
+      <i class="fa-solid fa-ellipsis profile-more"></i>
+    </div>
 
     <div class="sidebar-toggle" id="sidebarToggle">
       <i class="fa-solid fa-chevron-left"></i>
     </div>
 
   </div>
+
+@push('js')
+<script>
+$(function () {
+
+    /* Sidebar collapse toggle */
+    $('#sidebarToggle').on('click', function () {
+        $('#sidebar').toggleClass('collapsed');
+        $('body').toggleClass('collapsed');
+    });
+
+    /* Sub-menu accordion */
+    $('.has-sub').on('click', function () {
+        var $item = $(this);
+        var $sub  = $item.next('.sub-menu');
+        var isOpen = $item.hasClass('open');
+        $('.has-sub.open').not($item).removeClass('open');
+        $('.sub-menu.open').not($sub).removeClass('open');
+        $item.toggleClass('open', !isOpen);
+        $sub.toggleClass('open', !isOpen);
+    });
+
+    /* Auto-open active sub-menu on load */
+    $('.sub-menu.open').prev('.has-sub').addClass('open');
+
+});
+</script>
+@endpush

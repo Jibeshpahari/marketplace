@@ -6,37 +6,40 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- Viewport: strict, no user scaling (from Header 2) -->
+    <!-- Viewport -->
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <!-- SEO & indexing (from Header 1) -->
+    <!-- SEO & indexing -->
     <meta name="description" content="Admin Login" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#ffffff" />
 
-    <!-- Dynamic title (from Header 2) -->
-    <title>{{ get_option('site_title') }}{{ empty($title) ? '' : ' | ' . $title }}</title>
+    <!-- Dynamic title -->
+    <title>{{ empty($title) ? '' : ' | ' . $title }}</title>
 
-    <!-- Favicon set (from Header 1 — more complete) -->
+    <!-- Favicon set -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/global/images/favicon.ico') }}" />
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/global/images/favicon-32x32.png') }}" />
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/global/images/favicon-16x16.png') }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/global/images/apple-touch-icon.png') }}" />
 
-    <!-- CSRF Token (Laravel) -->
+    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <!-- Bootstrap CSS (from Header 1) -->
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Bootstrap Icons (from Header 1) -->
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
 
-    <!-- Font Awesome 6 (from Header 2 — newer version) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-    <!-- WebFont Loader for Google + custom fonts (from Header 2) -->
+    <!-- WebFont Loader -->
     <script src="{{ asset('assets/admin/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
@@ -64,6 +67,7 @@
     @stack('cdn')
     @stack('css')
 </head>
+
 <body>
 
     <!-- ═══════════════ SIDEBAR ═══════════════ -->
@@ -71,16 +75,34 @@
 
     <!-- ═══════════════ MAIN AREA ═══════════════ -->
     <div id="main">
+
         <!-- TOP SEARCH BAR -->
         @include('admin.layout.components.searchbar')
+
         <!-- SUB NAVBAR -->
         @include('admin.layout.components.navbar')
+
         <!-- BOTTOM PROGRESS/STATUS BAR -->
         @include('admin.layout.components.statusbar')
-        
-    </div>    
-    @stack('modal')
+
+        <!-- ALERTS OVERLAY -->
+        @include('admin.layout.components.alerts')
+
+        <!-- PAGE CONTENT -->
+        <div id="content">
+            @yield('content')
+        </div>
+
+    </div>
+
+    <!-- TOAST STRIP (global, outside main) -->
+    <div class="toast-strip" id="toastStrip"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @stack('js')
+    @stack('modal')
+
 </body>
 </html>
