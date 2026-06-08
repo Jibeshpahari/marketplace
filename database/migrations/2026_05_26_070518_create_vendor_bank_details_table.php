@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            $table->string('label')->nullable(); // e.g. "Home", "Work"
+            $table->enum('label', ['home', 'work', 'other'])->default('home');
             $table->string('full_name');
             $table->string('phone')->nullable();
             $table->string('address_line_1');

@@ -15,6 +15,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!$request->user()) {
+            return redirect()->route('admin.login.view');
+        }
+
+        if ($request->user()->role !== 'admin') {
+            abort(403, 'Unauthorized. Admin access required.');
+        }
+
         return $next($request);
     }
 }

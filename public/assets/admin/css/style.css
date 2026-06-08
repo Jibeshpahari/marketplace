@@ -10,6 +10,7 @@
     --accent: #C2EEFF;
     --accent-dim: rgba(194, 238, 255, 0.13);
     --accent-dark: #0a4a6e;
+    --font-body: 'Public Sans', Comic Sans MS, cursive;
     --text-light: #f0f0f4;
     --text-muted: #b0bcd8;
     --text-dim: #606880;
@@ -17,19 +18,17 @@
     --border: rgba(255, 255, 255, 0.06);
     --radius: 10px;
     --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
 }
 
 html,
 body {
     height: 100%;
     overflow: hidden;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     background: var(--content-bg);
 }
 
-/* ════════════════════════════════════════════════════════
-       COMPONENT: sidebar  →  @include('components.sidebar')
-       ════════════════════════════════════════════════════════ */
 #sidebar {
     position: fixed;
     left: 0;
@@ -167,9 +166,10 @@ body {
 }
 
 .nav-text {
-    font-size: 13.5px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 400;
     letter-spacing: 0.012em;
+    line-height: 1.5;
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -384,9 +384,6 @@ body {
     transform: rotate(180deg);
 }
 
-/* ════════════════════════════════════════════════════════
-       MAIN WRAPPER
-       ════════════════════════════════════════════════════════ */
 #main {
     margin-left: var(--sidebar-w);
     height: 100vh;
@@ -399,9 +396,6 @@ body.collapsed #main {
     margin-left: var(--sidebar-collapsed);
 }
 
-/* ════════════════════════════════════════════════════════
-       COMPONENT: topbar (searchbar)  →  @include('components.topbar')
-       ════════════════════════════════════════════════════════ */
 #topbar {
     height: var(--topbar-h);
     background: #fff;
@@ -532,9 +526,6 @@ body.collapsed #main {
     border-color: var(--accent);
 }
 
-/* ════════════════════════════════════════════════════════
-       COMPONENT: subnav (main-navbar)  →  @include('components.subnav')
-       ════════════════════════════════════════════════════════ */
 #subnav {
     height: var(--subnav-h);
     background: #fff;
@@ -679,11 +670,7 @@ body.collapsed #main {
     box-shadow: 0 0 18px rgba(194, 238, 255, 0.6);
 }
 
-/* ════════════════════════════════════════════════════════
-       COMPONENT: notice-bar (status/progress, hidden by default)
-       →  @include('components.noticebar')
-       Trigger:  showNotice('info' | 'success' | 'warning' | 'error' | 'progress')
-       ════════════════════════════════════════════════════════ */
+
 #notice-bar {
     display: flex;
     align-items: center;
@@ -870,11 +857,6 @@ body.collapsed #main {
     }
 }
 
-/* ════════════════════════════════════════════════════════
-       COMPONENT: alerts overlay (hidden by default)
-       →  @include('components.alerts')
-       Trigger:  showAlert('success' | 'error' | 'warning' | 'info' | 'confirm')
-       ════════════════════════════════════════════════════════ */
 .alert-overlay {
     position: fixed;
     inset: 0;
@@ -1156,9 +1138,6 @@ body.collapsed #main {
     }
 }
 
-/* ════════════════════════════════════════════════════════
-       CONTENT AREA
-       ════════════════════════════════════════════════════════ */
 #content {
     flex: 1;
     overflow-y: auto;
@@ -1175,10 +1154,6 @@ body.collapsed #main {
     border-radius: 3px;
 }
 
-/* ── Page header: breadcrumb + title  ──────────────────
-       These live OUTSIDE <main> so each blade view can
-       override just @yield('breadcrumb') and @yield('title')
-       ─────────────────────────────────────────────────────── */
 .page-header {
     display: flex;
     align-items: flex-start;

@@ -26,36 +26,29 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-
+    
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- WebFont Loader -->
-    <script src="{{ asset('assets/admin/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
             google: {
                 families: ["Public Sans:300,400,500,600,700", "DM+Sans:300,400,500,600", "Syne:700,800"]
             },
             custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
+                families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
                 urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
             },
-            active: function () {
+            active: function() {
                 sessionStorage.fonts = true;
             },
         });
@@ -90,7 +83,41 @@
 
         <!-- PAGE CONTENT -->
         <div id="content">
-            @yield('content')
+            <!-- PAGE CONTENT HEADER -->
+            <div class="page-header">
+                <div>
+                    @if ($nav)
+                        <nav class="breadcrumb-nav">
+                            @foreach ($nav as $item)
+                                @if (!$loop->last)
+                                    <a class="bc-item" href="{{ $item['url'] }}">{{ $item['name'] }}</a>
+                                    <span class="bc-sep">/</span>
+                                @else
+                                    <span class="bc-current">{{ $item['name'] }}</span>
+                                @endif
+                            @endforeach
+                        </nav>
+                    @endif
+                    <h1 class="page-title">
+                        {{ $title ?? '' }}
+                    </h1>
+                    <p class="page-sub">
+                        {{ $sub_title ?? '' }}
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <!-- @yield('header-actions') -->
+                    <button class="sub-action-btn" onclick="showNotice('info')"><i class="fa-solid fa-circle-info"></i>
+                        Notice</button>
+                    <button class="sub-action-btn" onclick="showAlert('confirm')"><i
+                            class="fa-solid fa-triangle-exclamation"></i>
+                        Alert</button>
+                </div>
+            </div>
+
+            <main id="page-content">
+                @yield('content')
+            </main>
         </div>
 
     </div>
@@ -100,9 +127,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="{{ asset('assets/admin/js/script.js') }}"></script>
     @stack('js')
     @stack('modal')
 
 </body>
+
 </html>

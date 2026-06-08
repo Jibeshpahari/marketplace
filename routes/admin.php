@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\SiteSettingsController;
 use Illuminate\Support\Facades\Route;
 
-// Route::controller()->group(function() {
+// Prefix & name decleared in app.php as "admin"
 
-// });
+Route::controller(SiteSettingsController::class)->group(function() {
+    Route::get('site-settings', 'index')->name('site-settings');
+});

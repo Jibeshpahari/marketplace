@@ -25,6 +25,9 @@
 
   <!-- CSRF Token (Laravel) -->
   <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -40,6 +43,13 @@
       <span id="alertMsg">Invalid email or password.</span>
     </div>
 
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+
     <form id="loginForm" action="{{ route('admin.login.post') }}" method="POST" novalidate>
       @csrf
 
@@ -49,17 +59,23 @@
           <i class="bi bi-envelope input-icon"></i>
           <input type="email" id="email" name="email" class="form-control-custom" placeholder="user@example.com" autocomplete="email" required />
         </div>
+        @error('email')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="form-group">
         <label class="form-label" for="password">Password</label>
         <div class="input-group-custom">
           <i class="bi bi-lock input-icon"></i>
-          <input type="password" id="password" name="password" class="form-control-custom has-toggle" placeholder="•••••••••••••••" autocomplete="current-password" required />
-          <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">
+          <input type="password" id="password" name="password" class="form-control-custom has-toggle" data-pw-toggle placeholder="•••••••••••••••" autocomplete="current-password" required />
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility"  data-pw-toggle-btn>
             <i class="bi bi-eye" id="toggleIcon"></i>
           </button>
         </div>
+        @error('password')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="form-options">
@@ -112,52 +128,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  {{-- <script>
-    const togglePw   = document.getElementById('togglePw');
-    const pwInput    = document.getElementById('password');
-    const toggleIcon = document.getElementById('toggleIcon');
-    togglePw.addEventListener('click', () => {
-      const isText = pwInput.type === 'text';
-      pwInput.type = isText ? 'password' : 'text';
-      toggleIcon.className = isText ? 'bi bi-eye' : 'bi bi-eye-slash';
-    });
+  <script src="{{ asset('assets/admin/js/script.js') }}"></script>
 
-    const form      = document.getElementById('loginForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText   = document.getElementById('btnText');
-    const btnIcon   = document.getElementById('btnIcon');
-    const btnSpinner = document.getElementById('btnSpinner');
-    const alertBox  = document.getElementById('loginAlert');
-    const alertMsg  = document.getElementById('alertMsg');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertBox.classList.remove('show');
-      const email = document.getElementById('email').value.trim();
-      const pw    = document.getElementById('password').value;
-      if (!email || !pw) {
-        alertMsg.textContent = 'Please fill in both fields.';
-        alertBox.classList.add('show');
-        return;
-      }
-      btnText.style.display    = 'none';
-      btnIcon.style.display    = 'none';
-      btnSpinner.style.display = 'flex';
-      submitBtn.disabled = true;
-      await new Promise(r => setTimeout(r, 1800));
-      btnText.style.display    = '';
-      btnIcon.style.display    = '';
-      btnSpinner.style.display = 'none';
-      submitBtn.disabled = false;
-      alertMsg.textContent = 'Invalid credentials. Please try again.';
-      alertBox.classList.add('show');
-      /*
-        const res  = await fetch('/api/admin/login', { method:'POST', body: JSON.stringify({email, pw}), headers:{'Content-Type':'application/json'} });
-        const data = await res.json();
-        if (res.ok) { window.location.href = data.redirectTo || '/dashboard'; }
-        else { alertMsg.textContent = data.message || 'Login failed.'; alertBox.classList.add('show'); }
-      */
-    });
-  </script> --}}
 </body>
 </html>

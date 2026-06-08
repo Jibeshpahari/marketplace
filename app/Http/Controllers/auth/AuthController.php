@@ -14,16 +14,26 @@ class AuthController extends Controller
 
     public function adminLoginPost(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|min:8',
+        ], [
+            'email.required'    => 'Email is required.',
+            'email.email'       => 'Please enter a valid email address.',
+            'password.required' => 'Password is required.',
+            'password.min'      => 'Password must be at least 8 characters.',
+        ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
-
+        if (Auth::attempt([
+            'email'    => $request->email,
+            'password' => $request->password,
+            'role'     => 'admin',
+            'status'   => 'active',
+        ], $request->boolean('remember_me'))) {
             $request->session()->regenerate();
-
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.site-settings');
         }
-
-        return back()->with('error', 'Invalid credentials');
+        return back()->withErrors(['error' => 'The provided credentials are incorrect.'])->withInput();
     }
 
 }
