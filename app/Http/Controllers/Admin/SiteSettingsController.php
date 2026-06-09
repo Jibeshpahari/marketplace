@@ -9,7 +9,6 @@ class SiteSettingsController extends Controller
 {
     public function index(){
         $title = "Site Settings";
-        $sub_title = 'sub-title';
         $nav = [
             [
                 'url' => route('admin.login.view'),
@@ -20,6 +19,6 @@ class SiteSettingsController extends Controller
             ]
         ];
 
-        return view('admin.site-settings', compact('title', 'sub_title', 'nav'));
+        return view('admin.site-settings', compact('title', 'nav'));
     }
 }
