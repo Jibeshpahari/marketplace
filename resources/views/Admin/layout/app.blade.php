@@ -87,7 +87,8 @@
             <!-- PAGE CONTENT HEADER -->
             <div class="page-header">
                 <div>
-                    @if ($nav)
+                    
+                    @isset($nav)
                         <nav class="breadcrumb-nav">
                             @foreach ($nav as $item)
                                 @if (!$loop->last)
@@ -98,7 +99,8 @@
                                 @endif
                             @endforeach
                         </nav>
-                    @endif
+                    @endisset
+
                     <h1 class="page-title">
                         {{ $title ?? '' }}
                     </h1>

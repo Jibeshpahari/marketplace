@@ -450,7 +450,30 @@
         </div>
         <div class="col-3">
             <div class="card p-3">
-                ///
+                <h5 class="card-title mb-3">Useful settings</h5>
+                <div class="form-group">
+                    <label for="city">User Pagination Per Page</label>
+                    <input type="number" class="form-control" id="city" name="city" min="1"
+                        step="1" value="{{ $s?->city ?? '' }}">
+                    @error('city')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="city">Admin Pagination Per Page</label>
+                    <input type="number" class="form-control" id="city" name="city" min="1"
+                        step="1" value="{{ $s?->city ?? '' }}">
+                    @error('city')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="switchCheckDefault">Default switch checkbox input</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                    </div>
+                    <span class="error"> Error </span>
+                </div>
             </div>
         </div>
     </div>
