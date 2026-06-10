@@ -1414,8 +1414,8 @@ body.collapsed #main {
     -webkit-appearance: none;
     width: 46px;
     height: 26px;
-    background: #2a2a2a;
-    border: 0.5px solid #444;
+    background: #555;
+    border: 0.5px solid #555;
     border-radius: 26px;
     cursor: pointer;
     position: relative;
@@ -1429,7 +1429,7 @@ body.collapsed #main {
     height: 20px;
     left: 2px;
     top: 2px;
-    background: #6b6b6b;
+    background: #ddd;
     border-radius: 50%;
     transition: transform 0.22s cubic-bezier(.4, 0, .2, 1), background 0.2s;
 }
