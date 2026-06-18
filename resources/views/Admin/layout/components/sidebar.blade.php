@@ -1,118 +1,157 @@
 <div id="sidebar">
 
     <div class="sidebar-logo">
-      <div class="logo-mark">N</div>
-      <span class="logo-text">Nova<span>Hub</span></span>
+        <div class="logo-mark">N</div>
+        <span class="logo-text">Nova<span>Hub</span></span>
     </div>
 
     <nav class="nav-section">
 
-      <div class="nav-label">Main</div>
+        <p class="nav-label">Main</p>
 
-      <div class="nav-item active" data-tip="Dashboard">
-        <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
-        <span class="nav-text">Dashboard</span>
-      </div>
+        <ul class="nav-list">
 
-      <div class="nav-item has-sub" data-tip="Analytics">
-        <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
-        <span class="nav-text">Analytics</span>
-        <i class="fa-solid fa-chevron-right nav-arrow"></i>
-      </div>
-      <div class="sub-menu">
-        <div class="sub-item active"><span class="sub-dot"></span>Overview</div>
-        <div class="sub-item"><span class="sub-dot"></span>Reports</div>
-        <div class="sub-item"><span class="sub-dot"></span>Real-time</div>
-      </div>
+            <li class="nav-item active" data-tip="Dashboard">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
 
-      <div class="nav-item has-sub" data-tip="Products">
-        <span class="nav-icon"><i class="fa-solid fa-box-open"></i></span>
-        <span class="nav-text">Products</span>
-        <span class="nav-badge">12</span>
-        <i class="fa-solid fa-chevron-right nav-arrow"></i>
-      </div>
-      <div class="sub-menu">
-        <div class="sub-item"><span class="sub-dot"></span>Catalogue</div>
-        <div class="sub-item"><span class="sub-dot"></span>Inventory</div>
-        <div class="sub-item"><span class="sub-dot"></span>Pricing</div>
-      </div>
+            <li class="nav-item has-sub" data-tip="Analytics">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <span class="nav-text">Analytics</span>
+                    <i class="fa-solid fa-chevron-right nav-arrow"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-item active"><span class="sub-dot"></span>Overview</li>
+                    <li class="sub-item"><span class="sub-dot"></span>Reports</li>
+                    <li class="sub-item"><span class="sub-dot"></span>Real-time</li>
+                </ul>
+            </li>
 
-      <div class="nav-item" data-tip="Orders">
-        <span class="nav-icon"><i class="fa-solid fa-bag-shopping"></i></span>
-        <span class="nav-text">Orders</span>
-        <span class="nav-badge">5</span>
-      </div>
+            <li class="nav-item has-sub" data-tip="Products">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-box-open"></i></span>
+                    <span class="nav-text">Products</span>
+                    <span class="nav-badge">12</span>
+                    <i class="fa-solid fa-chevron-right nav-arrow"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-item"><span class="sub-dot"></span>Catalogue</li>
+                    <li class="sub-item"><span class="sub-dot"></span>Inventory</li>
+                    <li class="sub-item"><span class="sub-dot"></span>Pricing</li>
+                </ul>
+            </li>
 
-      <div class="nav-item" data-tip="Customers">
-        <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
-        <span class="nav-text">Customers</span>
-      </div>
+            <li class="nav-item" data-tip="Orders">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                    <span class="nav-text">Orders</span>
+                    <span class="nav-badge">5</span>
+                </a>
+            </li>
 
-      <div class="nav-label" style="margin-top:12px;">Management</div>
+            <li class="nav-item" data-tip="Customers">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
+                    <span class="nav-text">Customers</span>
+                </a>
+            </li>
 
-      <div class="nav-item has-sub" data-tip="Settings">
-        <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
-        <span class="nav-text">Settings</span>
-        <i class="fa-solid fa-chevron-right nav-arrow"></i>
-      </div>
-      <div class="sub-menu">
-        <div class="sub-item"><span class="sub-dot"></span>General</div>
-        <div class="sub-item"><span class="sub-dot"></span>Security</div>
-        <div class="sub-item"><span class="sub-dot"></span>Integrations</div>
-        <div class="sub-item"><span class="sub-dot"></span>Billing</div>
-      </div>
+        </ul>
+        <p class="nav-label" style="margin-top:12px;">Management</p>
+        <ul class="nav-list">
+            <li class="nav-item has-sub {{ isActive('admin.settings.*') ? 'active open' : '' }}" data-tip="Settings">
+                <a href="javascript:void(0)">
+                    <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
+                    <span class="nav-text">Settings</span>
+                    <i class="fa-solid fa-chevron-right nav-arrow"></i>
+                </a>
+                <ul class="sub-menu {{ isActive('admin.settings.*') ? 'open' : '' }}">
+                    <li class="sub-item {{ isActive('admin.settings.site-settings') ? 'active' : '' }}">
+                        <a href="{{ route('admin.setting.site-settings') }}"><span class="sub-dot"></span>General</a>
+                    </li>
+                    <li class="sub-item {{ isActive('admin.settings.security') ? 'active' : '' }}">
+                        <a
+                            href="{{ Route::has('admin.settings.security') ? route('admin.settings.security') : 'javascript:void(0)' }}"><span
+                                class="sub-dot"></span>Security</a>
+                    </li>
+                    <li class="sub-item {{ isActive('admin.settings.integrations') ? 'active' : '' }}">
+                        <a
+                            href="{{ Route::has('admin.settings.integrations') ? route('admin.settings.integrations') : 'javascript:void(0)' }}"><span
+                                class="sub-dot"></span>Integrations</a>
+                    </li>
+                    <li class="sub-item {{ isActive('admin.settings.billing') ? 'active' : '' }}">
+                        <a
+                            href="{{ Route::has('admin.settings.billing') ? route('admin.settings.billing') : 'javascript:void(0)' }}"><span
+                                class="sub-dot"></span>Billing</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-tip="Team">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-solid fa-user-group"></i></span>
+                    <span class="nav-text">Team</span>
+                </a>
+            </li>
 
-      <div class="nav-item" data-tip="Team">
-        <span class="nav-icon"><i class="fa-solid fa-user-group"></i></span>
-        <span class="nav-text">Team</span>
-      </div>
+            <li class="nav-item" data-tip="Support">
+                <a href="#">
+                    <span class="nav-icon"><i class="fa-regular fa-circle-question"></i></span>
+                    <span class="nav-text">Help &amp; Support</span>
+                </a>
+            </li>
 
-      <div class="nav-item" data-tip="Support">
-        <span class="nav-icon"><i class="fa-regular fa-circle-question"></i></span>
-        <span class="nav-text">Help &amp; Support</span>
-      </div>
+        </ul>
 
     </nav>
-
     <div class="sidebar-profile">
-      <div class="profile-avatar">JD</div>
-      <div class="profile-info">
-        <div class="profile-name">John Doe</div>
-        <div class="profile-role">Administrator</div>
-      </div>
-      <i class="fa-solid fa-ellipsis profile-more"></i>
+        <div class="profile-avatar">JD</div>
+        <div class="profile-info">
+            <div class="profile-name">John Doe</div>
+            <div class="profile-role">Administrator</div>
+        </div>
+        <i class="fa-solid fa-ellipsis profile-more"></i>
     </div>
 
     <div class="sidebar-toggle" id="sidebarToggle">
-      <i class="fa-solid fa-chevron-left"></i>
+        <i class="fa-solid fa-chevron-left"></i>
     </div>
 
-  </div>
+</div>
 
 @push('js')
-<script>
-$(function () {
+    <script>
+        $(function() {
 
-    /* Sidebar collapse toggle */
-    $('#sidebarToggle').on('click', function () {
-        $('#sidebar').toggleClass('collapsed');
-        $('body').toggleClass('collapsed');
-    });
+            $('#sidebarToggle').on('click', function() {
+                $('#sidebar').toggleClass('collapsed');
+                $('body').toggleClass('collapsed');
+            });
 
-    /* Sub-menu accordion */
-    $('.has-sub').on('click', function () {
-        var $item = $(this);
-        var $sub  = $item.next('.sub-menu');
-        var isOpen = $item.hasClass('open');
-        $('.has-sub.open').not($item).removeClass('open');
-        $('.sub-menu.open').not($sub).removeClass('open');
-        $item.toggleClass('open', !isOpen);
-        $sub.toggleClass('open', !isOpen);
-    });
+            $('.has-sub').on('click', function(e) {
+                if ($(e.target).closest('.sub-menu').length) return;
 
-    /* Auto-open active sub-menu on load */
-    $('.sub-menu.open').prev('.has-sub').addClass('open');
+                var $item = $(this);
+                var $sub = $item.find('.sub-menu');
+                var isOpen = $item.hasClass('open');
 
-});
-</script>
+                $('.has-sub.open').not($item).removeClass('open')
+                    .find('.sub-menu').removeClass('open');
+
+                $item.toggleClass('open', !isOpen);
+                $sub.toggleClass('open', !isOpen);
+            });
+
+            $('.sub-menu').each(function() {
+                if ($(this).find('.sub-item.active').length) {
+                    $(this).addClass('open')
+                        .closest('.has-sub').addClass('open');
+                }
+            });
+
+        });
+    </script>
 @endpush

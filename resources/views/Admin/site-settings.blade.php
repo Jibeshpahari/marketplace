@@ -310,7 +310,7 @@
                                                             placeholder="e.g. https://facebook.com/"
                                                             value="{{ $social['link'] ?? '' }}">
                                                     </div>
-                                                    <div class="col-md-1">
+                                                    <div class="col-md-1 align-content-center">
                                                         <button type="button"
                                                             class="btn btn-danger btn-sm remove-social-link">
                                                             <i class="fa fa-times"></i>
@@ -470,9 +470,9 @@
                 <div class="form-group">
                     <div class="form-check form-switch">
                         <label class="form-check-label" for="switchCheckDefault">Default switch checkbox input</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                        <input class="form-check-input switch switch-lg" type="checkbox" role="switch" id="switchCheckDefault">
+                        <span class="error d-block mt-1"> </span>
                     </div>
-                    <span class="error"> Error </span>
                 </div>
             </div>
         </div>
@@ -495,7 +495,7 @@
                     <input type="url" class="form-control" name="social_links[${socialIndex}][link]"
                         placeholder="e.g. https://facebook.com/">
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 align-content-center">
                     <button type="button" class="btn btn-danger btn-sm remove-social-link">
                         <i class="fa fa-times"></i>
                     </button>
