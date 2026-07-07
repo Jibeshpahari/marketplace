@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // Site Identity
-            $table->string('site_name');
+            $table->string('site_title');
             $table->string('site_email');
             $table->string('site_phone')->nullable();
             $table->string('site_logo')->nullable();

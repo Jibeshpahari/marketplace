@@ -30,7 +30,11 @@ a {
     color: #FF0F0F;
 }
 
-
+.required::after {
+    content: " *";
+    color: #FF0F0F;
+    font-weight: bold;
+}
 
 html,
 body {
@@ -1494,10 +1498,6 @@ body.collapsed #main {
     left: 17px;
 }
 
-.form-check-input.switch-sm:active::before {
-    width: 18px;
-}
-
 .form-check-input.switch-sm:checked:active::before {
     left: 11px;
 }
@@ -1519,9 +1519,6 @@ body.collapsed #main {
     left: 24px;
 }
 
-.form-check-input.switch-md:active::before {
-    width: 24px;
-}
 
 .form-check-input.switch-md:checked:active::before {
     left: 16px;
@@ -1543,10 +1540,26 @@ body.collapsed #main {
     left: 31px;
 }
 
-.form-check-input.switch-lg:active::before {
-    width: 30px;
-}
-
 .form-check-input.switch-lg:checked:active::before {
     left: 21px;
+}
+
+.form-check-input.switch:hover {
+    background-color: #b8b8b8 !important;
+}
+
+.form-check-input.switch:checked:hover {
+    background-color: #15803d !important;
+}
+
+.form-check-input.switch:hover::before {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(0, 0, 0, 0.06);
+}
+
+.form-check-input.switch:disabled:hover {
+    background-color: #ccc !important;
+}
+
+.form-check-input.switch:checked:disabled:hover {
+    background-color: #16a34a !important;
 }

@@ -21,31 +21,28 @@
                                 aria-selected="false">Social Links</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pagination-tab" data-bs-toggle="tab" data-bs-target="#pagination"
-                                type="button" role="tab" aria-controls="contact"
-                                aria-selected="false">Pagination</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo"
                                 type="button" role="tab" aria-controls="contact" aria-selected="false">SEO</button>
                         </li>
                     </ul>
 
                     <div class="tab-content mt-3" id="myTabContent">
+                        {{-- Site Identity --}}
                         <div class="tab-pane fade show active" id="site-identity" role="tabpanel"
                             aria-labelledby="site-identity">
                             {{-- Site Settings Identity --}}
-                            <form action="{{ '' }}" method="POST" id="site-identity"
+                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST" id="site-identity"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @php $s = $site_settings ?? null; @endphp
-
+                                {{-- Tab Name --}}
+                                <input type="hidden" name="tab_name" value="site_identity" data-tab="site-identity">
                                 {{-- Site Name --}}
                                 <div class="form-group">
-                                    <label for="site_name">Site Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="site_name" name="site_name"
-                                        value="{{ $s?->site_name ?? '' }}">
-                                    @error('site_name')
+                                    <label for="site_title" class="required">Site Title</label>
+                                    <input type="text" class="form-control" id="site_title" name="site_title"
+                                        value="{{ $s?->site_title ?? '' }}">
+                                    @error('site_title')
                                         <span class="error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -54,7 +51,7 @@
                                     {{-- Site Email --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="site_email">Site Email <span class="text-danger">*</span></label>
+                                            <label for="site_email">Site Email</label>
                                             <input type="email" class="form-control" id="site_email" name="site_email"
                                                 value="{{ $s?->site_email ?? '' }}">
                                             @error('site_email')
@@ -117,7 +114,7 @@
                                     <div class="col">
                                         {{-- Site Timezone --}}
                                         <div class="form-group">
-                                            <label for="site_timezone">Timezone <span class="text-danger">*</span></label>
+                                            <label for="site_timezone">Timezone </label>
                                             <select class="form-select" id="site_timezone" name="site_timezone">
                                                 @foreach (timezone_identifiers_list() as $timezone)
                                                     <option value="{{ $timezone }}"
@@ -135,7 +132,7 @@
                                     <div class="col">
                                         {{-- Site Language --}}
                                         <div class="form-group">
-                                            <label for="site_language">Language <span class="text-danger">*</span></label>
+                                            <label for="site_language">Language</label>
                                             <select class="form-select" id="site_language" name="site_language">
                                                 <option value="en"
                                                     {{ ($s?->site_language ?? 'en') === 'en' ? 'selected' : '' }}>
@@ -169,7 +166,7 @@
                                     <div class="col">
                                         {{-- Site Currency --}}
                                         <div class="form-group">
-                                            <label for="site_currency">Currency <span class="text-danger">*</span></label>
+                                            <label for="site_currency">Currency </label>
                                             <select class="form-select" id="site_currency" name="site_currency">
                                                 <option value="USD"
                                                     {{ ($s?->site_currency ?? 'USD') === 'USD' ? 'selected' : '' }}>USD
@@ -214,10 +211,14 @@
 
                             </form>
                         </div>
+                        {{-- Address --}}
                         <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address">
-                            <form action="{{ '' }}" method="POST" id="site-address"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                                id="site-address" enctype="multipart/form-data">
                                 @csrf
+
+                                {{-- Tab Name --}}
+                                <input type="hidden" name="tab_name" value="address" data-tab="site-identity">
                                 {{-- Address --}}
                                 <div class="form-group">
                                     <label for="address">Address</label>
@@ -286,6 +287,7 @@
 
                             </form>
                         </div>
+                        {{-- Social-links --}}
                         <div class="tab-pane fade" id="social-links" role="tabpanel" aria-labelledby="social-links">
                             <form action="{{ '' }}" method="POST" id="site-links"
                                 enctype="multipart/form-data">
@@ -337,9 +339,7 @@
 
                             </form>
                         </div>
-                        <div class="tab-pane fade" id="pagination" role="tabpanel" aria-labelledby="pagination">
-                            Loading...
-                        </div>
+                        {{-- SEO --}}
                         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo">
                             <form action="{{ '' }}" method="POST" id="site-links"
                                 enctype="multipart/form-data">
@@ -470,7 +470,8 @@
                 <div class="form-group">
                     <div class="form-check form-switch">
                         <label class="form-check-label" for="switchCheckDefault">Default switch checkbox input</label>
-                        <input class="form-check-input switch switch-lg" type="checkbox" role="switch" id="switchCheckDefault">
+                        <input class="form-check-input switch switch-lg" type="checkbox" role="switch"
+                            id="switchCheckDefault">
                         <span class="error d-block mt-1"> </span>
                     </div>
                 </div>
