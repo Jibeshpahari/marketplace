@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\SettingKey;
+use App\Models\Admin\SiteSetting;
+
 /**
  * Single entry point: checks route name match (exact or wildcard)
  * and URL path match (for slash-based wildcards), so you only ever
@@ -34,4 +37,11 @@ function routePatternMatches(string $pattern): bool
 
     // Otherwise treat it as a route name pattern (e.g. "products.*" or "products.catalogue")
     return request()->routeIs($pattern);
+}
+
+if (! function_exists('setting')) {
+    function setting(SettingKey|string $key, mixed $default = null): mixed
+    {
+        return SiteSetting::get($key, $default);
+    }
 }

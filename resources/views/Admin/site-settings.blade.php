@@ -1,5 +1,6 @@
 @extends('admin.layout.app')
 
+
 @section('content')
     <div class="row">
         <div class="col-9">
@@ -8,21 +9,23 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="site-identity-tab" data-bs-toggle="tab"
-                                data-bs-target="#site-identity" type="button" role="tab" aria-controls="home"
-                                aria-selected="true">Site Identity</button>
+                                data-bs-target="#site-identity" data-tab="site_identity" type="button" role="tab"
+                                aria-controls="home" aria-selected="true">Site Identity</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="address-tab    " data-bs-toggle="tab" data-bs-target="#address"
-                                type="button" role="tab" aria-controls="profile" aria-selected="false">Address</button>
+                            <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address"
+                                data-tab="address" type="button" role="tab" aria-controls="profile"
+                                aria-selected="false">Address</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="social-links-tab" data-bs-toggle="tab"
-                                data-bs-target="#social-links" type="button" role="tab" aria-controls="contact"
-                                aria-selected="false">Social Links</button>
+                                data-bs-target="#social-links" data-tab="social_links" type="button" role="tab"
+                                aria-controls="contact" aria-selected="false">Social Links</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo"
-                                type="button" role="tab" aria-controls="contact" aria-selected="false">SEO</button>
+                                data-tab="seo" type="button" role="tab" aria-controls="contact"
+                                aria-selected="false">SEO</button>
                         </li>
                     </ul>
 
@@ -34,14 +37,14 @@
                             <form action="{{ route('admin.setting.site-setting.store') }}" method="POST" id="site-identity"
                                 enctype="multipart/form-data">
                                 @csrf
-                                @php $s = $site_settings ?? null; @endphp
                                 {{-- Tab Name --}}
                                 <input type="hidden" name="tab_name" value="site_identity" data-tab="site-identity">
+
                                 {{-- Site Name --}}
                                 <div class="form-group">
                                     <label for="site_title" class="required">Site Title</label>
                                     <input type="text" class="form-control" id="site_title" name="site_title"
-                                        value="{{ $s?->site_title ?? '' }}">
+                                        value="{{ old('site_title', setting('site_title')) }}">
                                     @error('site_title')
                                         <span class="error">{{ $message }}</span>
                                     @enderror
@@ -53,7 +56,7 @@
                                         <div class="form-group">
                                             <label for="site_email">Site Email</label>
                                             <input type="email" class="form-control" id="site_email" name="site_email"
-                                                value="{{ $s?->site_email ?? '' }}">
+                                                value="{{ old('site_email', setting('site_email')) }}">
                                             @error('site_email')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -65,7 +68,7 @@
                                         <div class="form-group">
                                             <label for="site_phone">Site Phone</label>
                                             <input type="text" class="form-control" id="site_phone" name="site_phone"
-                                                value="{{ $s?->site_phone ?? '' }}">
+                                                value="{{ old('site_phone', setting('site_phone')) }}">
                                             @error('site_phone')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -78,9 +81,10 @@
                                         {{-- Site Logo --}}
                                         <div class="form-group">
                                             <label for="site_logo">Site Logo</label>
-                                            @if ($s?->site_logo)
+                                            @if (setting('site_logo'))
                                                 <div class="mb-2">
-                                                    <img src="{{ asset($s->site_logo) }}" alt="Site Logo" height="50">
+                                                    <img src="{{ Storage::url(setting('site_logo')) }}" alt="Site Logo"
+                                                        height="50">
                                                 </div>
                                             @endif
                                             <input type="file" class="form-control" id="site_logo" name="site_logo"
@@ -95,10 +99,10 @@
                                         {{-- Site Favicon --}}
                                         <div class="form-group">
                                             <label for="site_favicon">Site Favicon</label>
-                                            @if ($s?->site_favicon)
+                                            @if (setting('site_favicon'))
                                                 <div class="mb-2">
-                                                    <img src="{{ asset($s->site_favicon) }}" alt="Site Favicon"
-                                                        height="32">
+                                                    <img src="{{ Storage::url(setting('site_favicon')) }}"
+                                                        alt="Site Favicon" height="32">
                                                 </div>
                                             @endif
                                             <input type="file" class="form-control" id="site_favicon"
@@ -115,10 +119,11 @@
                                         {{-- Site Timezone --}}
                                         <div class="form-group">
                                             <label for="site_timezone">Timezone </label>
+                                            @php $currentTimezone = old('site_timezone', setting('site_timezone', 'UTC')); @endphp
                                             <select class="form-select" id="site_timezone" name="site_timezone">
                                                 @foreach (timezone_identifiers_list() as $timezone)
                                                     <option value="{{ $timezone }}"
-                                                        {{ ($s?->site_timezone ?? 'UTC') === $timezone ? 'selected' : '' }}>
+                                                        {{ $currentTimezone === $timezone ? 'selected' : '' }}>
                                                         {{ $timezone }}
                                                     </option>
                                                 @endforeach
@@ -133,27 +138,18 @@
                                         {{-- Site Language --}}
                                         <div class="form-group">
                                             <label for="site_language">Language</label>
+                                            @php $currentLanguage = old('site_language', setting('site_language', 'en')); @endphp
                                             <select class="form-select" id="site_language" name="site_language">
-                                                <option value="en"
-                                                    {{ ($s?->site_language ?? 'en') === 'en' ? 'selected' : '' }}>
-                                                    English
-                                                </option>
-                                                <option value="fr"
-                                                    {{ ($s?->site_language ?? 'en') === 'fr' ? 'selected' : '' }}>
-                                                    French
-                                                </option>
-                                                <option value="de"
-                                                    {{ ($s?->site_language ?? 'en') === 'de' ? 'selected' : '' }}>
-                                                    German
-                                                </option>
-                                                <option value="es"
-                                                    {{ ($s?->site_language ?? 'en') === 'es' ? 'selected' : '' }}>
-                                                    Spanish
-                                                </option>
-                                                <option value="ar"
-                                                    {{ ($s?->site_language ?? 'en') === 'ar' ? 'selected' : '' }}>
-                                                    Arabic
-                                                </option>
+                                                <option value="en" {{ $currentLanguage === 'en' ? 'selected' : '' }}>
+                                                    English</option>
+                                                <option value="fr" {{ $currentLanguage === 'fr' ? 'selected' : '' }}>
+                                                    French</option>
+                                                <option value="de" {{ $currentLanguage === 'de' ? 'selected' : '' }}>
+                                                    German</option>
+                                                <option value="es" {{ $currentLanguage === 'es' ? 'selected' : '' }}>
+                                                    Spanish</option>
+                                                <option value="ar" {{ $currentLanguage === 'ar' ? 'selected' : '' }}>
+                                                    Arabic</option>
                                             </select>
                                             @error('site_language')
                                                 <span class="error">{{ $message }}</span>
@@ -167,22 +163,18 @@
                                         {{-- Site Currency --}}
                                         <div class="form-group">
                                             <label for="site_currency">Currency </label>
+                                            @php $currentCurrency = old('site_currency', setting('site_currency', 'USD')); @endphp
                                             <select class="form-select" id="site_currency" name="site_currency">
-                                                <option value="USD"
-                                                    {{ ($s?->site_currency ?? 'USD') === 'USD' ? 'selected' : '' }}>USD
-                                                </option>
-                                                <option value="EUR"
-                                                    {{ ($s?->site_currency ?? 'USD') === 'EUR' ? 'selected' : '' }}>EUR
-                                                </option>
-                                                <option value="GBP"
-                                                    {{ ($s?->site_currency ?? 'USD') === 'GBP' ? 'selected' : '' }}>GBP
-                                                </option>
-                                                <option value="AED"
-                                                    {{ ($s?->site_currency ?? 'USD') === 'AED' ? 'selected' : '' }}>AED
-                                                </option>
-                                                <option value="SAR"
-                                                    {{ ($s?->site_currency ?? 'USD') === 'SAR' ? 'selected' : '' }}>SAR
-                                                </option>
+                                                <option value="USD" {{ $currentCurrency === 'USD' ? 'selected' : '' }}>
+                                                    USD</option>
+                                                <option value="EUR" {{ $currentCurrency === 'EUR' ? 'selected' : '' }}>
+                                                    EUR</option>
+                                                <option value="GBP" {{ $currentCurrency === 'GBP' ? 'selected' : '' }}>
+                                                    GBP</option>
+                                                <option value="AED" {{ $currentCurrency === 'AED' ? 'selected' : '' }}>
+                                                    AED</option>
+                                                <option value="SAR" {{ $currentCurrency === 'SAR' ? 'selected' : '' }}>
+                                                    SAR</option>
                                             </select>
                                             @error('site_currency')
                                                 <span class="error">{{ $message }}</span>
@@ -197,7 +189,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="site_currency_symbol"
                                                 name="site_currency_symbol"
-                                                value="{{ $s?->site_currency_symbol ?? '$' }}">
+                                                value="{{ old('site_currency_symbol', setting('site_currency_symbol', '$')) }}">
                                             @error('site_currency_symbol')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -223,7 +215,7 @@
                                 <div class="form-group">
                                     <label for="address">Address</label>
                                     <input type="text" class="form-control" id="address" name="address"
-                                        value="{{ $s?->address ?? '' }}">
+                                        value="{{ old('address', setting('address')) }}">
                                     @error('address')
                                         <span class="error">{{ $message }}</span>
                                     @enderror
@@ -235,7 +227,7 @@
                                         <div class="form-group">
                                             <label for="city">City</label>
                                             <input type="text" class="form-control" id="city" name="city"
-                                                value="{{ $s?->city ?? '' }}">
+                                                value="{{ old('city', setting('city')) }}">
                                             @error('city')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -247,7 +239,7 @@
                                         <div class="form-group">
                                             <label for="state">State</label>
                                             <input type="text" class="form-control" id="state" name="state"
-                                                value="{{ $s?->state ?? '' }}">
+                                                value="{{ old('state', setting('state')) }}">
                                             @error('state')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -261,7 +253,7 @@
                                         <div class="form-group">
                                             <label for="country">Country</label>
                                             <input type="text" class="form-control" id="country" name="country"
-                                                value="{{ $s?->country ?? '' }}">
+                                                value="{{ old('country', setting('country')) }}">
                                             @error('country')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -273,7 +265,7 @@
                                         <div class="form-group">
                                             <label for="zip_code">Zip Code</label>
                                             <input type="text" class="form-control" id="zip_code" name="zip_code"
-                                                value="{{ $s?->zip_code ?? '' }}">
+                                                value="{{ old('zip_code', setting('zip_code')) }}">
                                             @error('zip_code')
                                                 <span class="error">{{ $message }}</span>
                                             @enderror
@@ -289,10 +281,10 @@
                         </div>
                         {{-- Social-links --}}
                         <div class="tab-pane fade" id="social-links" role="tabpanel" aria-labelledby="social-links">
-                            <form action="{{ '' }}" method="POST" id="site-links"
+                            {{-- <form action="{{ '' }}" method="POST" id="site-links"
                                 enctype="multipart/form-data">
                                 @csrf
-                                {{-- Social Links --}}
+                                Social Links
                                 <div class="form-group">
                                     <label>Social Links</label>
 
@@ -337,14 +329,14 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
 
-                            </form>
+                            </form> --}}
                         </div>
                         {{-- SEO --}}
                         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo">
-                            <form action="{{ '' }}" method="POST" id="site-links"
+                            {{-- <form action="{{ '' }}" method="POST" id="site-links"
                                 enctype="multipart/form-data">
                                 @csrf
-                                {{-- SEO --}}
+                                SEO
                                 <div class="form-group">
                                     <label for="meta_title">Meta Title</label>
                                     <input type="text" class="form-control" id="meta_title" name="meta_title"
@@ -373,7 +365,7 @@
                                 </div>
 
                                 <div class="row">
-                                    {{-- Google Analytics --}}
+                                    Google Analytics
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="google_analytics_id">Google Analytics ID</label>
@@ -386,7 +378,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- Google Tag Manager --}}
+                                    Google Tag Manager
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="google_tag_manager">Google Tag Manager</label>
@@ -408,7 +400,7 @@
                                     @enderror
                                 </div>
 
-                                {{-- Maintenance --}}
+                                Maintenance
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -442,7 +434,7 @@
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
-                            </form>
+                            </form> --}}
                         </div>
                     </div>
                 </div>
@@ -482,7 +474,21 @@
 
 
 @push('js')
-    <script>
+
+    @if (session('active_tab'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const tabTrigger = document.querySelector(
+                    '#myTab [data-tab="{{ session('active_tab') }}"]'
+                );
+                if (tabTrigger) {
+                    bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
+                }
+            });
+        </script>
+    @endif
+
+    {{-- <script>
         let socialIndex = {{ $s?->social_links ? count(json_decode($s->social_links, true)) : 0 }};
 
         $('#add_social_link').on('click', function() {
@@ -511,5 +517,5 @@
         $('#social_links_wrapper').on('click', '.remove-social-link', function() {
             $(this).closest('.social-link-row').remove();
         });
-    </script>
+    </script> --}}  
 @endpush
