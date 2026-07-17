@@ -11,39 +11,31 @@ class SiteSetting extends Model
     protected $table = 'site_settings';
     protected $fillable = ['key', 'value', 'type', 'group'];
 
-    // protected static function booted(): void
-    // {
-    //     static::saved(fn () => Cache::forget('settings'));
-    //     static::deleted(fn () => Cache::forget('settings'));
-    // }
+    protected static function booted(): void
+    {
+        static::saved(fn() => Cache::forget('settings'));
+        static::deleted(fn() => Cache::forget('settings'));
+    }
 
     public static function get(SettingKey|string $key, mixed $default = null): mixed
     {
         $key = $key instanceof SettingKey ? $key->value : $key;
 
-        // $settings = Cache::rememberForever('settings', function () {
-        //     return static::all()
-        //         ->keyBy('key')
-        //         ->map(fn ($setting) => [
-        //             'value' => $setting->value,
-        //             'type' => $setting->type,
-        //         ])
-        //         ->toArray();
-        // });
+        $settings = Cache::rememberForever('settings', function () {
+            return static::all()
+                ->keyBy('key')
+                ->map(fn($setting) => [
+                    'value' => $setting->value,
+                    'type' => $setting->type,
+                ])
+                ->toArray();
+        });
 
-        // Temporary: direct DB read, no cache, for testing 
-        $setting = static::where('key', $key)->first();
-
-        if (! $setting) {
+        if (! isset($settings[$key])) {
             return $default;
         }
 
-        return match ($setting->type) {
-            'boolean' => (bool) $setting->value,
-            'integer' => (int) $setting->value,
-            'json', 'array' => json_decode($setting->value, true),
-            default => $setting->value,
-        };
+        return static::castValue($settings[$key]['value'], $settings[$key]['type']);
     }
 
     public static function set(SettingKey|string $key, mixed $value, string $type = 'string', string $group = 'general'): void
@@ -59,5 +51,15 @@ class SiteSetting extends Model
         }
 
         static::updateOrCreate(['key' => $key], compact('value', 'type', 'group'));
+    }
+
+    protected static function castValue(mixed $value, string $type): mixed
+    {
+        return match ($type) {
+            'boolean' => (bool) $value,
+            'integer' => (int) $value,
+            'json', 'array' => json_decode($value, true),
+            default => $value,
+        };
     }
 }

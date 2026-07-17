@@ -23,7 +23,13 @@ enum SettingKey: string
     case ZipCode = 'zip_code';
 
     // Social
-    case SocialLinks = 'social_links';
+    case FacebookLink = 'facebook_link';
+    case InstagramLink = 'instagram_link';
+    case TwitterLink = 'twitter_link';
+    case YoutubeLink = 'youtube_link';
+    case LinkedinLink = 'linkedin_link';
+    case WhatsappLink = 'whatsapp_link';
+    case TiktokLink = 'tiktok_link';
 
     // Pagination
     case PaginationPerPage = 'pagination_per_page';

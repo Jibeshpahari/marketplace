@@ -98,9 +98,68 @@ class SiteSettingsController extends Controller
         }
     }
 
-    public function storeAddress(Request $request) {}
+    public function storeAddress(Request $request) {
+        $validated = $request->validate([  //TODO - Remove rules from here and add Requests
+            'address'  => ['required', 'string', 'max:255'],
+            'city'     => ['required', 'string', 'max:100'],
+            'state'    => ['required', 'string', 'max:100'],
+            'country'  => ['required', 'string', 'max:100'],
+            'zip_code' => ['required', 'string', 'max:20'],
+            'map_link' => ['nullable', 'url', 'max:500'],    
+        ]);
 
-    public function storeSocialLinks(Request $request) {}
+        DB::beginTransaction();
 
-    public function storeSEO(Request $request) {}
+        try {
+            foreach ($validated as $key => $value) {
+                SiteSetting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value]
+                );
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Site identity settings updated successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return redirect()->back()
+                ->with('error', 'Something went wrong, no changes were saved.')
+                ->withInput();
+        }
+    }
+
+    public function storeSocialLinks(Request $request) {
+        $validated = $request->validate([ //TODO - Remove rules from here and add Requests
+            'facebook_link'  => ['nullable', 'url', 'max:500'],
+            'instagram_link' => ['nullable', 'url', 'max:500'],
+            'twitter_link'   => ['nullable', 'url', 'max:500'],
+            'youtube_link'   => ['nullable', 'url', 'max:500'],
+            'linkedin_link'  => ['nullable', 'url', 'max:500'],
+            'whatsapp_link'  => ['nullable', 'url', 'max:500'],
+            'tiktok_link'    => ['nullable', 'url', 'max:500'],
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($validated as $key => $value) {
+                SiteSetting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value]
+                );
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Social links updated successfully.');
+            
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong, no changes were saved.')->withInput();
+        }
+    }
+
+    public function storeSEO(Request $request) {}  //TODO - Site setting Seo When needed
 }

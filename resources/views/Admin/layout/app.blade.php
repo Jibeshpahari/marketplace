@@ -111,12 +111,7 @@
                     </p>
                 </div>
                 <div class="d-flex gap-2">
-                    <!-- @yield('header-actions') -->
-                    <button class="sub-action-btn" onclick="showNotice('info')"><i class="fa-solid fa-circle-info"></i>
-                        Notice</button>
-                    <button class="sub-action-btn" onclick="showAlert('confirm')"><i
-                            class="fa-solid fa-triangle-exclamation"></i>
-                        Alert</button>
+                    {{-- //TODO - Action BUtton --}}
                 </div>
             </div>
 

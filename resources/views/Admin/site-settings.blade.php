@@ -1,5 +1,14 @@
 @extends('admin.layout.app')
 
+@push('css')
+    <style>
+        .input-group-text {
+            font-size: 18px;
+        }
+
+        /* //TODO - Use Poopins for siddebar  */
+    </style>
+@endpush
 
 @section('content')
     <div class="row">
@@ -85,6 +94,7 @@
                                                 <div class="mb-2">
                                                     <img src="{{ Storage::url(setting('site_logo')) }}" alt="Site Logo"
                                                         height="50">
+                                                    {{-- //TODO - Image will show on hover  --}}
                                                 </div>
                                             @endif
                                             <input type="file" class="form-control" id="site_logo" name="site_logo"
@@ -274,53 +284,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-
-                            </form>
-                        </div>
-                        {{-- Social-links --}}
-                        <div class="tab-pane fade" id="social-links" role="tabpanel" aria-labelledby="social-links">
-                            {{-- <form action="{{ '' }}" method="POST" id="site-links"
-                                enctype="multipart/form-data">
-                                @csrf
-                                Social Links
-                                <div class="form-group">
-                                    <label>Social Links</label>
-
-                                    <div id="social_links_wrapper">
-                                        @if ($s?->social_links)
-                                            @foreach (json_decode($s->social_links, true) as $index => $social)
-                                                <div class="row social-link-row mb-2">
-                                                    <div class="col-md-4">
-                                                        <input type="text" class="form-control"
-                                                            name="social_links[{{ $index }}][name]"
-                                                            placeholder="e.g. Facebook"
-                                                            value="{{ $social['name'] ?? '' }}">
-                                                    </div>
-                                                    <div class="col-md-7">
-                                                        <input type="url" class="form-control"
-                                                            name="social_links[{{ $index }}][link]"
-                                                            placeholder="e.g. https://facebook.com/"
-                                                            value="{{ $social['link'] ?? '' }}">
-                                                    </div>
-                                                    <div class="col-md-1 align-content-center">
-                                                        <button type="button"
-                                                            class="btn btn-danger btn-sm remove-social-link">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
-
-                                    <button type="button" class="btn btn-outline-primary btn-sm mt-2"
-                                        id="add_social_link">
-                                        <i class="fa fa-plus"></i> Add Social Link
-                                    </button>
-
-                                    @error('social_links')
+                                    <label for="map_link">Map Link</label>
+                                    <input type="url" class="form-control" id="map_link" name="map_link"
+                                        placeholder="https://maps.google.com/?q=..."
+                                        value="{{ old('map_link', setting('map_link')) }}">
+                                    <small class="form-text text-muted">
+                                        Paste a Google Maps share link (e.g. from "Share" → "Copy link" on Google Maps).
+                                    </small>
+                                    @error('map_link')
                                         <span class="error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -329,14 +300,148 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
 
-                            </form> --}}
+                            </form>
+                        </div>
+                        {{-- Social-links --}}
+                        <div class="tab-pane fade" id="social-links" role="tabpanel" aria-labelledby="social-links">
+                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                                id="site-links" enctype="multipart/form-data">
+                                @csrf
+
+                                {{-- Tab Name --}}
+                                <input type="hidden" name="tab_name" value="social_links" data-tab="social-links">
+
+                                <div class="row">
+                                    {{-- Facebook --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="facebook_link">Facebook Page Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-facebook-f text-primary"></i></span>
+                                                <input type="url" class="form-control" id="facebook_link"
+                                                    name="facebook_link" placeholder="https://facebook.com/yourpage"
+                                                    value="{{ old('facebook_link', setting('facebook_link')) }}">
+                                            </div>
+                                            @error('facebook_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- Instagram --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="instagram_link">Instagram Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-instagram text-danger"></i></span>
+                                                <input type="url" class="form-control" id="instagram_link"
+                                                    name="instagram_link" placeholder="https://instagram.com/yourpage"
+                                                    value="{{ old('instagram_link', setting('instagram_link')) }}">
+                                            </div>
+                                            @error('instagram_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- Twitter / X --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="twitter_link">Twitter / X Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fab fa-x-twitter"></i></span>
+                                                <input type="url" class="form-control" id="twitter_link"
+                                                    name="twitter_link" placeholder="https://x.com/yourpage"
+                                                    value="{{ old('twitter_link', setting('twitter_link')) }}">
+                                            </div>
+                                            @error('twitter_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- YouTube --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="youtube_link">YouTube Channel Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-youtube text-danger"></i></span>
+                                                <input type="url" class="form-control" id="youtube_link"
+                                                    name="youtube_link" placeholder="https://youtube.com/@yourchannel"
+                                                    value="{{ old('youtube_link', setting('youtube_link')) }}">
+                                            </div>
+                                            @error('youtube_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- LinkedIn --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="linkedin_link">LinkedIn Page Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-linkedin-in text-primary"></i></span>
+                                                <input type="url" class="form-control" id="linkedin_link"
+                                                    name="linkedin_link"
+                                                    placeholder="https://linkedin.com/company/yourpage"
+                                                    value="{{ old('linkedin_link', setting('linkedin_link')) }}">
+                                            </div>
+                                            @error('linkedin_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- WhatsApp --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="whatsapp_link">WhatsApp Link / Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-whatsapp text-success"></i></span>
+                                                <input type="url" class="form-control" id="whatsapp_link"
+                                                    name="whatsapp_link" placeholder="https://wa.me/8801XXXXXXXXX"
+                                                    value="{{ old('whatsapp_link', setting('whatsapp_link')) }}">
+                                            </div>
+                                            @error('whatsapp_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- TikTok --}}
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tiktok_link">TikTok Link</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fab fa-tiktok"></i></span>
+                                                <input type="url" class="form-control" id="tiktok_link"
+                                                    name="tiktok_link" placeholder="https://tiktok.com/@yourpage"
+                                                    value="{{ old('tiktok_link', setting('tiktok_link')) }}">
+                                            </div>
+                                            @error('tiktok_link')
+                                                <span class="error">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+
+                            </form>
                         </div>
                         {{-- SEO --}}
                         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo">
-                            {{-- <form action="{{ '' }}" method="POST" id="site-links"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                                id="site-links" enctype="multipart/form-data">
                                 @csrf
-                                SEO
                                 <div class="form-group">
                                     <label for="meta_title">Meta Title</label>
                                     <input type="text" class="form-control" id="meta_title" name="meta_title"
@@ -365,8 +470,7 @@
                                 </div>
 
                                 <div class="row">
-                                    Google Analytics
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="google_analytics_id">Google Analytics ID</label>
                                             <input type="text" class="form-control" id="google_analytics_id"
@@ -378,8 +482,7 @@
                                         </div>
                                     </div>
 
-                                    Google Tag Manager
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="google_tag_manager">Google Tag Manager</label>
                                             <textarea class="form-control" id="google_tag_manager" name="google_tag_manager" rows="3"
@@ -400,41 +503,10 @@
                                     @enderror
                                 </div>
 
-                                Maintenance
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="maintenance_mode">Maintenance Mode</label>
-                                            <select class="form-select" id="maintenance_mode" name="maintenance_mode">
-                                                <option value="0"
-                                                    {{ ($s?->maintenance_mode ?? false) == false ? 'selected' : '' }}>
-                                                    Disabled</option>
-                                                <option value="1"
-                                                    {{ ($s?->maintenance_mode ?? false) == true ? 'selected' : '' }}>
-                                                    Enabled</option>
-                                            </select>
-                                            @error('maintenance_mode')
-                                                <span class="error">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="maintenance_message">Maintenance Message</label>
-                                            <textarea class="form-control" id="maintenance_message" name="maintenance_message" rows="3"
-                                                placeholder="e.g. We are currently down for maintenance. Please check back soon.">{{ $s?->maintenance_message ?? '' }}</textarea>
-                                            @error('maintenance_message')
-                                                <span class="error">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
-                            </form> --}}
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -442,7 +514,7 @@
         </div>
         <div class="col-3">
             <div class="card p-3">
-                <h5 class="card-title mb-3">Useful settings</h5>
+                <h5 class="card-title mb-3 ps-2">Useful settings</h5>
                 <div class="form-group">
                     <label for="city">User Pagination Per Page</label>
                     <input type="number" class="form-control" id="city" name="city" min="1"
@@ -467,6 +539,29 @@
                         <span class="error d-block mt-1"> </span>
                     </div>
                 </div>
+                <div class="form-group text-center">
+                    <button class="primary-btn btn btn-primary">
+                        Clear Cache
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="32" height="32"
+                            fill="currentColor">
+                            <!-- Handle -->
+                            <rect x="290" y="20" width="28" height="260" rx="10"
+                                transform="rotate(15 304 150)" />
+
+                            <!-- Broom head (bound part) -->
+                            <path d="M340 250 L420 260 L440 310 L300 320 Z" />
+
+                            <!-- Bristles (fanned out) -->
+                            <path d="M300 320
+                                L120 480 L150 490 L310 340
+                                L180 500 L210 505 L325 350
+                                L250 505 L280 500 L340 355
+                                L320 500 L350 490 L360 355
+                                L400 480 L420 460 L380 350
+                                Z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -474,19 +569,21 @@
 
 
 @push('js')
+    <script>
+        $(function() {
+            const storageKey = 'site_setting_active_tab';
+            const sessionTab = @json(session('active_tab'));
+            const savedTab = sessionTab || localStorage.getItem(storageKey);
 
-    @if (session('active_tab'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const tabTrigger = document.querySelector(
-                    '#myTab [data-tab="{{ session('active_tab') }}"]'
-                );
-                if (tabTrigger) {
-                    bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
-                }
+            if (savedTab) {
+                $(`#myTab [data-tab="${savedTab}"]`).tab('show');
+            }
+
+            $('#myTab button').on('shown.bs.tab', function(e) {
+                localStorage.setItem(storageKey, $(e.target).data('tab'));
             });
-        </script>
-    @endif
+        });
+    </script>
 
     {{-- <script>
         let socialIndex = {{ $s?->social_links ? count(json_decode($s->social_links, true)) : 0 }};
@@ -517,5 +614,5 @@
         $('#social_links_wrapper').on('click', '.remove-social-link', function() {
             $(this).closest('.social-link-row').remove();
         });
-    </script> --}}  
+    </script> --}}
 @endpush

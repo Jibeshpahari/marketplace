@@ -11,7 +11,7 @@
 
         <ul class="nav-list">
 
-            <li class="nav-item active" data-tip="Dashboard">
+            <li class="nav-item" data-tip="Dashboard">
                 <a href="#">
                     <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
                     <span class="nav-text">Dashboard</span>
@@ -25,7 +25,7 @@
                     <i class="fa-solid fa-chevron-right nav-arrow"></i>
                 </a>
                 <ul class="sub-menu">
-                    <li class="sub-item active"><span class="sub-dot"></span>Overview</li>
+                    <li class="sub-item"><span class="sub-dot"></span>Overview</li>
                     <li class="sub-item"><span class="sub-dot"></span>Reports</li>
                     <li class="sub-item"><span class="sub-dot"></span>Real-time</li>
                 </ul>
@@ -63,29 +63,28 @@
         </ul>
         <p class="nav-label" style="margin-top:12px;">Management</p>
         <ul class="nav-list">
-            <li class="nav-item has-sub {{ isActive('admin.settings.*') ? 'active open' : '' }}" data-tip="Settings">
+            <li class="nav-item has-sub {{ isActive('admin.setting.*') ? 'active open' : '' }}" data-tip="Settings">
                 <a href="javascript:void(0)">
                     <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
                     <span class="nav-text">Settings</span>
                     <i class="fa-solid fa-chevron-right nav-arrow"></i>
                 </a>
-                <ul class="sub-menu {{ isActive('admin.settings.*') ? 'open' : '' }}">
-                    <li class="sub-item {{ isActive('admin.settings.site-settings') ? 'active' : '' }}">
-                        <a href="{{ route('admin.setting.site-settings') }}"><span class="sub-dot"></span>General</a>
+                <ul class="sub-menu {{ isActive('admin.setting.*') ? 'open' : '' }}">
+                    <li class="sub-item {{ isActive('admin.setting.site-settings') ? 'active' : '' }}">
+                        <a href="{{ route('admin.setting.site-settings') }}"></span>General</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.settings.security') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.setting.security') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.settings.security') ? route('admin.settings.security') : 'javascript:void(0)' }}"><span
-                                class="sub-dot"></span>Security</a>
+                            href="{{ Route::has('admin.setting.security') ? route('admin.setting.security') : 'javascript:void(0)' }}">Security</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.settings.integrations') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.setting.integrations') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.settings.integrations') ? route('admin.settings.integrations') : 'javascript:void(0)' }}"><span
+                            href="{{ Route::has('admin.setting.integrations') ? route('admin.setting.integrations') : 'javascript:void(0)' }}"><span
                                 class="sub-dot"></span>Integrations</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.settings.billing') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.setting.billing') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.settings.billing') ? route('admin.settings.billing') : 'javascript:void(0)' }}"><span
+                            href="{{ Route::has('admin.setting.billing') ? route('admin.setting.billing') : 'javascript:void(0)' }}"><span
                                 class="sub-dot"></span>Billing</a>
                     </li>
                 </ul>
