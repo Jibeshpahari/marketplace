@@ -15,8 +15,8 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#ffffff" />
 
-    <!-- Dynamic title -->
-    <title>{{ empty($title) ? '' : ' | ' . $title }}</title>
+    <!-- Dynamic Admin title -->
+    <title>{{ empty($title) ? '' : $title . ' | ' }}{{ setting('site_title') }}</title>
 
     <!-- Favicon set -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/global/images/favicon.ico') }}" />

@@ -31,17 +31,23 @@
                 </ul>
             </li>
 
-            <li class="nav-item has-sub" data-tip="Products">
-                <a href="#">
+            <li class="nav-item has-sub {{ isActive('admin.products.*') ? 'active open' : '' }}" data-tip="Products">
+                <a href="javascript:void(0)">
                     <span class="nav-icon"><i class="fa-solid fa-box-open"></i></span>
                     <span class="nav-text">Products</span>
                     <span class="nav-badge">12</span>
                     <i class="fa-solid fa-chevron-right nav-arrow"></i>
                 </a>
-                <ul class="sub-menu">
-                    <li class="sub-item"><span class="sub-dot"></span>Catalogue</li>
-                    <li class="sub-item"><span class="sub-dot"></span>Inventory</li>
-                    <li class="sub-item"><span class="sub-dot"></span>Pricing</li>
+                <ul class="sub-menu {{ isActive('admin.products.*') ? 'open' : '' }}">
+                    <li class="sub-item {{ isActive('admin.products.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.products.index') }}"></span>Catalogue</a>
+                    </li>
+                    <li class="sub-item">
+                        <a href="{{ route('admin.products.index') }}"></span>Inventory</a>
+                    </li>
+                    <li class="sub-item">
+                        <a href="{{ route('admin.products.index') }}"></span>Pricing</a>
+                    </li>
                 </ul>
             </li>
 
@@ -63,28 +69,28 @@
         </ul>
         <p class="nav-label" style="margin-top:12px;">Management</p>
         <ul class="nav-list">
-            <li class="nav-item has-sub {{ isActive('admin.setting.*') ? 'active open' : '' }}" data-tip="Settings">
+            <li class="nav-item has-sub {{ isActive('admin.settings.*') ? 'active open' : '' }}" data-tip="Settings">
                 <a href="javascript:void(0)">
                     <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
                     <span class="nav-text">Settings</span>
                     <i class="fa-solid fa-chevron-right nav-arrow"></i>
                 </a>
-                <ul class="sub-menu {{ isActive('admin.setting.*') ? 'open' : '' }}">
-                    <li class="sub-item {{ isActive('admin.setting.site-settings') ? 'active' : '' }}">
-                        <a href="{{ route('admin.setting.site-settings') }}"></span>General</a>
+                <ul class="sub-menu {{ isActive('admin.settings.*') ? 'open' : '' }}">
+                    <li class="sub-item {{ isActive('admin.settings.site-settings') ? 'active' : '' }}">
+                        <a href="{{ route('admin.settings.site-settings') }}">General</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.setting.security') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.settings.security') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.setting.security') ? route('admin.setting.security') : 'javascript:void(0)' }}">Security</a>
+                            href="{{ Route::has('admin.settings.security') ? route('admin.settings.security') : 'javascript:void(0)' }}">Security</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.setting.integrations') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.settings.integrations') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.setting.integrations') ? route('admin.setting.integrations') : 'javascript:void(0)' }}"><span
+                            href="{{ Route::has('admin.setting.integrations') ? route('admin.settings.integrations') : 'javascript:void(0)' }}"><span
                                 class="sub-dot"></span>Integrations</a>
                     </li>
-                    <li class="sub-item {{ isActive('admin.setting.billing') ? 'active' : '' }}">
+                    <li class="sub-item {{ isActive('admin.settings.billing') ? 'active' : '' }}">
                         <a
-                            href="{{ Route::has('admin.setting.billing') ? route('admin.setting.billing') : 'javascript:void(0)' }}"><span
+                            href="{{ Route::has('admin.settings.billing') ? route('admin.settings.billing') : 'javascript:void(0)' }}"><span
                                 class="sub-dot"></span>Billing</a>
                     </li>
                 </ul>

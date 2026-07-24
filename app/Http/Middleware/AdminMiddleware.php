@@ -16,7 +16,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->user()) {
-            return redirect()->route('admin.login.view');
+            return redirect()->guest(route('admin.login.view'));
         }
 
         if ($request->user()->role !== 'admin') {

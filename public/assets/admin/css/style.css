@@ -284,17 +284,22 @@ body {
     width: 100%;
     height: 100%;
     align-content: center;
+    position: relative;
 }
 
-.sub-item.active a::before {
+.sub-item a::before {
     content: '';
     display: inline-block;
-    /* or block */
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: yellow;
+    background: currentColor;
+    position: absolute !important;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 30px;
 }
+
 .sub-dot {
     width: 5px;
     height: 5px;

@@ -31,8 +31,10 @@ class AuthController extends Controller
             'status'   => 'active',
         ], $request->boolean('remember_me'))) {
             $request->session()->regenerate();
-            return redirect()->route('admin.setting.site-settings');
+
+            return redirect()->intended(route('admin.settings.site-settings'));
         }
+
         return back()->withErrors(['error' => 'The provided credentials are incorrect.'])->withInput();
     }
 

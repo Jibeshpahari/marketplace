@@ -43,7 +43,7 @@
                         <div class="tab-pane fade show active" id="site-identity" role="tabpanel"
                             aria-labelledby="site-identity">
                             {{-- Site Settings Identity --}}
-                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST" id="site-identity"
+                            <form action="{{ route('admin.settings.site-setting.store') }}" method="POST" id="site-identity"
                                 enctype="multipart/form-data">
                                 @csrf
                                 {{-- Tab Name --}}
@@ -215,7 +215,7 @@
                         </div>
                         {{-- Address --}}
                         <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address">
-                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                            <form action="{{ route('admin.settings.site-setting.store') }}" method="POST"
                                 id="site-address" enctype="multipart/form-data">
                                 @csrf
 
@@ -304,7 +304,7 @@
                         </div>
                         {{-- Social-links --}}
                         <div class="tab-pane fade" id="social-links" role="tabpanel" aria-labelledby="social-links">
-                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                            <form action="{{ route('admin.settings.site-setting.store') }}" method="POST"
                                 id="site-links" enctype="multipart/form-data">
                                 @csrf
 
@@ -439,7 +439,7 @@
                         </div>
                         {{-- SEO --}}
                         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo">
-                            <form action="{{ route('admin.setting.site-setting.store') }}" method="POST"
+                            <form action="{{ route('admin.settings.site-setting.store') }}" method="POST"
                                 id="site-links" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
@@ -542,23 +542,14 @@
                 <div class="form-group text-center">
                     <button class="primary-btn btn btn-primary">
                         Clear Cache
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="32" height="32"
-                            fill="currentColor">
-                            <!-- Handle -->
-                            <rect x="290" y="20" width="28" height="260" rx="10"
-                                transform="rotate(15 304 150)" />
-
-                            <!-- Broom head (bound part) -->
-                            <path d="M340 250 L420 260 L440 310 L300 320 Z" />
-
-                            <!-- Bristles (fanned out) -->
-                            <path d="M300 320
-                                L120 480 L150 490 L310 340
-                                L180 500 L210 505 L325 350
-                                L250 505 L280 500 L340 355
-                                L320 500 L350 490 L360 355
-                                L400 480 L420 460 L380 350
-                                Z" />
+                        <svg viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            transform="rotate(0 0 0)" width="22" height="22">
+                            <path
+                                d="M22.2815 2.21576C22.5744 2.50866 22.5744 2.98353 22.2815 3.27642L14.9502 10.6077C16.3493 12.1876 16.4673 14.5469 15.1982 16.2639L13.3497 18.7649L5.7346 11.1498L8.23557 9.30129C9.95171 8.03284 12.3095 8.15011 13.8894 9.54722L21.2208 2.21576C21.5137 1.92287 21.9886 1.92287 22.2815 2.21576Z"
+                                fill="#ffffff"></path>
+                            <path
+                                d="M4.51484 12.0514L2.80372 13.3161C2.62814 13.4459 2.51783 13.6458 2.50159 13.8635C2.48535 14.0812 2.5648 14.2952 2.71918 14.4496L10.0499 21.7803C10.2043 21.9347 10.4183 22.0142 10.636 21.9979C10.8538 21.9817 11.0536 21.8714 11.1834 21.6958L12.4481 19.9847L4.51484 12.0514Z"
+                                fill="#ffffff"></path>
                         </svg>
                     </button>
                 </div>
