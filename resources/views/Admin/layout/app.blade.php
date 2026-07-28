@@ -40,21 +40,21 @@
     <!-- WebFont Loader -->
     <script src="{{ asset('assets/admin/js/webfont.min.js') }}"></script>
     <script>
-        WebFont.load({
-            google: {
-                families: ["Public Sans:300,400,500,600,700", "DM+Sans:300,400,500,600", "Syne:700,800"]
-            },
-            custom: {
-                families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
-            },
-            active: function() {
-                sessionStorage.fonts = true;
-            },
-        });
-    </script>
+    WebFont.load({
+        google: {
+            families: ["Public Sans:300,400,500,600,700", "DM+Sans:300,400,500,600", "Syne:700,800", "Poppins:300,400,500,600,700,800"]
+        },
+        custom: {
+            families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands",
+                "simple-line-icons",
+            ],
+            urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
+        },
+        active: function() {
+            sessionStorage.fonts = true;
+        },
+    });
+</script>
 
     <!-- App Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/kaiadmin.css') }}" />

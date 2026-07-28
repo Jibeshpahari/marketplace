@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vendor_id')->constrained('users')->restrictOnDelete();
+
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

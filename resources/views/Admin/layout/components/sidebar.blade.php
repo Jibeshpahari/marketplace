@@ -112,7 +112,7 @@
         </ul>
 
     </nav>
-    <div class="sidebar-profile">
+    <div class="sidebar-profile d-none">
         <div class="profile-avatar">JD</div>
         <div class="profile-info">
             <div class="profile-name">John Doe</div>
