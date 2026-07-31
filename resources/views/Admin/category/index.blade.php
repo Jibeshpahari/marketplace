@@ -41,7 +41,7 @@
 @section('content')
     <div class="card p-3">
         <div class="text-end mb-3">
-            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Category</button>
+            <a href="{{ route('admin.categories.add') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Category</a>
         </div>
         <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
             <thead>

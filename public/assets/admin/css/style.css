@@ -254,6 +254,7 @@ body {
 .sub-menu li:first-child {
     margin-top: 8px;
 }
+
 .sub-menu li:last-child {
     margin-bottom: 8px;
 }
@@ -1611,7 +1612,7 @@ body.collapsed #main {
 }
 
 .nav-tabs .nav-item.show .nav-link,
-.nav-tabs .nav-link.active{
+.nav-tabs .nav-link.active {
     color: #000;
     /* box-shadow: 0px 0px 10px #00000020; */
 }
@@ -1630,6 +1631,23 @@ body.collapsed #main {
 }
 
 .nav-tabs .nav-link:focus,
-.nav-tabs .nav-link:hover{
+.nav-tabs .nav-link:hover {
     border: none;
+}
+
+.form-group .form-select {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    padding-left: 1rem;
+    font-size: 1rem;
+    border: 2px solid #ebedf2;
+}
+
+.selectgroup-button{
+    padding: 0.668rem 1rem;
+}
+
+.form-group label,
+.form-check label {
+    font-size: 1.05rem !important;
 }
