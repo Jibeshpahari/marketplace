@@ -2,6 +2,8 @@
 
 use App\Enums\SettingKey;
 use App\Models\Admin\SiteSetting;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Single entry point: checks route name match (exact or wildcard)
@@ -45,3 +47,19 @@ if (! function_exists('setting')) {
         return SiteSetting::get($key, $default);
     }
 }
+
+if (!function_exists('format_date')) {
+    function format_date($date, $format = 'd M Y', $blank = '--')
+    {
+        if (empty($date)) {
+            return $blank;
+        }
+
+        try {
+            return Carbon::parse($date)->format($format);
+        } catch (Exception  $err) {
+            return $blank;
+        }
+    }
+}
+

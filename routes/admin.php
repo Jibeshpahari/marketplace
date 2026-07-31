@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SiteSettingsController;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,10 @@ Route::controller(ProductController::class)->prefix('products')->name('products.
     Route::get('/', 'index')->name('index');
     Route::get('/form/{id?}', 'form')->name('form');
     Route::post('/save/{id?}', 'save')->name('save');
+});
+
+Route::controller(CategoryController::class)->prefix('product/categories')->name('categories.')->group( function() {
+    Route::get('/', 'index')->name('index');
 });
 
 Route::controller(SiteSettingsController::class)->prefix('settings')->name('settings.')->group(function () {

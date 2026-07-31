@@ -40,7 +40,7 @@
                 </a>
                 <ul class="sub-menu {{ isActive('admin.products.*') ? 'open' : '' }}">
                     <li class="sub-item {{ isActive('admin.products.index') ? 'active' : '' }}">
-                        <a href="{{ route('admin.products.index') }}"></span>Catalogue</a>
+                        <a href="{{ route('admin.products.index') }}"></span>Listing</a>
                     </li>
                     <li class="sub-item">
                         <a href="{{ route('admin.products.index') }}"></span>Inventory</a>
@@ -49,6 +49,14 @@
                         <a href="{{ route('admin.products.index') }}"></span>Pricing</a>
                     </li>
                 </ul>
+            </li>
+
+            <li class="nav-item {{ isActive('admin.categories.*') ? 'active' : '' }}" data-tip="Orders">
+                <a href="{{ route('admin.categories.index') }}">
+                    <span class="nav-icon"><i class="fa-solid fa-chart-diagram"></i></span>
+                    <span class="nav-text">Categories</span>
+                    <span class="nav-badge">5</span>
+                </a>
             </li>
 
             <li class="nav-item" data-tip="Orders">
@@ -68,6 +76,7 @@
 
         </ul>
         <p class="nav-label" style="margin-top:12px;">Management</p>
+
         <ul class="nav-list">
             <li class="nav-item has-sub {{ isActive('admin.settings.*') ? 'active open' : '' }}" data-tip="Settings">
                 <a href="javascript:void(0)">

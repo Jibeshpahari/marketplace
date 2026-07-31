@@ -15,21 +15,18 @@
 @endpush
 
 @section('content')
-    <div class="card p-3">
-        <div class="card-header"></div>
-        <div class="card-body">
-
-            <form action="">
-
-                <p class="fs-4">
+    <form action="">
+        <div class="card p-3">
+            <div class="card-header">
+                <p class="fs-4 mb-0">
                     Basic information
                     <i class="bi bi-info-circle text-dark fs-6" data-bs-toggle="tooltip" data-bs-placement="top"
                         title="Shared across every variant of this product.">
                     </i>
                 </p>
-
+            </div>
+            <div class="card-body">
                 <div class="row">
-
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="name" class="form-label"> Product Name </label>
@@ -81,9 +78,21 @@
                             <input type="text" class="form-control" name="weight" id="weight">
                         </div>
                     </div>
-
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <div class="card p-3">
+            <div class="card-header">
+                <p class="fs-4 mb-0">
+                    Options
+                    <i class="bi bi-info-circle text-dark fs-6" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title='The axes of variation for this product. Marking an option as "color swatch" just shows a color dot next to its values — it has no effect on photos.'>
+                    </i>
+                </p>
+            </div>
+            <div class="card-body"></div>
+        </div>
+
+    </form>
 @endsection
