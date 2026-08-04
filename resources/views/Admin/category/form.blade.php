@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css">
 
     <style>
-        /* Status label — reflects the toggle's current state, no JS involved */
         .status-toggle-wrap {
             display: flex;
             align-items: center;
@@ -30,35 +29,49 @@
         }
 
         /* --- Select2 styling for #parent_category ---
-           Real <li> elements now, so padding/background/etc. all work normally. */
+                                               Real <li> elements now, so padding/background/etc. all work normally. */
         .select2-container--default .select2-selection--single {
             height: 38px;
             border: 1px solid #dee2e6;
             border-radius: .375rem;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 38px;
             padding-left: 12px;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 38px;
         }
 
         .select2-results__option {
-            padding: 12px 16px !important;
+            padding: 10px 16px !important;
         }
 
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: #5e72e4 !important;
+            background-color: #5ea3e4 !important;
         }
 
-        
+        .status-toggle-button {
+            padding: 0.745rem 0.875rem;
+            border-radius: 0;
+            width: 110px;
+        }
+
+        .status-toggle {
+            border-radius: 0.375rem;
+            overflow: auto;
+            padding: 0;
+            gap: 0;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="card p-4">
-        <form action="" class="">
+        <form action="{{ route('admin.categories.save') }}" class="" method="POST">
+            @csrf
             <div class="row">
                 <div class="form-group col-6">
                     <label for="name" class="form-label">
@@ -67,7 +80,11 @@
                         Category Name
                     </label>
                     <input type="text" class="form-control" name="name" id="name" placeholder="Ex: Fashion">
+                    @error('name')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="form-group col-3">
                     <label class="form-label">
                         <i class="fa-solid fa-sitemap me-1" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -76,28 +93,40 @@
                     </label>
                     <div class="selectgroup w-100">
                         <label class="selectgroup-item">
-                            <input type="radio" name="type" value="1" class="selectgroup-input" checked="">
+                            <input type="radio" name="type" value="parent" class="selectgroup-input" checked="">
                             <span class="selectgroup-button"><i class="fa-solid fa-layer-group me-1"></i>Parent</span>
                         </label>
                         <label class="selectgroup-item">
-                            <input type="radio" name="type" value="0" class="selectgroup-input">
+                            <input type="radio" name="type" value="child" class="selectgroup-input">
                             <span class="selectgroup-button"><i class="fa-solid fa-code-branch me-1"></i>Child</span>
                         </label>
                     </div>
+                    @error('type')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="form-group col-3 d-none par-cate-select">
                     <label for="parent_category" class="form-label">
                         <i class="fa-solid fa-diagram-project me-1" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Select the parent this category belongs to"></i>
                         Choose A Parent Categoty
                     </label>
-                    <select class="form-select" id="parent_category">
-                        <option selected> -- Select -- </option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select class="form-select" id="parent_category" name="parent_category">
+                        @forelse ($par_categories as $par_cate)
+                            @if ($loop->first)
+                                <option value="" selected> -- Select -- </option>
+                            @endif
+                            <option value="{{ $par_cate?->id }}">{{ $par_cate?->name }}</option>
+                        @empty
+                            <option value="" selected>No categories available</option>
+                        @endforelse
                     </select>
+                    @error('parent_category')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="form-group col-6">
                     <label for="slug" class="form-label">
                         <i class="fa-solid fa-link me-1" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -105,6 +134,9 @@
                         Slug
                     </label>
                     <input type="text" class="form-control" name="slug" id="slug">
+                    @error('slug')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group col-6">
                     <label for="status" class="form-label">
@@ -112,11 +144,30 @@
                             title="Turn this category on or off"></i>
                         Status
                     </label>
-                    <div class="status-toggle-wrap">
-                        <input class="form-check-input switch switch-lg" type="checkbox" role="switch" name="status"
-                            id="status" value="1" checked="">
-                        <span class="status-label"></span>
+                    <div>
+                        <div class="status-toggle" data-size="sm" role="radiogroup" aria-labelledby="caption-sm">
+                            <label class="status-toggle-item">
+                                <input type="radio" name="status" value="active" class="status-toggle-input"
+                                    data-value="active" checked>
+                                <span class="status-toggle-button"><i class="fa-solid fa-circle-check"
+                                        aria-hidden="true"></i>Active</span>
+                            </label>
+                            <label class="status-toggle-item">
+                                <input type="radio" name="status" value="inactive" class="status-toggle-input"
+                                    data-value="inactive">
+                                <span class="status-toggle-button"><i class="fa-solid fa-circle-xmark"
+                                        aria-hidden="true"></i>Inactive</span>
+                            </label>
+                        </div>
                     </div>
+                    @error('status')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+            <div class="card-footer mt-3">
+                <div class="mt-3 text-center">
+                    <input type="submit" class="btn btn-primary" value="Submit" name="submit">
                 </div>
             </div>
         </form>
@@ -132,10 +183,10 @@
         $(document).ready(function() {
             $('input[name="type"]').on('change', function() {
                 var selectedValue = $(this).val();
-                if (selectedValue == '1') {
-                    $('.par-cate-select').addClass('d-none');
-                } else {
+                if (selectedValue == 'child') {
                     $('.par-cate-select').removeClass('d-none');
+                } else {
+                    $('.par-cate-select').addClass('d-none');
                 }
             });
 

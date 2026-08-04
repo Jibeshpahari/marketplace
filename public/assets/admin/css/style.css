@@ -10,15 +10,19 @@
     --accent: #C2EEFF;
     --accent-dim: rgba(194, 238, 255, 0.13);
     --accent-dark: #0a4a6e;
-    --font-body: 'Public Sans', Comic Sans MS, cursive;
+    --font-body: 'Poppins', 'Public Sans', 'Comic Sans MS', cursive, sans-serif;
     --text-light: #f0f0f4;
     --text-muted: #b0bcd8;
     --text-dim: #606880;
     --content-bg: #f2fbff;
     --border: rgba(255, 255, 255, 0.06);
     --radius: 10px;
+    --active-toggle-bg: #2fbf71;
+    --active-toggle-glow: rgba(47, 191, 113, 0.32);
+    --inactive-toggle-bg: #e5484d;
+    --inactive-toggle-glow: rgba(229, 72, 77, 0.32);
+    --toggle-radius: 999px;
     --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-
 }
 
 a {
@@ -1651,3 +1655,82 @@ body.collapsed #main {
 .form-check label {
     font-size: 1.05rem !important;
 }
+
+.status-toggle {
+    position: relative;
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
+    border-radius: var(--toggle-radius);
+    background: #ffffff;
+    border: 1px solid rgba(10, 74, 110, 0.12);
+    box-shadow:
+        0 1px 2px rgba(10, 74, 110, 0.06),
+        0 8px 20px -12px rgba(10, 74, 110, 0.35);
+}
+
+label.status-toggle-item {
+    display: flex;
+    flex: 1 1 0;
+    margin: 0;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+}
+
+.status-toggle-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.status-toggle-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    /* padding: 8px 16px; */
+    padding: 6px 14px;
+    border-radius: var(--toggle-radius);
+    background: transparent;
+    color: var(--accent-dark);
+    opacity: 0.7;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    user-select: none;
+    transition: background-color var(--transition), color var(--transition),
+        box-shadow var(--transition), transform 0.15s ease, opacity var(--transition);
+}
+
+
+.status-toggle-item:hover .status-toggle-input:not(:checked)+.status-toggle-button {
+    background: var(--accent-dim);
+    color: var(--accent-dark);
+    opacity: 1;
+}
+
+.status-toggle-input[data-value="active"]:checked+.status-toggle-button {
+    background: var(--active-toggle-bg);
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: 0 4px 12px var(--active-toggle-glow);
+}
+
+.status-toggle-input[data-value="inactive"]:checked+.status-toggle-button {
+    background: var(--inactive-toggle-bg);
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: 0 4px 12px var(--inactive-toggle-glow);
+}
+
+.status-toggle-item:active .status-toggle-button {
+    transform: scale(0.97);
+}
+
+.status-toggle-input:focus-visible+.status-toggle-button {
+    outline: 2px solid var(--accent-dark);
+    outline-offset: 2px;
+}
+
