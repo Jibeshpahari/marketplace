@@ -14,8 +14,19 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    public function getParentNameAttribute(): string
+    public function getParentNameAttribute(): ?string
     {
-        return $this->parent ? $this->parent->name : '--';
+        return $this->parent ? $this->parent->name : null;
     }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
 }

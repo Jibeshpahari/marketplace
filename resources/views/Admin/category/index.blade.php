@@ -1,161 +1,389 @@
 @extends('admin.layout.app')
 @push('css')
     <style>
+        .dropdown-options {
+            --do-edit: #3D6DF2;
+            --do-edit-tint: #EFF4FF;
+            --do-delete: #E5484D;
+            --do-delete-tint: #FDEAEA;
+            --do-border: #E7E9EE;
+            --do-ink: #1E2430;
+            --do-muted: #8A93A3;
+            --do-shadow: 0 10px 30px -8px rgba(20, 25, 40, 0.16), 0 2px 8px -2px rgba(20, 25, 40, 0.08);
+        }
+
+        .dropdown-options .do-kebab-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--do-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .12s, color .12s;
+        }
+
+        .dropdown-options .do-kebab-btn:hover {
+            background: #EFFAFF;
+            color: var(--do-ink);
+        }
+
+        .dropdown-options .dropdown-menu.do-menu {
+            width: 190px;
+            background: #FFFFFF;
+            border: 1px solid var(--do-border);
+            border-radius: 12px;
+            box-shadow: var(--do-shadow);
+            padding: 6px;
+        }
+
+        .dropdown-options .do-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--do-ink);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background .12s;
+        }
+
+        .dropdown-options .do-item:hover {
+            background: #F3F4F7;
+        }
+
+        .dropdown-options .do-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .dropdown-options .do-badge--edit {
+            background: var(--do-edit-tint);
+            color: var(--do-edit);
+        }
+
+        .dropdown-options .do-badge--delete {
+            background: var(--do-delete-tint);
+            color: var(--do-delete);
+        }
+
+        .dropdown-options .do-item--edit:hover {
+            background: var(--do-edit-tint);
+        }
+
+        .dropdown-options .do-item--edit:hover .do-badge--edit {
+            background: #fff;
+        }
+
+        .dropdown-options .do-item--edit:hover span {
+            color: var(--do-edit);
+        }
+
+        .dropdown-options .do-item--delete:hover {
+            background: var(--do-delete-tint);
+        }
+
+        .dropdown-options .do-item--delete:hover .do-badge--delete {
+            background: #fff;
+        }
+
+        .dropdown-options .do-item--delete:hover span {
+            color: var(--do-delete);
+        }
+
+        .dropdown-options .do-divider {
+            height: 1px;
+            background: var(--do-border);
+            margin: 5px 4px;
+        }
+    </style>
+@endpush
+@push('css')
+    <style>
         .row-checkbox {
             width: 18px;
             height: 18px;
         }
 
-        .dropdown .dropdown-menu {
-            padding: 0;
-            border: 1px solid #ddd;
-            box-shadow: 0px 0px 15px #00000030 !important;
-        }
-
-        .dropdown .dropdown-menu .dropdown-item {
-            font-size: 16px;
-            padding-block: 6px;
-        }
-        .dropdown .dropdown-menu li{
-            border-bottom: 2px solid #ddd;
-        }
-        .dropdown .dropdown-menu li:last-child{
-            border-bottom: 0;
-        }
-
         .table thead th {
             background: #eeeeee75;
         }
-        .table>thead{
+
+        .table>thead {
             border-bottom: 2px solid #dddddd80;
         }
+
         .table>thead>tr>th,
-        .table>tbody>tr>td
-        {
+        .table>tbody>tr>td {
             padding: 10px 15px !important;
         }
 
+        .sub-category-badge {
+            margin-left: auto;
+            line-height: 1;
+            padding: 4px 7px;
+            vertical-align: middle;
+            font-weight: 500;
+            font-size: 11px;
+            height: fit-content !important;
+            border-radius: 50rem;
+            background: #cfe2ff;
+            color: #052c65;
+            border: 1px solid #9ec5fe;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .sub-category-badge:hover {
+            background: #b6d4fe;
+            border-color: #6ea8fe;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="card p-3">
-        <div class="text-end mb-3">
-            <a href="{{ route('admin.categories.add') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Category</a>
+        <div class="card-header py-3 px-0 pt-0">
+            <div class="text-end">
+                <a href="{{ route('admin.categories.add') }}" class="btn btn-primary bg-primary-gradient btn-sm"><i
+                        class="fa-solid fa-plus"></i>
+                    Add Category</a>
+            </div>
         </div>
-        <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" class="form-check-input row-checkbox" data-id="1"></th>
-                    <th>Category</th>
-                    <th>Parent</th>
-                    <th>Status</th>
-                    <th>Products</th>
-                    <th>Order</th>
-                    <th>Modified At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($categories as $cate)
+        <div class="card-body px-0 py-3">
+            <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
+                <thead>
                     <tr>
+                        <th><input type="checkbox" class="form-check-input row-checkbox" data-id="1"></th>
+                        <th>Category</th>
+                        <th>Parent</th>
+                        <th>Status</th>
+                        <th>Products</th>
+                        <th>Order</th>
+                        <th>Modified At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($categories as $cate)
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="form-check-input row-checkbox" data-id="1">
+                            </td>
+                            <td>
+                                <p class="mb-0">
+                                    {{ $cate?->name }}
+                                    @if (!$cate?->parent_name)
+                                        <span class="sub-category-badge" data-bs-toggle="modal" data-bs-target="#subModal"
+                                            onclick="loadSubcategories({{ $cate->id }}, '{{ $cate->name }}')">
+                                            <i class="fa fa-layer-group"></i> {{ count($cate->children) }}
+                                        </span>
+                                    @endif
+                                </p>
+                                <sub class="d-block text-muted small pt-1 pb-3">{{ '/' . $cate?->slug }}</sub>
+                            </td>
+                            <td>
+                                {{ $cate?->parent_name ?? '--' }}
+                            </td>
+                            <td>
+                                <input class="form-check-input switch switch-md" type="checkbox" role="switch"
+                                    data-bs-toggle="status" {{ $cate?->is_active ? 'checked' : '' }}>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="text-decoration-underline">None</a>
+                                {{-- //TODO - Add a count of product --}}
+                            </td>
+                            <td>
+                                IN hold
+                            </td>
+                            <td>
+                                {{ format_date($cate?->updated_at, 'jS F Y') }}
+                            </td>
+                            <td>
+                                <div class="dropdown-options dropdown text-center">
+                                    <button class="do-kebab-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end do-menu">
+                                        <li>
+                                            <a class="do-item do-item--edit edit-action"
+                                                href="{{ route('admin.categories.edit', $cate) }}" data-id="1">
+                                                <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
+                                                <span>Edit</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="do-item edit-action" href="#" data-id="1">
+                                                <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
+                                                <span>Edit</span>
+                                                {{-- #eff4ff --}}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="do-divider"></div>
+                                        </li>
+                                        <li>
+                                            <a class="do-item do-item--delete delete-action" href="#" data-id="1">
+                                                <span class="do-badge do-badge--delete"><i
+                                                        class="fa-solid fa-trash"></i></span>
+                                                <span>Delete</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    {{-- <tr>
                         <td>
                             <input type="checkbox" class="form-check-input row-checkbox" data-id="1">
                         </td>
                         <td>
-                            <p class="mb-0">{{ $cate?->name }}</p>
-                            <sub class="d-block text-muted small pt-1 pb-3">{{ '/' . $cate?->slug }}</sub>
+                            Name
+                            <span class="d-block">Slug</span>
                         </td>
-                        <td>
-                            {{ $cate?->parent_name }}
-                        </td>
+                        <td>P-Name</td>
                         <td>
                             <input class="form-check-input switch switch-md" type="checkbox" role="switch"
-                                {{ $cate?->is_active ? 'checked' : '' }}>
+                                id="switchCheckDefault">
                         </td>
-                        <td>
-                            <a href="javascript:void(0)" class="text-decoration-underline">None</a>
-                            {{-- //TODO - Add a count of product --}}
-                        </td>
-                        <td>
-                            IN hold
-                        </td>
-                        <td>
-                            {{ format_date($cate?->updated_at, 'jS F Y') }}
-                        </td>
-                        <td>
-                            <div class="dropdown text-center">
-                                <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown"
-                                    aria-expanded="true">
-                                    <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
+                        <td><a href="javascript:void(0)" class="">10</a></td>
+                        <td>Ranking</td>
+                        <td>date</td>
+                        <td class="text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end" data-popper-placement="bottom-end"
-                                    style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 31px);">
+                                <ul class="dropdown-menu dropdown-menu-end fs-3">
+                                    <li><a class="dropdown-item edit-action" href="#" data-id="1">
+                                            <i class="fa-solid fa-pen me-2"></i>Edit</a></li>
                                     <li>
-                                        <a class="dropdown-item edit-action text-primary" href="#" data-id="1">
-                                            <i class="fa-solid fa-pen me-2"></i> Edit
-                                        </a>
+                                        <a class="dropdown-item add-sub-action" href="#" data-id="1">
+                                            <i class="fa-solid fa-plus me-2"></i>Add subcategory</a>
                                     </li>
-                                    {{-- <li>
+                                    <li>
                                         <hr class="dropdown-divider">
-                                    </li> --}}
+                                    </li>
                                     <li>
                                         <a class="dropdown-item text-danger delete-action" href="#" data-id="1">
-                                            <i class="fa-solid fa-trash me-2"></i> Delete
+                                            <i class="fa-solid fa-trash me-2"></i>
+                                            Delete
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </td>
-                    </tr>
-                @endforeach
-                {{-- <tr>
-                    <td>
-                        <input type="checkbox" class="form-check-input row-checkbox" data-id="1">
-                    </td>
-                    <td>
-                        Name
-                        <span class="d-block">Slug</span>
-                    </td>
-                    <td>P-Name</td>
-                    <td>
-                        <input class="form-check-input switch switch-md" type="checkbox" role="switch"
-                            id="switchCheckDefault">
-                    </td>
-                    <td><a href="javascript:void(0)" class="">10</a></td>
-                    <td>Ranking</td>
-                    <td>date</td>
-                    <td class="text-end">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end fs-3">
-                                <li><a class="dropdown-item edit-action" href="#" data-id="1">
-                                        <i class="fa-solid fa-pen me-2"></i>Edit</a></li>
-                                <li>
-                                    <a class="dropdown-item add-sub-action" href="#" data-id="1">
-                                        <i class="fa-solid fa-plus me-2"></i>Add subcategory</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-danger delete-action" href="#" data-id="1">
-                                        <i class="fa-solid fa-trash me-2"></i>
-                                        Delete
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr> --}}
+                    </tr> --}}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="subModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalParentName">Subcategories</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="sub-table w-100">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th style="width:140px;">Products</th>
+                                <th style="width:90px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subTableBody">
+                            <!-- spinner injected here on open, replaced once data arrives -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 
 @push('js')
+    <script>
+        function loadSubcategories(categoryId, categoryName) {
+            $('#modalParentName').text(categoryName + ' — Subcategories');
+
+            // show Bootstrap spinner while fetching
+            $('#subTableBody').html(`<tr>
+                <td colspan="3" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                </td>
+                </tr>
+            `);
+
+            $.ajax({
+                url: `/product/categories/${categoryId}/subcategories`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const $body = $('#subTableBody');
+
+                    if (!data.subcategories.length) {
+                        $body.html(
+                            `<tr><td colspan="3" class="text-center text-muted py-3">No subcategories found</td></tr>`
+                        );
+                        return;
+                    }
+
+                    const rows = data.subcategories.map(item => `<tr>
+                            <td>${item.name}</td>
+                            <td>${item.products_count > 0 ? item.products_count + ' products' : '<span class="text-muted">None</span>'}</td>
+                            <td><i class="fa fa-ellipsis-vertical"></i></td>
+                        </tr> `).join('');
+
+                    $body.html(rows);
+                },
+                error: function() {
+                    $('#subTableBody').html(
+                        `<tr><td colspan="3" class="text-center text-danger py-3">Failed to load subcategories</td></tr>`
+                    );
+                }
+            });
+        }
+
+        
+        $(document).on('change', '[data-bs-toggle="status"]', function() {
+            let isChecked = $(this).is(':checked');
+
+            $.ajax({
+                url: {{ route() }},
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    slug,
+                    status
+                },
+                success: function(data) {
+
+                },
+            });
+
+        });
+    </script>
 @endpush

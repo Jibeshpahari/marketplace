@@ -18,8 +18,10 @@ Route::controller(ProductController::class)->prefix('products')->name('products.
 Route::controller(CategoryController::class)->prefix('product/categories')->name('categories.')->group( function() {
     Route::get('/', 'index')->name('index');
     Route::get('/add', 'add')->name('add');
-    Route::get('/edit', 'edit')->name('edit');
-    Route::post('/save/{id?}', 'save')->name('save');
+    Route::get('/{category}/edit', 'edit')->name('edit');
+    Route::post('/save/{category?}', 'save')->name('save');
+    Route::post('/toggle-status', 'toggleStatus')->name('toggleStatus');
+    Route::get('/{category}/subcategories', 'subcategories')->name('subcategories');
 });
 
 Route::controller(SiteSettingsController::class)->prefix('settings')->name('settings.')->group(function () {

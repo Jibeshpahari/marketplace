@@ -29,7 +29,7 @@
         }
 
         /* --- Select2 styling for #parent_category ---
-                                               Real <li> elements now, so padding/background/etc. all work normally. */
+                                                       Real <li> elements now, so padding/background/etc. all work normally. */
         .select2-container--default .select2-selection--single {
             height: 38px;
             border: 1px solid #dee2e6;
@@ -79,7 +79,8 @@
                             title="Enter a unique name for this category"></i>
                         Category Name
                     </label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Ex: Fashion">
+                    <input type="text" class="form-control" name="name" value="{{ $category?->name ?? '' }}"
+                        id="name" placeholder="Ex: Fashion">
                     @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -93,11 +94,15 @@
                     </label>
                     <div class="selectgroup w-100">
                         <label class="selectgroup-item">
-                            <input type="radio" name="type" value="parent" class="selectgroup-input" checked="">
+                            <!-- Fixed: Checked if parent_id is null/blank -->
+                            <input type="radio" name="type" value="parent" class="selectgroup-input"
+                                {{ !$category?->parent_id ? 'checked' : '' }}>
                             <span class="selectgroup-button"><i class="fa-solid fa-layer-group me-1"></i>Parent</span>
                         </label>
                         <label class="selectgroup-item">
-                            <input type="radio" name="type" value="child" class="selectgroup-input">
+                            <!-- Fixed: Checked if parent_id exists -->
+                            <input type="radio" name="type" value="child" class="selectgroup-input"
+                                {{ $category?->parent_id ? 'checked' : '' }}>
                             <span class="selectgroup-button"><i class="fa-solid fa-code-branch me-1"></i>Child</span>
                         </label>
                     </div>
@@ -105,6 +110,7 @@
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
+
 
                 <div class="form-group col-3 d-none par-cate-select">
                     <label for="parent_category" class="form-label">
@@ -133,7 +139,8 @@
                             title="URL-friendly version of the category name"></i>
                         Slug
                     </label>
-                    <input type="text" class="form-control" name="slug" id="slug">
+                    <input type="text" class="form-control" name="slug" value="{{ $category?->slug ?? '' }}"
+                        id="slug" placeholder="fashion">
                     @error('slug')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -190,17 +197,14 @@
                 }
             });
 
-            // Initialize Bootstrap tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
-            // Initialize Select2 on the parent-category dropdown
             $('#parent_category').select2({
                 width: '100%',
-                placeholder: '-- Select --',
-                minimumResultsForSearch: Infinity // hides the search box — remove this line if you'd rather keep search
+                placeholder: '-- Select --'
             });
         });
 
