@@ -102,25 +102,25 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'slug' => 'required|string|exists:categories,slug',
-            'status' => 'required|in:active,inactive',
+            'status' => 'required|boolean',
         ]);
+
+        DB::beginTransaction();
 
         try {
             $category = Category::where('slug', $validated['slug'])->firstOrFail();
 
             $category->update([
-                'is_active' => $validated['status'] == true ? 1 : 0,
+                'is_active' => $validated['status'],
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => "Category status updated to {$validated['status']}.",
-            ]);
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => "Category {$category->name} status updated to " . ($validated['status'] ? 'Active' : 'Inactive') . '.' ]);
+
         } catch (Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update category status.',
-            ], 422);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Failed to update category status.'], 422);
         }
     }
 

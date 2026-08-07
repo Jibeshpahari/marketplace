@@ -198,7 +198,8 @@
                             </td>
                             <td>
                                 <input class="form-check-input switch switch-md" type="checkbox" role="switch"
-                                    data-bs-toggle="status" {{ $cate?->is_active ? 'checked' : '' }}>
+                                    data-bs-toggle="status" data-slug="{{ $cate?->slug ?? '' }}"
+                                    {{ $cate?->is_active ? 'checked' : '' }}>
                             </td>
                             <td>
                                 <a href="javascript:void(0)" class="text-decoration-underline">None</a>
@@ -367,23 +368,32 @@
             });
         }
 
-        
+
         $(document).on('change', '[data-bs-toggle="status"]', function() {
-            let isChecked = $(this).is(':checked');
+            let status = $(this).is(':checked') ? 1 : 0;
+            let slug = $(this).data('slug');
 
             $.ajax({
-                url: {{ route() }},
-                method: 'GET',
+                url: "{{ route('admin.categories.toggleStatus') }}",
+                method: 'POST',
                 dataType: 'json',
                 data: {
                     slug,
                     status
                 },
                 success: function(data) {
-
+                    if (data.success) {
+                        notify('success', data.message, 'toast');
+                    } else {
+                        $toggle.prop('checked', !$toggle.is(':checked'));
+                        notify('error', data.message, 'toast');
+                    }
                 },
+                error: function(error) {
+                    $toggle.prop('checked', !$toggle.is(':checked'));
+                    notify('error', error.responseJSON?.message || 'Failed to update', 'toast');
+                }
             });
-
         });
     </script>
 @endpush
