@@ -28,8 +28,6 @@
             background-color: rgba(45, 206, 137, .12);
         }
 
-        /* --- Select2 styling for #parent_category ---
-                                                       Real <li> elements now, so padding/background/etc. all work normally. */
         .select2-container--default .select2-selection--single {
             height: 38px;
             border: 1px solid #dee2e6;
@@ -70,7 +68,7 @@
 
 @section('content')
     <div class="card p-4">
-        <form action="{{ route('admin.categories.save') }}" class="" method="POST">
+        <form action="{{ route('admin.categories.save', $category ?? null) }}" class="" method="POST">
             @csrf
             <div class="row">
                 <div class="form-group col-6">
@@ -112,7 +110,7 @@
                 </div>
 
 
-                <div class="form-group col-3 d-none par-cate-select">
+                <div class="form-group col-3 {{ $category?->parent_id ?? 'd-none' }} par-cate-select">
                     <label for="parent_category" class="form-label">
                         <i class="fa-solid fa-diagram-project me-1" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Select the parent this category belongs to"></i>
@@ -123,7 +121,7 @@
                             @if ($loop->first)
                                 <option value="" selected> -- Select -- </option>
                             @endif
-                            <option value="{{ $par_cate?->id }}">{{ $par_cate?->name }}</option>
+                            <option value="{{ $par_cate?->id }}" {{ $par_cate?->id == $category?->parent_id ? 'selected' : '' }}>{{ $par_cate?->name }}</option>
                         @empty
                             <option value="" selected>No categories available</option>
                         @endforelse
@@ -155,13 +153,15 @@
                         <div class="status-toggle" data-size="sm" role="radiogroup" aria-labelledby="caption-sm">
                             <label class="status-toggle-item">
                                 <input type="radio" name="status" value="active" class="status-toggle-input"
-                                    data-value="active" checked>
+                                    data-value="active"
+                                    {{ old('status', $category?->is_active ?? true) == 'active' || old('status', $category?->is_active ?? true) ? 'checked' : '' }}>
                                 <span class="status-toggle-button"><i class="fa-solid fa-circle-check"
                                         aria-hidden="true"></i>Active</span>
                             </label>
                             <label class="status-toggle-item">
                                 <input type="radio" name="status" value="inactive" class="status-toggle-input"
-                                    data-value="inactive">
+                                    data-value="inactive"
+                                    {{ old('status') == 'inactive' || (!old('status') && $category && !$category->is_active) ? 'checked' : '' }}>
                                 <span class="status-toggle-button"><i class="fa-solid fa-circle-xmark"
                                         aria-hidden="true"></i>Inactive</span>
                             </label>

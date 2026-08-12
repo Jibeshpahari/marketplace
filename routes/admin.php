@@ -18,8 +18,9 @@ Route::controller(ProductController::class)->prefix('products')->name('products.
 Route::controller(CategoryController::class)->prefix('product/categories')->name('categories.')->group( function() {
     Route::get('/', 'index')->name('index');
     Route::get('/add', 'add')->name('add');
-    Route::get('/{category}/edit', 'edit')->name('edit');
+    Route::get('/edit/{category}', 'edit')->name('edit');
     Route::post('/save/{category?}', 'save')->name('save');
+    Route::get('/delete/{category}', 'delete')->name('delete');
     Route::post('/toggle-status', 'toggleStatus')->name('toggleStatus');
     Route::post('/{category}/subcategories', 'subcategories')->name('subcategories');
 });

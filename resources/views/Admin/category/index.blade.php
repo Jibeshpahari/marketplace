@@ -111,54 +111,66 @@
 @endpush
 @push('css')
     <style>
-        .row-checkbox {
-            width: 18px;
-            height: 18px;
-        }
+        .row-checkbox { width: 18px; height: 18px;}
 
-        .table thead th {
-            background: #eeeeee75;
-        }
+        .table thead th {background: #eeeeee75;}
+        .table>thead {border-bottom: 2px solid #dddddd80;}
+        .table>thead>tr>th, .table>tbody>tr>td {padding: 10px 15px !important;}
 
-        .table>thead {
-            border-bottom: 2px solid #dddddd80;
-        }
+        .sub-category-badge {margin-left: auto;line-height: 1;padding: 4px 7px;vertical-align: middle;font-weight: 500;font-size: 11px;height: fit-content !important;border-radius: 50rem;background: #cfe2ff;color: #052c65;border: 1px solid #9ec5fe;margin-left: 8px;cursor: pointer;}
 
-        .table>thead>tr>th,
-        .table>tbody>tr>td {
-            padding: 10px 15px !important;
-        }
+        .sub-category-badge:hover {background: #b6d4fe; border-color: #6ea8fe;}
+        .card-header .form-control, .card-header .form-select{padding-block: 0.465rem !important;}
 
-        .sub-category-badge {
-            margin-left: auto;
-            line-height: 1;
-            padding: 4px 7px;
-            vertical-align: middle;
-            font-weight: 500;
-            font-size: 11px;
-            height: fit-content !important;
-            border-radius: 50rem;
-            background: #cfe2ff;
-            color: #052c65;
-            border: 1px solid #9ec5fe;
-            margin-left: 8px;
-            cursor: pointer;
-        }
-
-        .sub-category-badge:hover {
-            background: #b6d4fe;
-            border-color: #6ea8fe;
-        }
+        .btn-sm{height: 36px;font-size: 12px;align-content: center;}
     </style>
 @endpush
 
 @section('content')
     <div class="card p-3">
         <div class="card-header py-3 px-0 pt-0">
-            <div class="text-end">
-                <a href="{{ route('admin.categories.add') }}" class="btn btn-primary bg-primary-gradient btn-sm"><i
-                        class="fa-solid fa-plus"></i>
-                    Add Category</a>
+            {{-- <form action="" method="GET" class="row g-3 align-items-end" autocomplete="off">
+                <div class="col-md-4">
+                    <label for="keyword" class="form-label">Keyword</label>
+                    <input type="text" class="form-control" value="{{ request()->keyword ?? '' }}" name="keyword">
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    @if (!empty(request()->keyword))
+                        <a href="{{ route('admin.categories.index') }}" class="btn btn-danger">Clear</a>
+                    @endif
+                </div>
+            </form> --}}
+            <div class="row">
+                <div class="col">
+                    <select class="form-select" name="status" id="status">
+                        <option value="" disabled selected hidden>Status</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending_approval">Pending Approval</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-select" name="sort" id="sort">
+                        <option value="" disabled selected hidden>Sort By</option>
+                        <option value="date_asc">Date (Oldest First)</option>
+                        <option value="date_desc">Date (Newest First)</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="date" class="form-control datepicker" value="" name="start_date"
+                        min="{{ date('Y-m-01') }}" max="{{ date('Y-m-d') }}">
+                </div>
+                <div class="col">
+                    <input type="date" class="form-control " value="" name="end_date">
+                </div>
+                <div class="col">
+                    <div class="text-end">
+                        <a href="{{ route('admin.categories.add') }}" class="btn btn-primary bg-primary-gradient btn-sm"><i
+                                class="fa-solid fa-plus me-1"></i>
+                            Add Category</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body px-0 py-3">
@@ -235,7 +247,8 @@
                                             <div class="do-divider"></div>
                                         </li>
                                         <li>
-                                            <a class="do-item do-item--delete delete-action" href="#" data-id="1">
+                                            <a class="do-item do-item--delete delete-action"
+                                                href="{{ route('admin.categories.delete', $cate) }}" data-id="1">
                                                 <span class="do-badge do-badge--delete"><i
                                                         class="fa-solid fa-trash"></i></span>
                                                 <span>Delete</span>

@@ -6,16 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Product Categories';
         $nav = [];
-
+        // if()
         $categories = Category::with('parent', 'children')->get();
+
+
 
         return view('admin.category.index', compact('title', 'nav', 'categories'));
     }
@@ -65,13 +68,15 @@ class CategoryController extends Controller
         return view('admin.category.form', compact('title', 'nav', 'par_categories', 'category'));
     }
 
-    public function save(Request $request, $id = null)
+    public function save(Request $request, ?Category $category = null)
     {
+
+        // dd($category);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:parent,child',
             'parent_category' => 'required_if:type,child|nullable|exists:categories,id',
-            'slug' => 'required|string|max:255|unique:categories,slug' . ($id ? ",$id" : ''),
+            'slug' => ['required', 'string', 'max:255', Rule::unique('categories', 'slug')->ignore($category?->id),],
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -79,10 +84,10 @@ class CategoryController extends Controller
 
         try {
             $category = Category::updateOrCreate(
-                ['id' => $id],
+                ['id' => $category?->id],
                 [
                     'name' => $validated['name'],
-                    'parent_id' => $validated['type'] == 'parent' ? $validated['parent_category'] : null,
+                    'parent_id' => $validated['type'] == 'child' ? $validated['parent_category'] : null,
                     'slug' => $validated['slug'],
                     'is_active' => $validated['status'] == 'active' ? 1 : 0,
                 ]
@@ -139,4 +144,28 @@ class CategoryController extends Controller
             'subcategories' => $subs,
         ]);
     }
+
+    public function delete(Category $category)
+    {
+        DB::beginTransaction();
+
+        try {
+            $category->delete();
+            DB::commit();
+            return redirect()->back()->with('success', 'Category deleted successfully.');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong, category could not be deleted.');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 }

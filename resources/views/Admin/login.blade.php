@@ -80,7 +80,7 @@
 
       <div class="form-options">
         <label class="custom-check">
-          <input type="checkbox" id="remember" />
+          <input type="checkbox" id="remember" name="remember_me" />
           <span class="check-label">Keep me signed in</span>
         </label>
         <a href="#" class="forgot-link">Forgot password?</a>

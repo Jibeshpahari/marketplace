@@ -83,8 +83,8 @@
         let timer = setTimeout(dismiss, 3200);
 
         function dismiss() {
-            $t.removeClass('show');
-            setTimeout(() => $t.remove(), 400);
+            $t.removeClass('show').addClass('hide');
+            setTimeout(() => $t.remove(), 600);
         }
 
         $t.on('mouseenter', () => {
