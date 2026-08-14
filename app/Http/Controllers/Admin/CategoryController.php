@@ -15,11 +15,22 @@ class CategoryController extends Controller
     {
         $title = 'Product Categories';
         $nav = [];
-        // if()
-        $categories = Category::with('parent', 'children')->get();
 
+        $categories = Category::with('parent', 'children')
+            ->when($request?->start_date, fn($query, $date) => $query->where('created_at', '>=', $date))
+            ->when($request?->end_date, fn($query, $date) => $query->where('created_at', '<=', $date))
+            ->when( true, fn($query) => match ($request?->date_sort) {
+                    'date_asc'  => $query->orderBy('updated_at'),
+                    'date_desc' => $query->orderByDesc('updated_at'),
+                    'name_asc'  => $query->orderBy('name'),
+                    'name_desc' => $query->orderByDesc('name'),
+                    default     => $query->orderByDesc('updated_at'),
+                }
+            )
+            ->limit($request?->limit ?? 20)
+            ->get();
 
-
+            // dd($categories);
         return view('admin.category.index', compact('title', 'nav', 'categories'));
     }
 

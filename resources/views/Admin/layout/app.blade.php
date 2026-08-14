@@ -35,38 +35,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <!-- Date Time Picker -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/pickers.css') }}">
-    
+
     <!-- jQuery -->
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
     <script src="{{ asset('assets/global/js/core/jquery-3.7.1.min.js') }}"></script>
     <!-- WebFont Loader -->
     <script src="{{ asset('assets/admin/js/webfont.min.js') }}"></script>
     <script>
-    WebFont.load({
-    google: {
-        families: [
-            "Public Sans:300,400,500,600,700", 
-            "DM Sans:300,400,500,600", 
-            "Syne:700,800", 
-            "Poppins:300,400,500,600,700,800",
-            "Inter:300,400,500,600,700"
-        ]
-    },
-    custom: {
-        families: [
-            "Font Awesome 5 Solid", 
-            "Font Awesome 5 Regular", 
-            "Font Awesome 5 Brands",
-            "simple-line-icons",
-        ],
-        urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
-    },
-    active: function() {
-        sessionStorage.fonts = true;
-    },
-});
-
-</script>
+        WebFont.load({
+            google: {
+                families: [
+                    "Public Sans:300,400,500,600,700",
+                    "DM Sans:300,400,500,600",
+                    "Syne:700,800",
+                    "Poppins:300,400,500,600,700,800",
+                    "Inter:300,400,500,600,700"
+                ]
+            },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
+            },
+            active: function() {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
 
     <!-- App Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/kaiadmin.css') }}" />
@@ -101,7 +100,7 @@
             <!-- PAGE CONTENT HEADER -->
             <div class="page-header">
                 <div>
-                    
+
                     @isset($nav)
                         <nav class="breadcrumb-nav">
                             @foreach ($nav as $item)
@@ -140,14 +139,26 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/admin/js/script.js') }}"></script>
-    <script src="{{ asset('assets/global/js/pickers.js') }}"></script>
+    <script src="{{ asset('assets/global/js/pickers.min.js') }}"></script>
 
     @stack('js')
     @stack('modal')
 
     <script>
-        $(".datepicker").datepicker();
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+            new bootstrap.Tooltip(el);
+        });
+
+        document.querySelectorAll('[data-bs-custom-class="tooltip-pinned"]').forEach(el => {
+            bootstrap.Tooltip.getInstance(el)?.dispose();
+            const pinnedTip = new bootstrap.Tooltip(el, {
+                trigger: 'manual',
+                customClass: 'tooltip-pinned'
+            });
+            requestAnimationFrame(() => pinnedTip.show());
+        });
     </script>
+
 </body>
 
 </html>

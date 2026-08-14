@@ -111,67 +111,107 @@
 @endpush
 @push('css')
     <style>
-        .row-checkbox { width: 18px; height: 18px;}
+        .row-checkbox {
+            width: 18px;
+            height: 18px;
+        }
 
-        .table thead th {background: #eeeeee75;}
-        .table>thead {border-bottom: 2px solid #dddddd80;}
-        .table>thead>tr>th, .table>tbody>tr>td {padding: 10px 15px !important;}
+        .table thead th {
+            background: #eeeeee75;
+        }
 
-        .sub-category-badge {margin-left: auto;line-height: 1;padding: 4px 7px;vertical-align: middle;font-weight: 500;font-size: 11px;height: fit-content !important;border-radius: 50rem;background: #cfe2ff;color: #052c65;border: 1px solid #9ec5fe;margin-left: 8px;cursor: pointer;}
+        .table>thead {
+            border-bottom: 2px solid #dddddd80;
+        }
 
-        .sub-category-badge:hover {background: #b6d4fe; border-color: #6ea8fe;}
-        .card-header .form-control, .card-header .form-select{padding-block: 0.465rem !important;}
+        .table>thead>tr>th,
+        .table>tbody>tr>td {
+            padding: 10px 15px !important;
+        }
 
-        .btn-sm{height: 36px;font-size: 12px;align-content: center;}
+        .sub-category-badge {
+            margin-left: auto;
+            line-height: 1;
+            padding: 4px 7px;
+            vertical-align: middle;
+            font-weight: 500;
+            font-size: 11px;
+            height: fit-content !important;
+            border-radius: 50rem;
+            background: #cfe2ff;
+            color: #052c65;
+            border: 1px solid #9ec5fe;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .sub-category-badge:hover {
+            background: #b6d4fe;
+            border-color: #6ea8fe;
+        }
+
+        .card-header .form-control,
+        .card-header .form-select {
+            padding-block: 0.465rem !important;
+        }
+
+        .card-header .btn-sm {
+            height: 36px;
+            font-size: 12px;
+            align-content: center;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="card p-3">
         <div class="card-header py-3 px-0 pt-0">
-            {{-- <form action="" method="GET" class="row g-3 align-items-end" autocomplete="off">
-                <div class="col-md-4">
-                    <label for="keyword" class="form-label">Keyword</label>
-                    <input type="text" class="form-control" value="{{ request()->keyword ?? '' }}" name="keyword">
-                </div>
-                <div class="col-md-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    @if (!empty(request()->keyword))
-                        <a href="{{ route('admin.categories.index') }}" class="btn btn-danger">Clear</a>
-                    @endif
-                </div>
-            </form> --}}
-            <div class="row">
-                <div class="col">
-                    <select class="form-select" name="status" id="status">
-                        <option value="" disabled selected hidden>Status</option>
-                        <option value="approved">Approved</option>
-                        <option value="pending_approval">Pending Approval</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select class="form-select" name="sort" id="sort">
-                        <option value="" disabled selected hidden>Sort By</option>
-                        <option value="date_asc">Date (Oldest First)</option>
-                        <option value="date_desc">Date (Newest First)</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <input type="date" class="form-control datepicker" value="" name="start_date"
-                        min="{{ date('Y-m-01') }}" max="{{ date('Y-m-d') }}">
-                </div>
-                <div class="col">
-                    <input type="date" class="form-control " value="" name="end_date">
-                </div>
-                <div class="col">
-                    <div class="text-end">
-                        <a href="{{ route('admin.categories.add') }}" class="btn btn-primary bg-primary-gradient btn-sm"><i
-                                class="fa-solid fa-plus me-1"></i>
-                            Add Category</a>
+            <form action="" method="GET" class="" autocomplete="off">
+                <div class="row">
+                    <div class="col-2">
+                        <select class="form-select" name="status" id="status">
+                            <option value="" disabled selected hidden>Status</option>
+                            <option value="approved">Approved</option>
+                            <option value="pending_approval">Pending Approval</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <select class="form-select" name="date_sort" id="sort">
+                            <option value="" disabled selected hidden>Sort By</option>
+                            <option value="date_asc">Date (Oldest First)</option>
+                            <option value="date_desc">Date (Newest First)</option>
+                            <option value="name_asc">Name (A-Z)</option>
+                            <option value="name_desc">Name (Z-A)</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <input type="date" class="form-control datepicker" value="{{ request()->start_date }}"
+                            name="start_date" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="Added From (Start Date)">
+                    </div>
+                    <div class="col-2">
+                        <input type="date" class="form-control datepicker" value="{{ request()->end_date }}"
+                            name="end_date" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="Added To (End Date)">
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-secondary bg-secondary-gradient btn-sm">
+                            <i class="fa-solid fa-filter me-1"></i>
+                            Filter
+                        </button>
+                    </div>
+                    <div class="col-2">
+                        <div class="text-end">
+                            <a href="{{ route('admin.categories.add') }}"
+                                class="btn btn-primary bg-primary-gradient btn-sm">
+                                <i class="fa-solid fa-plus me-1"></i>
+                                Add Category
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="card-body px-0 py-3">
             <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
@@ -259,50 +299,200 @@
                             </td>
                         </tr>
                     @endforeach
-                    {{-- <tr>
-                        <td>
-                            <input type="checkbox" class="form-check-input row-checkbox" data-id="1">
-                        </td>
-                        <td>
-                            Name
-                            <span class="d-block">Slug</span>
-                        </td>
-                        <td>P-Name</td>
-                        <td>
-                            <input class="form-check-input switch switch-md" type="checkbox" role="switch"
-                                id="switchCheckDefault">
-                        </td>
-                        <td><a href="javascript:void(0)" class="">10</a></td>
-                        <td>Ranking</td>
-                        <td>date</td>
-                        <td class="text-end">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary border-0" data-bs-toggle="dropdown">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end fs-3">
-                                    <li><a class="dropdown-item edit-action" href="#" data-id="1">
-                                            <i class="fa-solid fa-pen me-2"></i>Edit</a></li>
-                                    <li>
-                                        <a class="dropdown-item add-sub-action" href="#" data-id="1">
-                                            <i class="fa-solid fa-plus me-2"></i>Add subcategory</a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item text-danger delete-action" href="#" data-id="1">
-                                            <i class="fa-solid fa-trash me-2"></i>
-                                            Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr> --}}
-
                 </tbody>
             </table>
+        </div>
+        <div class="card-footer">
+            {{-- //TODO - Add Pagination --}}
+            <div class="row">
+                <div class="col-4">
+                    <p>Total Arivals: 100 | Showing: 21–30</p>
+                </div>
+                <div class="col-6">
+                    <div class="pg-nav" id="pagination">
+                        <button class="pg-arrow" onclick="goToPage(10)" aria-label="Previous">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="pg-num " onclick="goToPage(1)">1</button>
+                        <span class="pg-ellipsis">...</span>
+                        <button class="pg-num " onclick="goToPage(9)">9</button>
+                        <button class="pg-num " onclick="goToPage(10)">10</button>
+                        <button class="pg-num active" onclick="goToPage(11)"> 11 </button>
+                        <button class="pg-num " onclick="goToPage(12)">12</button>
+                        <button class="pg-arrow" onclick="goToPage(12)" aria-label="Next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-2">
+                    Show Per Page
+                    <select id="perPage" class="pp-select">
+                        <option value="5">5</option>
+                        <option value="10" selected="">10</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+            @push('css')
+                <style>
+                    /* ===== Base row/col layout (missing from your markup — needed for alignment) ===== */
+                    .row {
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        gap: 12px;
+                    }
+
+                    .col-4,
+                    .col-6,
+                    .col-2 {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .col-4 {
+                        flex: 0 0 auto;
+                    }
+
+                    .col-6 {
+                        flex: 1 1 auto;
+                        justify-content: center;
+                    }
+
+                    .col-2 {
+                        flex: 0 0 auto;
+                        gap: 8px;
+                        font-size: 13px;
+                        color: var(--text-secondary);
+                        font-weight: 500;
+                        margin-left: auto;
+                    }
+
+                    .col-4 p {
+                        font-size: 13px;
+                        color: var(--text-secondary);
+                        font-weight: 500;
+                        margin: 0;
+                    }
+
+                    /* ===== Pagination nav (from original file) ===== */
+                    .pg-nav {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+
+                    .pg-arrow {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 999px;
+                        border: 1px solid var(--border);
+                        background: var(--surface-2);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        color: var(--text-secondary);
+                        transition: all 0.15s;
+                    }
+
+                    .pg-arrow:hover:not(:disabled) {
+                        border-color: var(--border-strong);
+                        background: var(--surface-1);
+                    }
+
+                    .pg-arrow:disabled {
+                        opacity: 0.4;
+                        cursor: not-allowed;
+                    }
+
+                    .pg-arrow svg {
+                        width: 14px;
+                        height: 14px;
+                    }
+
+                    .pg-num {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 8px;
+                        border: 1px solid var(--border);
+                        background: var(--surface-2);
+                        color: var(--text-secondary);
+                        font-size: 13px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all 0.15s;
+                        padding: 0;
+                        /* fixes the " 11 " button with extra whitespace in your markup */
+                    }
+
+                    .pg-num:hover {
+                        background: var(--surface-1);
+                        border-color: var(--border-strong);
+                    }
+
+                    .pg-num.active {
+                        background: #EEECFB;
+                        border-color: #EEECFB;
+                        color: #5B4FCF;
+                        font-weight: 600;
+                    }
+
+                    .pg-ellipsis {
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--text-muted);
+                        font-size: 13px;
+                    }
+
+                    /* ===== Per-page select (renamed to pp-select in your markup) ===== */
+                    .pp-select {
+                        appearance: none;
+                        border: 1px solid var(--border);
+                        border-radius: 8px;
+                        padding: 5px 26px 5px 10px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: var(--text-primary);
+                        background: var(--surface-2) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="%23888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 10px center;
+                        cursor: pointer;
+                    }
+
+                    .pp-select:focus {
+                        outline: none;
+                        border-color: #5B4FCF;
+                    }
+
+                    /* ===== Small screens: stack instead of squeezing ===== */
+                    @media (max-width: 640px) {
+                        .row {
+                            flex-direction: column;
+                            align-items: stretch;
+                        }
+
+                        .col-4,
+                        .col-6,
+                        .col-2 {
+                            justify-content: center;
+                            margin-left: 0;
+                        }
+                    }
+                </style>
+            @endpush
         </div>
     </div>
 
