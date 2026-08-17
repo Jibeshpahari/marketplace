@@ -238,7 +238,7 @@
                                     {{ $cate?->name }}
                                     @if (!$cate?->parent_name)
                                         <span class="sub-category-badge" data-bs-toggle="modal" data-bs-target="#subModal"
-                                            onclick="loadSubcategories({{ $cate->id }}, '{{ $cate->name }}')">
+                                            data-slug="{{ $cate->slug }}" data-name="{{ $cate->name }}">
                                             <i class="fa fa-layer-group"></i> {{ count($cate->children) }}
                                         </span>
                                     @endif
@@ -302,197 +302,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer">
-            {{-- //TODO - Add Pagination --}}
-            <div class="row">
-                <div class="col-4">
-                    <p>Total Arivals: 100 | Showing: 21–30</p>
-                </div>
-                <div class="col-6">
-                    <div class="pg-nav" id="pagination">
-                        <button class="pg-arrow" onclick="goToPage(10)" aria-label="Previous">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                        </button>
-                        <button class="pg-num " onclick="goToPage(1)">1</button>
-                        <span class="pg-ellipsis">...</span>
-                        <button class="pg-num " onclick="goToPage(9)">9</button>
-                        <button class="pg-num " onclick="goToPage(10)">10</button>
-                        <button class="pg-num active" onclick="goToPage(11)"> 11 </button>
-                        <button class="pg-num " onclick="goToPage(12)">12</button>
-                        <button class="pg-arrow" onclick="goToPage(12)" aria-label="Next">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-2">
-                    Show Per Page
-                    <select id="perPage" class="pp-select">
-                        <option value="5">5</option>
-                        <option value="10" selected="">10</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                </div>
-            </div>
-            @push('css')
-                <style>
-                    /* ===== Base row/col layout (missing from your markup — needed for alignment) ===== */
-                    .row {
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        gap: 12px;
-                    }
-
-                    .col-4,
-                    .col-6,
-                    .col-2 {
-                        display: flex;
-                        align-items: center;
-                    }
-
-                    .col-4 {
-                        flex: 0 0 auto;
-                    }
-
-                    .col-6 {
-                        flex: 1 1 auto;
-                        justify-content: center;
-                    }
-
-                    .col-2 {
-                        flex: 0 0 auto;
-                        gap: 8px;
-                        font-size: 13px;
-                        color: var(--text-secondary);
-                        font-weight: 500;
-                        margin-left: auto;
-                    }
-
-                    .col-4 p {
-                        font-size: 13px;
-                        color: var(--text-secondary);
-                        font-weight: 500;
-                        margin: 0;
-                    }
-
-                    /* ===== Pagination nav (from original file) ===== */
-                    .pg-nav {
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                    }
-
-                    .pg-arrow {
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 999px;
-                        border: 1px solid var(--border);
-                        background: var(--surface-2);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        color: var(--text-secondary);
-                        transition: all 0.15s;
-                    }
-
-                    .pg-arrow:hover:not(:disabled) {
-                        border-color: var(--border-strong);
-                        background: var(--surface-1);
-                    }
-
-                    .pg-arrow:disabled {
-                        opacity: 0.4;
-                        cursor: not-allowed;
-                    }
-
-                    .pg-arrow svg {
-                        width: 14px;
-                        height: 14px;
-                    }
-
-                    .pg-num {
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 8px;
-                        border: 1px solid var(--border);
-                        background: var(--surface-2);
-                        color: var(--text-secondary);
-                        font-size: 13px;
-                        font-weight: 500;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        transition: all 0.15s;
-                        padding: 0;
-                        /* fixes the " 11 " button with extra whitespace in your markup */
-                    }
-
-                    .pg-num:hover {
-                        background: var(--surface-1);
-                        border-color: var(--border-strong);
-                    }
-
-                    .pg-num.active {
-                        background: #EEECFB;
-                        border-color: #EEECFB;
-                        color: #5B4FCF;
-                        font-weight: 600;
-                    }
-
-                    .pg-ellipsis {
-                        width: 30px;
-                        height: 30px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: var(--text-muted);
-                        font-size: 13px;
-                    }
-
-                    /* ===== Per-page select (renamed to pp-select in your markup) ===== */
-                    .pp-select {
-                        appearance: none;
-                        border: 1px solid var(--border);
-                        border-radius: 8px;
-                        padding: 5px 26px 5px 10px;
-                        font-size: 13px;
-                        font-weight: 500;
-                        color: var(--text-primary);
-                        background: var(--surface-2) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="%23888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 10px center;
-                        cursor: pointer;
-                    }
-
-                    .pp-select:focus {
-                        outline: none;
-                        border-color: #5B4FCF;
-                    }
-
-                    /* ===== Small screens: stack instead of squeezing ===== */
-                    @media (max-width: 640px) {
-                        .row {
-                            flex-direction: column;
-                            align-items: stretch;
-                        }
-
-                        .col-4,
-                        .col-6,
-                        .col-2 {
-                            justify-content: center;
-                            margin-left: 0;
-                        }
-                    }
-                </style>
-            @endpush
+        <div class="card-footer py-3">
+            <!-- TODO - Add Pagination -->
+            @include('admin.layout.components.pagination', ['items' => $categories])
         </div>
     </div>
 
@@ -504,11 +316,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="sub-table w-100">
+                    <table class="w-100 table table-bordered table-hover align-middle mb-0" id="subTable"
+                        data-edit-url-template="{{ route('admin.categories.edit', ':slug') }}">
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th style="width:140px;">Products</th>
+                                <th style="width:100px;">Status</th>
                                 <th style="width:90px;">Action</th>
                             </tr>
                         </thead>
@@ -528,50 +342,68 @@
 
 @push('js')
     <script>
-        function loadSubcategories(categoryId, categoryName) {
-            $('#modalParentName').text(categoryName + ' — Subcategories');
+        $(document).on('click', '.sub-category-badge', function() {
+            const slug = $(this).data('slug');
+            const name = $(this).data('name');
+
+            $('#modalParentName').text(name + ' — Subcategories');
 
             // show Bootstrap spinner while fetching
-            $('#subTableBody').html(`<tr>
-                <td colspan="3" class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                    </div>
-                </td>
+            $('#subTableBody').html(`
+                <tr>
+                    <td colspan="4" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
                 </tr>
             `);
 
             $.ajax({
-                url: `/product/categories/${categoryId}/subcategories`,
+                url: "{{ route('admin.categories.subcategories', ':slug') }}".replace(':slug', slug),
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     const $body = $('#subTableBody');
+                    const editUrlTemplate = $('#subTable').data('edit-url-template');
 
                     if (!data.subcategories.length) {
                         $body.html(
-                            `<tr><td colspan="3" class="text-center text-muted py-3">No subcategories found</td></tr>`
+                            `<tr><td colspan="4" class="text-center text-muted py-3">No subcategories found</td></tr>`
                         );
                         return;
                     }
 
-                    const rows = data.subcategories.map(item => `<tr>
-                            <td>${item.name}</td>
-                            <td>${item.products_count > 0 ? item.products_count + ' products' : '<span class="text-muted">None</span>'}</td>
-                            <td><i class="fa fa-ellipsis-vertical"></i></td>
-                        </tr> `).join('');
+                    const rows = data.subcategories.map(item => {
+                        const editUrl = editUrlTemplate.replace(':slug', item.slug);
+
+                        return `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.products_count > 0 ? item.products_count + ' products' : '<span class="text-muted">None</span>'}</td>
+                        <td>
+                            <input class="form-check-input switch switch-sm" type="checkbox" role="switch"
+                                data-bs-toggle="status" data-slug="${item.slug}"
+                                ${item.is_active ? 'checked' : ''}>
+                        </td>
+                        <td class="text-center">
+                            <a class="do-item do-item--edit edit-action" href="${editUrl}" data-slug="${item.slug}">
+                                <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+                    }).join('');
 
                     $body.html(rows);
                 },
                 error: function() {
                     $('#subTableBody').html(
-                        `<tr><td colspan="3" class="text-center text-danger py-3">Failed to load subcategories</td></tr>`
+                        `<tr><td colspan="4" class="text-center text-danger py-3">Failed to load subcategories</td></tr>`
                     );
                 }
             });
-        }
-
-
+        });
         $(document).on('change', '[data-bs-toggle="status"]', function() {
             let status = $(this).is(':checked') ? 1 : 0;
             let slug = $(this).data('slug');

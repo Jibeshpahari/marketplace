@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Throwable;
 
+
+// TODO - Check access authority before action
 class CategoryController extends Controller
 {
     public function index(Request $request)
@@ -27,8 +29,7 @@ class CategoryController extends Controller
                     default     => $query->orderByDesc('updated_at'),
                 }
             )
-            ->limit($request?->limit ?? 20)
-            ->get();
+            ->paginate($request->integer('per_page', 20));
 
             // dd($categories);
         return view('admin.category.index', compact('title', 'nav', 'categories'));
@@ -142,17 +143,10 @@ class CategoryController extends Controller
 
     public function subcategories(Category $category)
     {
-        $subs = $category->children()
-            ->select('id', 'name', 'slug', 'products_count', 'status')
-            ->get();
+        $subcategories = $category->children()->get(['name', 'slug', 'is_active']);
 
         return response()->json([
-            'parent' => [
-                'id' => $category->id,
-                'name' => $category->name,
-                'slug' => $category->slug,
-            ],
-            'subcategories' => $subs,
+            'subcategories' => $subcategories,
         ]);
     }
 

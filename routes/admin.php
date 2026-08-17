@@ -22,7 +22,7 @@ Route::controller(CategoryController::class)->prefix('product/categories')->name
     Route::post('/save/{category?}', 'save')->name('save');
     Route::get('/delete/{category}', 'delete')->name('delete');
     Route::post('/toggle-status', 'toggleStatus')->name('toggleStatus');
-    Route::post('/{category}/subcategories', 'subcategories')->name('subcategories');
+    Route::get('/{category}/subcategories', 'subcategories')->name('subcategories');
 });
 
 Route::controller(SiteSettingsController::class)->prefix('settings')->name('settings.')->group(function () {
