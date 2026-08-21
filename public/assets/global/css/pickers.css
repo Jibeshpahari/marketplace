@@ -168,6 +168,37 @@
   cursor: not-allowed;
 }
 
+/* --- Keyboard focus ring: which day/month/year is currently focused ---
+   Uses :focus-visible so it only appears for keyboard interaction, not
+   mouse clicks, and an outline fallback for older browsers. Declared
+   after hover/selected/disabled so it always wins visually. */
+.dp-panel .dp-day:focus-visible,
+.dp-panel .dp-month-cell:focus-visible,
+.dp-panel .dp-year-cell:focus-visible {
+  outline: none;
+  /* box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #1160c3 !important; */
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 2px #1160c3 inset !important;
+  z-index: 1;
+}
+
+.dp-panel .dp-day-selected:focus-visible {
+  /* keep the selected fill, layer a brighter ring on top so a selected+focused
+     day is still distinguishable from merely-selected */
+  box-shadow: 0 0 0 2px #e8f0ff, 0 0 0 4px #1160c3 !important;
+}
+
+.dp-panel .dp-day-outside:focus-visible {
+  color: #211f1b;
+  opacity: 1;
+}
+
+/* Fallback for browsers without :focus-visible support */
+.dp-panel .dp-day:focus:not(:focus-visible),
+.dp-panel .dp-month-cell:focus:not(:focus-visible),
+.dp-panel .dp-year-cell:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .dp-panel .dp-year-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -295,7 +326,7 @@
 }
 
 .dp-panel .dp-time-col-viewport:focus-within {
-  box-shadow: 0 0 0 2px #e8f0ff;
+  box-shadow: 0 0 0 2px #e8f0ff, 0 0 0 4px #1160c3;
 }
 
 .dp-panel .dp-time-col {
@@ -419,8 +450,30 @@
 .dp-panel .dp-done-btn:hover {
   background: #0d4399;
 }
+
+/* Focus ring for the other interactive controls in the panel (nav arrows,
+   month/year select buttons, footer buttons) so keyboard focus is always
+   visible, not just on calendar cells. */
+.dp-panel .dp-nav-btn:focus-visible,
+.dp-panel .dp-select-btn:focus-visible,
+.dp-panel .dp-today-link:focus-visible,
+.dp-panel .dp-clear-link:focus-visible,
+.dp-panel .dp-done-btn:focus-visible {
+  outline: 2px solid #1160c3;
+  outline-offset: 2px;
+}
+
 .datepicker.form-control[readonly] {
   opacity: 1 !important;
   border-color: #ebedf2 !important;
   background-color: var(--bs-body-bg) !important;
+}
+
+/* Show the same kind of ring on the trigger input itself when it has
+   keyboard focus, so it's clear the picker is about to open / is open. */
+.datepicker.form-control:focus-visible,
+.timepicker.form-control:focus-visible,
+.datetimepicker.form-control:focus-visible {
+  outline: 2px solid #1160c3;
+  outline-offset: 1px;
 }

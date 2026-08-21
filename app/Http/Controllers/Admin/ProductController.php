@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     //Product List
-    public function index(){
+    public function index(Request $request){
         $title = "Product List";
         $nav = [
             [
@@ -20,7 +20,9 @@ class ProductController extends Controller
                 'name' => $title
             ]
         ];
-        return view('admin.product.products', compact('title', 'nav'));
+        $products = Product::query()
+            ->paginate($request->integer('per_page', 20));
+        return view('admin.product.index', compact('title', 'nav', 'products'));
 
     }
 
@@ -28,7 +30,7 @@ class ProductController extends Controller
     {
         $product = $id ? Product::findOrFail($id) : new Product();
 
-        return view('admin.product.product-form', compact('product'));
+        return view('admin.product.form', compact('product'));
     }
 
     public function save(Request $request, $id = null)

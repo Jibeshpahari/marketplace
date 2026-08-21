@@ -87,7 +87,7 @@
         @include('admin.layout.components.searchbar')
 
         <!-- SUB NAVBAR -->
-        @include('admin.layout.components.navbar')
+        {{-- @include('admin.layout.components.navbar') --}}
 
         <!-- BOTTOM PROGRESS/STATUS BAR -->
         @include('admin.layout.components.statusbar')

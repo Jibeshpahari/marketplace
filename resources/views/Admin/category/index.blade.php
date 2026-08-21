@@ -1,114 +1,5 @@
 @extends('admin.layout.app')
-@push('css')
-    <style>
-        .dropdown-options {
-            --do-edit: #3D6DF2;
-            --do-edit-tint: #EFF4FF;
-            --do-delete: #E5484D;
-            --do-delete-tint: #FDEAEA;
-            --do-border: #E7E9EE;
-            --do-ink: #1E2430;
-            --do-muted: #8A93A3;
-            --do-shadow: 0 10px 30px -8px rgba(20, 25, 40, 0.16), 0 2px 8px -2px rgba(20, 25, 40, 0.08);
-        }
 
-        .dropdown-options .do-kebab-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--do-muted);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: background .12s, color .12s;
-        }
-
-        .dropdown-options .do-kebab-btn:hover {
-            background: #EFFAFF;
-            color: var(--do-ink);
-        }
-
-        .dropdown-options .dropdown-menu.do-menu {
-            width: 190px;
-            background: #FFFFFF;
-            border: 1px solid var(--do-border);
-            border-radius: 12px;
-            box-shadow: var(--do-shadow);
-            padding: 6px;
-        }
-
-        .dropdown-options .do-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 13.5px;
-            font-weight: 500;
-            color: var(--do-ink);
-            text-decoration: none;
-            cursor: pointer;
-            transition: background .12s;
-        }
-
-        .dropdown-options .do-item:hover {
-            background: #F3F4F7;
-        }
-
-        .dropdown-options .do-badge {
-            width: 26px;
-            height: 26px;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .dropdown-options .do-badge--edit {
-            background: var(--do-edit-tint);
-            color: var(--do-edit);
-        }
-
-        .dropdown-options .do-badge--delete {
-            background: var(--do-delete-tint);
-            color: var(--do-delete);
-        }
-
-        .dropdown-options .do-item--edit:hover {
-            background: var(--do-edit-tint);
-        }
-
-        .dropdown-options .do-item--edit:hover .do-badge--edit {
-            background: #fff;
-        }
-
-        .dropdown-options .do-item--edit:hover span {
-            color: var(--do-edit);
-        }
-
-        .dropdown-options .do-item--delete:hover {
-            background: var(--do-delete-tint);
-        }
-
-        .dropdown-options .do-item--delete:hover .do-badge--delete {
-            background: #fff;
-        }
-
-        .dropdown-options .do-item--delete:hover span {
-            color: var(--do-delete);
-        }
-
-        .dropdown-options .do-divider {
-            height: 1px;
-            background: var(--do-border);
-            margin: 5px 4px;
-        }
-    </style>
-@endpush
 @push('css')
     <style>
         .row-checkbox {
@@ -149,22 +40,12 @@
             background: #b6d4fe;
             border-color: #6ea8fe;
         }
-
-        .card-header .form-control,
-        .card-header .form-select {
-            padding-block: 0.465rem !important;
-        }
-
-        .card-header .btn-sm {
-            height: 36px;
-            font-size: 12px;
-            align-content: center;
-        }
     </style>
 @endpush
 
 @section('content')
     <div class="card p-3">
+
         <div class="card-header py-3 px-0 pt-0">
             <form action="" method="GET" class="" autocomplete="off">
                 <div class="row">
@@ -213,11 +94,34 @@
                 </div>
             </form>
         </div>
+
         <div class="card-body px-0 py-3">
+            <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between" id="bulkBar">
+                <div class="align-content-center">
+                    <span class="me-auto fw-semibold" id="bulkCount">9 selected</span>
+                </div>
+                <div class="btn-group ms-auto" role="group" aria-label="Bulk actions">
+                    <button class="btn btn-sm btn-dark bulk-archive">
+                        <i class="fa-solid fa-box-archive"></i> Archive
+                    </button>
+                    <button class="btn btn-sm btn-dark bulk-export">
+                        <i class="fa-solid fa-file-export"></i> Export
+                    </button>
+                    <button class="btn btn-sm btn-danger bulk-delete">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                    <button class="btn btn-sm btn-link text-white text-decoration-underline" id="bulkClear"> Clear
+                    </button>
+                </div>
+
+            </div>
+
             <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" class="form-check-input row-checkbox" data-id="1"></th>
+                        <th>
+                            <input type="checkbox" class="form-check-input row-checkbox" data-select-all=".row-checkbox">
+                        </th>
                         <th>Category</th>
                         <th>Parent</th>
                         <th>Status</th>
@@ -231,7 +135,7 @@
                     @foreach ($categories as $cate)
                         <tr>
                             <td>
-                                <input type="checkbox" class="form-check-input row-checkbox" data-id="1">
+                                <input type="checkbox" class="form-check-input row-checkbox">
                             </td>
                             <td>
                                 <p class="mb-0">
@@ -258,7 +162,7 @@
                                 {{-- //TODO - Add a count of product --}}
                             </td>
                             <td>
-                                IN hold
+                                In hold
                             </td>
                             <td>
                                 {{ format_date($cate?->updated_at, 'jS F Y') }}
@@ -278,7 +182,8 @@
                                         </li>
                                         <li>
                                             <a class="do-item edit-action" href="#" data-id="1">
-                                                <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
+                                                <span class="do-badge do-badge--edit"><i
+                                                        class="fa-solid fa-pen"></i></span>
                                                 <span>Edit</span>
                                                 {{-- #eff4ff --}}
                                             </a>
@@ -302,8 +207,8 @@
                 </tbody>
             </table>
         </div>
+
         <div class="card-footer py-3">
-            <!-- TODO - Add Pagination -->
             @include('admin.layout.components.pagination', ['items' => $categories])
         </div>
     </div>
@@ -404,6 +309,7 @@
                 }
             });
         });
+
         $(document).on('change', '[data-bs-toggle="status"]', function() {
             let status = $(this).is(':checked') ? 1 : 0;
             let slug = $(this).data('slug');
@@ -428,6 +334,31 @@
                     $toggle.prop('checked', !$toggle.is(':checked'));
                     notify('error', error.responseJSON?.message || 'Failed to update', 'toast');
                 }
+            });
+        });
+
+        $(function() {
+            $('[data-select-all]').each(function() {
+                const $master = $(this);
+                const targetSelector = $master.data('select-all');
+                const $scope = $master.closest('table').length ? $master.closest('table') : $(document);
+
+                function updateState() {
+                    const $rows = $scope.find(targetSelector);
+                    const checkedCount = $rows.filter(':checked').length;
+
+                    $master.prop('checked', $rows.length > 0 && checkedCount === $rows.length);
+                    $master.prop('indeterminate', checkedCount > 0 && checkedCount < $rows.length);
+                }
+
+                $master.on('change', function() {
+                    $scope.find(targetSelector).prop('checked', $master.is(':checked'));
+                    updateState();
+                });
+
+                $scope.on('change', targetSelector, updateState);
+
+                updateState();
             });
         });
     </script>

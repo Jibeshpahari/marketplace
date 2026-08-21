@@ -11,6 +11,7 @@ use Throwable;
 
 
 // TODO - Check access authority before action
+// TODO - DELECT ACTION IS ON PENDING
 class CategoryController extends Controller
 {
     public function index(Request $request)
