@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -29,4 +30,8 @@ class Category extends Model
         return 'slug';
     }
 
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', '1');
+    }
 }

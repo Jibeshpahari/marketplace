@@ -17,7 +17,109 @@
 
         .table>thead>tr>th,
         .table>tbody>tr>td {
-            padding: 10px 15px !important;
+            padding: 10px 12px !important;
+        }
+
+        .thumbnail-image {
+            max-width: 52px;
+            max-height: 52px;
+            margin-right: 6px;
+            align-self: center;
+        }
+
+        .product-name {
+            font-size: 1.08rem;
+            font-weight: 500;
+            line-height: 1.55;
+            margin: 0;
+            max-width: 280px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-rating {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #222222;
+            white-space: nowrap;
+            padding: 1px 7px 0.5px 6px;
+            border-radius: 25px;
+            background: #ffc30035;
+            border: 1px solid #ffc30080;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .product-rating i {
+            color: #ffaa00;
+            font-size: 10.5px;
+            margin-right: 4px;
+            text-shadow: 0px 0px 0px #000000;
+        }
+
+        .rating-divider {
+            width: 100%;
+            height: 1px;
+            background: #d0d0d0;
+            margin: 6px 0 2px;
+            display: block;
+        }
+
+        .sku-txt {
+            font-size: 13px;
+            color: #777777;
+            line-height: 2;
+            font-weight: 600;
+            max-width: 300px;
+            white-space: wrap;
+        }
+
+        .category-badge {
+            background: #e3f2fd;
+            color: #1565c0;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .variant-badge {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .discount-chip {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 5px;
+            white-space: nowrap;
+            background: #222222;
+            color: #fff;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .price-val {
+            font-size: 15.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .price-was {
+            font-size: 12px;
+            color: #454545;
+            text-decoration: line-through;
+            margin-left: 5px;
+            font-weight: 500;
         }
     </style>
 @endpush
@@ -61,11 +163,14 @@
                         </button>
                     </div>
                     <div class="col-2">
+
+                    </div>
+                    <div class="col-2">
                         <div class="text-end">
-                            <a href="{{ route('admin.categories.add') }}"
+                            <a href="{{ route('admin.products.add') }}"
                                 class="btn btn-primary bg-primary-gradient btn-sm">
                                 <i class="fa-solid fa-plus me-1"></i>
-                                Add Category
+                                Add Product
                             </a>
                         </div>
                     </div>
@@ -74,7 +179,8 @@
         </div>
 
         <div class="card-body px-0 py-3">
-            <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between" id="bulkBar">
+            {{-- Bulk Select Bar --}}
+            <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between d-none" id="bulkBar">
                 <div class="align-content-center">
                     <span class="me-auto fw-semibold" id="bulkCount">9 selected</span>
                 </div>
@@ -103,31 +209,30 @@
                         <th>Product</th>
                         <th>Price</th>
                         <th>Stock</th>
+                        <th>Status</th>
+                        <th>Rating</th>
                         <th>Published</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="" data-id="Mac-5006">
-                        <td><input type="checkbox" class="form-check-input row-checkbox"></td>
+                        <td>
+                            <input type="checkbox" class="form-check-input row-checkbox">
+                        </td>
                         <td>
                             <div class="d-flex align-items-start gap-2">
-                                <div class="p-thumb"><i class="fa-brands fa-apple"></i></div>
+                                <img src="https://tse3.mm.bing.net/th/id/OIP.CvFx2otcDoNFsvaXMX1HWwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+                                    alt="" class="thumbnail-image">
+
                                 <div class="p-name-cell">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <p class="p-name" title="Macbook Pro 14 Inch 512GB Space Grey">Macbook Pro 14 Inch
-                                            512GB Space Grey</p>
-                                        <span class="p-rating-inline d-inline-flex align-items-center gap-1"><i
-                                                class="fa-solid fa-star"></i>4.8</span>
-                                    </div>
+                                    <p class="product-name" title="Macbook Pro 14 Inch 512GB Space Grey">
+                                        Macbook Pro 14 Inch 512GB Space Grey
+                                    </p>
+                                    <span class="sku-txt">SKU: Mac-5006006644</span>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="sku-txt">Mac-5006</span>
-                                        <span class="meta-dot"></span>
-                                        <span class="cat-chip">Laptops</span>
-                                        <span
-                                            class="status-badge status-active d-inline-flex align-items-center gap-1"><span
-                                                class="status-dot"></span>Active</span>
-                                        <span class="variant-chip">6 variants</span>
+                                        <span class="category-badge">Laptops</span>
+                                        <span class="variant-badge">6 variants</span>
                                     </div>
                                 </div>
                             </div>
@@ -146,6 +251,15 @@
                                 </div><span class="orders-line"><b>184</b> orders · 30d</span>
                             </div>
                         </td>
+                        <td>
+                            <span class="status-badge status-active d-inline-flex align-items-center gap-1"><span
+                                    class="status-dot"></span>Active</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="product-rating"> <i class="fa-solid fa-star"></i> 4.8 </span>
+                            <span class="rating-divider"></span>
+                            <span class="review-count">1020</span>
+                        </td>
                         <td>12 Jun 2025</td>
                         <td>
                             <div class="dropdown-options dropdown text-center">
@@ -161,10 +275,9 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="do-item edit-action" href="#" data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                            {{-- #eff4ff --}}
+                                        <a class="do-item do-item--amber flag-action" href="{{ '' }}">
+                                            <span class="do-badge do-badge--amber"><i class="fa-solid fa-flag"></i></span>
+                                            <span>Flag</span>
                                         </a>
                                     </li>
                                     <li>
@@ -182,225 +295,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="row-draft" data-id="JBL-9928">
-                        <td><input type="checkbox" class="form-check-input row-checkbox"></td>
-                        <td>
-                            <div class="d-flex align-items-start gap-2">
-                                <div class="p-thumb"><i class="fa-solid fa-volume-high"></i></div>
-                                <div class="p-name-cell">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <p class="p-name" title="JBL Go 2 Portable Speaker Blue">JBL Go 2 Portable Speaker
-                                            Blue</p>
-                                        <span class="p-rating-none">No ratings</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="sku-txt">JBL-9928</span>
-                                        <span class="meta-dot"></span>
-                                        <span class="cat-chip">Audio</span>
-                                        <span
-                                            class="status-badge status-draft d-inline-flex align-items-center gap-1"><span
-                                                class="status-dot"></span>Draft</span>
-                                        <span class="variant-chip">3 variants</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex flex-column gap-1">
-                                <div><span class="price-val">$180.00</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="stock-orders-cell d-flex flex-column gap-2">
-                                <div class="d-flex flex-column gap-1">
-                                    <span class="stock-info stock-high">341 in stock</span>
-                                    <div class="stock-bar high"><i></i></div>
-                                </div><span class="orders-line"><b>0</b> orders · 30d</span>
-                            </div>
-                        </td>
-                        <td>—</td>
-                        <td>
-                            <div class="dropdown-options dropdown text-center">
-                                <button class="do-kebab-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end do-menu">
-                                    <li>
-                                        <a class="do-item do-item--edit edit-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="do-item edit-action" href="#" data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                            {{-- #eff4ff --}}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="do-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="do-item do-item--delete delete-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--delete"><i
-                                                    class="fa-solid fa-trash"></i></span>
-                                            <span>Delete</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="" data-id="JBL-1019">
-                        <td><input type="checkbox" class="form-check-input row-checkbox"></td>
-                        <td>
-                            <div class="d-flex align-items-start gap-2">
-                                <div class="p-thumb"><i class="fa-solid fa-volume-high"></i></div>
-                                <div class="p-name-cell">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <p class="p-name" title="JBL Charge 5 Portable Bluetooth Speaker">JBL Charge 5
-                                            Portable
-                                            Bluetooth Speaker</p>
-                                        <span class="p-rating-inline d-inline-flex align-items-center gap-1"><i
-                                                class="fa-solid fa-star"></i>4.6</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="sku-txt">JBL-1019</span>
-                                        <span class="meta-dot"></span>
-                                        <span class="cat-chip">Audio</span>
-                                        <span
-                                            class="status-badge status-archived d-inline-flex align-items-center gap-1"><span
-                                                class="status-dot"></span>Inactive</span>
-                                        <span class="variant-chip">4 variants</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex flex-column gap-1">
-                                <div><span class="price-val">$180.00</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="stock-orders-cell d-flex flex-column gap-2">
-                                <div class="d-flex flex-column gap-1">
-                                    <span class="stock-info stock-low">5 in stock</span>
-                                    <div class="stock-bar low"><i></i></div>
-                                </div><span class="orders-line"><b>8</b> orders · 30d</span>
-                            </div>
-                        </td>
-                        <td>14 Nov 2024</td>
-                        <td>
-                            <div class="dropdown-options dropdown text-center">
-                                <button class="do-kebab-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end do-menu">
-                                    <li>
-                                        <a class="do-item do-item--edit edit-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="do-item edit-action" href="#" data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                            {{-- #eff4ff --}}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="do-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="do-item do-item--delete delete-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--delete"><i
-                                                    class="fa-solid fa-trash"></i></span>
-                                            <span>Delete</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="row-scheduled" data-id="Sony-4471">
-                        <td><input type="checkbox" class="form-check-input row-checkbox"></td>
-                        <td>
-                            <div class="d-flex align-items-start gap-2">
-                                <div class="p-thumb"><i class="fa-solid fa-headphones"></i></div>
-                                <div class="p-name-cell">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <p class="p-name" title="Sony WH-1000XM5 Wireless Headphones">Sony WH-1000XM5
-                                            Wireless
-                                            Headphones</p>
-                                        <span class="p-rating-none">No ratings</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="sku-txt">Sony-4471</span>
-                                        <span class="meta-dot"></span>
-                                        <span class="cat-chip">Audio</span>
-                                        <span
-                                            class="status-badge status-scheduled d-inline-flex align-items-center gap-1"><span
-                                                class="status-dot"></span>Scheduled</span>
-                                        <span class="variant-chip">3 variants</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex flex-column gap-1">
-                                <div><span class="price-val">$329.00</span></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="stock-orders-cell d-flex flex-column gap-2">
-                                <div class="d-flex flex-column gap-1">
-                                    <span class="stock-info stock-high">60 in stock</span>
-                                    <div class="stock-bar high"><i></i></div>
-                                </div><span class="orders-line"><b>0</b> orders · 30d</span>
-                            </div>
-                        </td>
-                        <td>02 Sep 2026</td>
-                        <td>
-                            <div class="dropdown-options dropdown text-center">
-                                <button class="do-kebab-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end do-menu">
-                                    <li>
-                                        <a class="do-item do-item--edit edit-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="do-item edit-action" href="#" data-id="1">
-                                            <span class="do-badge do-badge--edit"><i class="fa-solid fa-pen"></i></span>
-                                            <span>Edit</span>
-                                            {{-- #eff4ff --}}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="do-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="do-item do-item--delete delete-action" href="{{ '' }}"
-                                            data-id="1">
-                                            <span class="do-badge do-badge--delete"><i
-                                                    class="fa-solid fa-trash"></i></span>
-                                            <span>Delete</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -612,33 +507,6 @@
             object-fit: cover;
         }
 
-        .p-name-cell {
-            max-width: 280px;
-        }
-
-        .p-name {
-            font-size: 13.5px;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.3;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .p-rating-inline {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--text);
-            white-space: nowrap;
-        }
-
-        .p-rating-inline i {
-            color: #111113;
-            font-size: 10.5px;
-        }
-
         .p-rating-none {
             font-size: 11px;
             color: var(--muted);
@@ -646,12 +514,6 @@
             white-space: nowrap;
         }
 
-        .sku-txt {
-            font-size: 11.5px;
-            color: var(--muted);
-            font-weight: 600;
-            white-space: nowrap;
-        }
 
         .meta-dot {
             width: 3px;
@@ -661,9 +523,9 @@
         }
 
         .cat-chip {
-            background: var(--bg);
+            background: #f3f3f4;
             color: #4b5563;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
             padding: 3px 8px;
             border-radius: 6px;
@@ -715,40 +577,6 @@
             background: #918ac5;
         }
 
-        .variant-chip {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-            background: var(--bg);
-            color: #374151;
-        }
-
-        .price-val {
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .price-was {
-            font-size: 11.5px;
-            color: var(--muted);
-            text-decoration: line-through;
-            margin-left: 5px;
-            font-weight: 500;
-        }
-
-        .discount-chip {
-            font-size: 10.5px;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 5px;
-            white-space: nowrap;
-            background: #111113;
-            color: #fff;
-            display: inline-block;
-            width: fit-content;
-        }
 
         .stock-orders-cell {
             min-width: 110px;
@@ -892,59 +720,10 @@
             border-color: var(--line);
         }
 
-        .p-thumb {
-            width: 38px;
-            height: 38px;
-            border-radius: 9px;
-            background: #f2f2f3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-            font-size: 15px;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .p-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .p-name-cell {
-            max-width: 280px;
+            /* max-width: 280px; */
         }
 
-        .p-name {
-            font-size: 13.5px;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.3;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .p-rating-inline {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--text);
-            white-space: nowrap;
-        }
-
-        .p-rating-inline i {
-            color: #111113;
-            font-size: 10.5px;
-        }
-
-        .sku-txt {
-            font-size: 11.5px;
-            color: var(--muted);
-            font-weight: 600;
-            white-space: nowrap;
-        }
 
         .meta-dot {
             width: 3px;
@@ -953,15 +732,6 @@
             background: var(--line);
         }
 
-        .cat-chip {
-            background: var(--bg);
-            color: #4b5563;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-        }
 
         .status-badge {
             font-weight: 600;
@@ -984,14 +754,28 @@
             background: var(--green);
         }
 
-        .variant-chip {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            white-space: nowrap;
-            background: var(--bg);
-            color: #374151;
+        .status-draft {
+            color: var(--muted);
+        }
+
+        .status-draft .status-dot {
+            background: #9ca3af;
+        }
+
+        .status-scheduled {
+            color: #918ac5;
+        }
+
+        .status-scheduled .status-dot {
+            background: #918ac5;
+        }
+
+        .status-archived {
+            color: var(--red-soft);
+        }
+
+        .status-archived .status-dot {
+            background: var(--red-soft);
         }
     </style>
 @endpush

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -26,26 +27,20 @@ class ProductController extends Controller
 
     }
 
-    public function form($id = null)
-    {
-        $product = $id ? Product::findOrFail($id) : new Product();
+    public function add() {
+        $title = "Add Product";
+        $nav = [
+            [
+                'url'  => route('admin.products.index'),
+                'name' => 'Product Listing' 
+            ],
+            [
+                'name' => $title
+            ]
+        ];
 
-        return view('admin.product.form', compact('product'));
-    }
-
-    public function save(Request $request, $id = null)
-    {
-        $data = $request->validate([
-            'name'  => 'required|string|max:255',
-            'price' => 'required|numeric',
-            // ...
-        ]);
-
-        // $product = $id ? Product::findOrFail($id) : new Product();
-        // $product->fill($data)->save();
-
-        // return redirect()->route('products.index')
-        //     ->with('success', $id ? 'Product updated.' : 'Product created.');
+        $categories = Category::active()->get();
+        return view('admin.product.form', compact('title', 'nav', 'categories'));
     }
 
 }

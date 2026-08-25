@@ -11,8 +11,11 @@ Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
 Route::controller(ProductController::class)->prefix('products')->name('products.')->group( function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/form/{id?}', 'form')->name('form');
-    Route::post('/save/{id?}', 'save')->name('save');
+    Route::get('/add', 'add')->name('add');
+    Route::get('/edit/{product}', 'edit')->name('edit');
+    Route::post('/save/{product?}', 'save')->name('save');
+    Route::get('/delete/{category}', 'delete')->name('delete');
+    Route::post('/toggle-status', 'toggleStatus')->name('toggleStatus');
 });
 
 Route::controller(CategoryController::class)->prefix('product/categories')->name('categories.')->group( function() {

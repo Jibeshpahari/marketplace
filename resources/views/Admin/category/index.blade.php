@@ -96,7 +96,7 @@
         </div>
 
         <div class="card-body px-0 py-3">
-            <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between" id="bulkBar">
+            <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between d-none" id="bulkBar">
                 <div class="align-content-center">
                     <span class="me-auto fw-semibold" id="bulkCount">9 selected</span>
                 </div>
@@ -342,6 +342,7 @@
                 const $master = $(this);
                 const targetSelector = $master.data('select-all');
                 const $scope = $master.closest('table').length ? $master.closest('table') : $(document);
+                const $bulkBar = $('#bulkBar');
 
                 function updateState() {
                     const $rows = $scope.find(targetSelector);
@@ -349,6 +350,9 @@
 
                     $master.prop('checked', $rows.length > 0 && checkedCount === $rows.length);
                     $master.prop('indeterminate', checkedCount > 0 && checkedCount < $rows.length);
+
+                    // Show bulkBar if at least one row is checked, hide if none
+                    $bulkBar.toggleClass('d-none', checkedCount === 0);
                 }
 
                 $master.on('change', function() {

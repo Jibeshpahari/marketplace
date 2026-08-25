@@ -1875,6 +1875,18 @@ label.status-toggle-item {
     --do-edit-tint: #EFF4FF;
     --do-delete: #E5484D;
     --do-delete-tint: #FDEAEA;
+    --do-green: #22A06B;
+    --do-green-tint: #E9F9F1;
+    --do-amber: #D89614;
+    --do-amber-tint: #FEF6E7;
+    --do-purple: #8B5CF6;
+    --do-purple-tint: #F4F0FE;
+    --do-violet: #7C3AED;
+    --do-violet-tint: #F1EAFE;
+    --do-pink: #EC4899;
+    --do-pink-tint: #FDEFF6;
+    --do-teal: #14B8A6;
+    --do-teal-tint: #E8FBF9;
     --do-border: #E7E9EE;
     --do-ink: #1E2430;
     --do-muted: #8A93A3;
@@ -1942,11 +1954,6 @@ label.status-toggle-item {
     color: var(--do-edit);
 }
 
-.dropdown-options .do-badge--delete {
-    background: var(--do-delete-tint);
-    color: var(--do-delete);
-}
-
 .dropdown-options .do-item--edit:hover {
     background: var(--do-edit-tint);
 }
@@ -1959,6 +1966,11 @@ label.status-toggle-item {
     color: var(--do-edit);
 }
 
+.dropdown-options .do-badge--delete {
+    background: var(--do-delete-tint);
+    color: var(--do-delete);
+}
+
 .dropdown-options .do-item--delete:hover {
     background: var(--do-delete-tint);
 }
@@ -1969,6 +1981,108 @@ label.status-toggle-item {
 
 .dropdown-options .do-item--delete:hover span {
     color: var(--do-delete);
+}
+
+.dropdown-options .do-badge--green {
+    background: var(--do-green-tint);
+    color: var(--do-green);
+}
+
+.dropdown-options .do-item--green:hover {
+    background: var(--do-green-tint);
+}
+
+.dropdown-options .do-item--green:hover .do-badge--green {
+    background: #fff;
+}
+
+.dropdown-options .do-item--green:hover span {
+    color: var(--do-green);
+}
+
+.dropdown-options .do-badge--amber {
+    background: var(--do-amber-tint);
+    color: var(--do-amber);
+}
+
+.dropdown-options .do-item--amber:hover {
+    background: var(--do-amber-tint);
+}
+
+.dropdown-options .do-item--amber:hover .do-badge--amber {
+    background: #fff;
+}
+
+.dropdown-options .do-item--amber:hover span {
+    color: var(--do-amber);
+}
+
+.dropdown-options .do-badge--purple {
+    background: var(--do-purple-tint);
+    color: var(--do-purple);
+}
+
+.dropdown-options .do-item--purple:hover {
+    background: var(--do-purple-tint);
+}
+
+.dropdown-options .do-item--purple:hover .do-badge--purple {
+    background: #fff;
+}
+
+.dropdown-options .do-item--purple:hover span {
+    color: var(--do-purple);
+}
+
+.dropdown-options .do-badge--violet {
+    background: var(--do-violet-tint);
+    color: var(--do-violet);
+}
+
+.dropdown-options .do-item--violet:hover {
+    background: var(--do-violet-tint);
+}
+
+.dropdown-options .do-item--violet:hover .do-badge--violet {
+    background: #fff;
+}
+
+.dropdown-options .do-item--violet:hover span {
+    color: var(--do-violet);
+}
+
+.dropdown-options .do-badge--pink {
+    background: var(--do-pink-tint);
+    color: var(--do-pink);
+}
+
+.dropdown-options .do-item--pink:hover {
+    background: var(--do-pink-tint);
+}
+
+.dropdown-options .do-item--pink:hover .do-badge--pink {
+    background: #fff;
+}
+
+.dropdown-options .do-item--pink:hover span {
+    color: var(--do-pink);
+}
+
+.dropdown-options .do-badge--teal {
+    background: var(--do-teal-tint);
+    color: var(--do-teal);
+}
+
+.dropdown-options .do-item--teal:hover {
+    background: var(--do-teal-tint);
+}
+
+.dropdown-options .do-item--teal:hover .do-badge--teal {
+    background: #fff;
+}
+
+.dropdown-options .do-item--teal:hover span {
+    color: var(--do-teal);
 }
 
 .dropdown-options .do-divider {
@@ -2053,14 +2167,23 @@ label.status-toggle-item {
 #bulkBar .btn {
     padding: 7px 13px;
     border-radius: 4px;
-    font-size: 11.5px;
-    background: rgba(255, 255, 255, .22);
+    font-size: 12px;
+    background: #ffffff38;
+    border: 1px solid #FFFFFF50;
 }
 
 #bulkBar .btn-group {
     gap: 6px;
 }
 
-table th .form-check-input[type=checkbox] {
-    border-color: #ccc;
+table th .form-check-input[type=checkbox],
+table td .form-check-input[type=checkbox] {
+    border-color: #bbb;
+}
+
+table th .form-check-input[type="checkbox"]:checked,
+table th .form-check-input[type="checkbox"]:indeterminate,
+table td .form-check-input[type="checkbox"]:checked {
+    background-color: #000000;
+    border-color: #000000;
 }
