@@ -28,17 +28,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}">
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /> --}}
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <!-- Font Awesome 7 -->
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+     --}}
+    <link rel="stylesheet" href="{{ asset('assets/global/css/fontawesome-7.3.1.min.css') }}">
     <!-- Date Time Picker -->
-    <link rel="stylesheet" href="{{ asset('assets/global/css/pickers.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/global/css/date-time-picker.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('assets/global/css/select2.min.css') }}">
 
     <!-- jQuery -->
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
-    <script src="{{ asset('assets/global/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/jquery-3.7.1.min.js') }}"></script>
     <!-- WebFont Loader -->
     <script src="{{ asset('assets/admin/js/webfont.min.js') }}"></script>
     <script>
@@ -53,10 +54,9 @@
                 ]
             },
             custom: {
+                // Font Awesome is loaded separately above (fontawesome-7.3.1.min.css),
+                // so only Simple Line Icons is preloaded here to avoid duplicate icon fonts.
                 families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
                 urls: ["{{ asset('assets/admin/css/fonts.min.css') }}"],
@@ -68,7 +68,7 @@
     </script>
 
     <!-- App Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('assets/global/css/kaiadmin.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/global/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}?v={{ time() }}" />
 
     @stack('cdn')
@@ -138,8 +138,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/global/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/script.js') }}"></script>
-    <script src="{{ asset('assets/global/js/pickers.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/date-time-picker.min.js') }}"></script>
 
     @stack('js')
     @stack('modal')
