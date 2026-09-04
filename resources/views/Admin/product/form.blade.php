@@ -57,7 +57,6 @@
             <div class="card p-4 mb-3">
                 <p class="fs-6 fw-semibold ">Varients</p>
                 <div class="row g-0 border p-3 rounded-3 align-items-center">
-
                     <!-- Image -->
                     <div class="col-2">
                         <button type="button" class="add-image img-picker-trigger" id="galleryAddImageBtn">
@@ -65,7 +64,6 @@
                             <i class="lni lni-gallery"></i>
                         </button>
                     </div>
-
                     <!-- Variant Fields -->
                     <div class="col-9">
                         <div class="row">
@@ -101,14 +99,12 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Delete Button -->
                     <div class="col-1 pt-4 ps-4">
                         <button type="button" class="btn mt-2 btn-outline-danger d-flex py-2 px-1 align-content-center justify-content-center rounded-3" title="Delete variant" aria-label="Delete variant">
                             <i class="fa-solid fa-trash fs-5"></i>
                         </button>
                     </div>
-
                 </div>
                 <div class="btn btn-secondary col-md-12 mt-2">
                     <i class="fa-solid fa-plus"></i> Add Another Variation
