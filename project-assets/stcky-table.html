@@ -1,0 +1,979 @@
+@extends('admin.layout.app')
+
+@push('css')
+<style>
+    :root {
+        --bg: #f3f3f4;
+        --panel: #ffffff;
+        --line: #e7e7e9;
+        --text: #111113;
+        --muted: #8b8b90;
+        --ink: #111113;
+        --ink-soft: #3a3a3d;
+        --green: #1c9a63;
+        --green-bg: #eaf6f0;
+        --red: #c23b3b;
+        --red-bg: rgba(194, 59, 59, 0.07);
+        --red-soft: rgba(194, 59, 59, 0.55);
+        --radius: 14px;
+    }
+
+    .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+    }
+
+    .page-title {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .page-title i {
+        font-size: 13px;
+        color: var(--muted);
+        cursor: pointer;
+    }
+
+    .btn-add-product {
+        background: var(--ink);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        font-size: 13.5px;
+    }
+
+    .btn-add-product:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    .tab-pill {
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+    }
+
+    .tab-pill.active {
+        background: var(--text);
+        color: #fff;
+    }
+
+    .view-settings {
+        font-size: 13.5px;
+        color: var(--muted);
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .tb-search {
+        background: var(--bg);
+        border-radius: 9px;
+        padding: 8px 12px;
+        color: var(--muted);
+        font-size: 13.5px;
+    }
+
+    .tb-search input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 13.5px;
+    }
+
+    .tb-select {
+        background: var(--bg);
+        border: none;
+        border-radius: 9px;
+        padding: 8px 12px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #374151;
+        white-space: nowrap;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .tb-select:hover {
+        background: #ececee;
+    }
+
+    .tb-select.open {
+        background: #111113;
+        color: #fff;
+    }
+
+    .tb-select.open i {
+        color: #fff;
+    }
+
+    .filter-dd {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: calc(100% + 6px);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, .10);
+        min-width: 170px;
+        z-index: 20;
+        padding: 6px;
+    }
+
+    .filter-dd.show {
+        display: block;
+    }
+
+    .filter-dd a {
+        padding: 8px 10px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #374151;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .filter-dd a:hover {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .filter-dd a.selected {
+        background: var(--text);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .dd-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    .dd-dot.status-active {
+        background: var(--green);
+    }
+
+    .dd-dot.status-draft {
+        background: #9ca3af;
+    }
+
+    .dd-dot.status-archived {
+        background: var(--red-soft);
+    }
+
+    .dd-dot.status-scheduled {
+        background: #918ac5;
+    }
+
+    .select-all-wrap {
+        background: var(--bg);
+        border-radius: 9px;
+        padding: 8px 12px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .select-all-wrap input {
+        accent-color: var(--ink);
+    }
+
+    .bulk-bar {
+        display: none;
+        background: var(--text);
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-size: 13.5px;
+        font-weight: 600;
+    }
+
+    .bulk-bar.show {
+        display: flex;
+    }
+
+    .bulk-bar button {
+        background: rgba(255, 255, 255, .12);
+        border: none;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .bulk-bar button:hover {
+        background: rgba(255, 255, 255, .2);
+    }
+
+    .bulk-bar button.bulk-delete:hover {
+        background: var(--red-soft);
+    }
+
+    .bulk-bar .bulk-clear {
+        background: transparent;
+        text-decoration: underline;
+    }
+
+    /* ---------- TABLE ---------- */
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+    }
+
+    table.p-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 980px;
+    }
+
+    table.p-table thead th {
+        position: sticky;
+        top: 0;
+        background: #fafafa;
+        z-index: 2;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+    }
+
+    table.p-table thead th:first-child {
+        border-top-left-radius: 12px;
+    }
+
+    table.p-table thead th:last-child {
+        border-top-right-radius: 12px;
+    }
+
+    table.p-table tbody tr {
+        border-bottom: 1px solid var(--line);
+        transition: background .15s ease;
+    }
+
+    table.p-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    table.p-table tbody tr:hover {
+        background: #fafafa;
+    }
+
+    table.p-table tbody tr.row-draft {
+        background: #f9f9f9;
+    }
+
+    table.p-table tbody tr.row-draft:hover {
+        background: #f2f2f2;
+    }
+
+    table.p-table tbody tr.row-scheduled {
+        background: rgba(145, 138, 197, 0.10);
+    }
+
+    table.p-table tbody tr.row-scheduled:hover {
+        background: rgba(145, 138, 197, 0.16);
+    }
+
+    table.p-table tbody tr.out-of-stock {
+        background: var(--red-bg);
+    }
+
+    table.p-table tbody tr.out-of-stock:hover {
+        background: rgba(194, 59, 59, 0.11);
+    }
+
+    table.p-table td {
+        padding: 11px 12px;
+        font-size: 13px;
+        vertical-align: middle;
+        color: var(--text);
+    }
+
+    .p-check {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--ink);
+    }
+
+    .p-thumb {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        background: #f2f2f3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 15px;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .p-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .p-name-cell {
+        max-width: 280px;
+    }
+
+    .p-name {
+        font-size: 13.5px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .p-rating-inline {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text);
+        white-space: nowrap;
+    }
+
+    .p-rating-inline i {
+        color: #111113;
+        font-size: 10.5px;
+    }
+
+    .p-rating-none {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .sku-txt {
+        font-size: 11.5px;
+        color: var(--muted);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .meta-dot {
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--line);
+    }
+
+    .cat-chip {
+        background: var(--bg);
+        color: #4b5563;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        font-weight: 600;
+        font-size: 11.5px;
+        white-space: nowrap;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .status-active {
+        color: var(--green);
+    }
+
+    .status-active .status-dot {
+        background: var(--green);
+    }
+
+    .status-draft {
+        color: var(--muted);
+    }
+
+    .status-draft .status-dot {
+        background: #9ca3af;
+    }
+
+    .status-archived {
+        color: var(--red-soft);
+    }
+
+    .status-archived .status-dot {
+        background: var(--red-soft);
+    }
+
+    .status-scheduled {
+        color: #918ac5;
+    }
+
+    .status-scheduled .status-dot {
+        background: #918ac5;
+    }
+
+    .variant-chip {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+        background: var(--bg);
+        color: #374151;
+    }
+
+    .price-val {
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .price-was {
+        font-size: 11.5px;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 5px;
+        font-weight: 500;
+    }
+
+    .discount-chip {
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 5px;
+        white-space: nowrap;
+        background: #111113;
+        color: #fff;
+        display: inline-block;
+        width: fit-content;
+    }
+
+    .stock-orders-cell {
+        min-width: 110px;
+    }
+
+    .stock-info {
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .stock-high {
+        color: var(--green);
+    }
+
+    .stock-low {
+        color: #a6791f;
+    }
+
+    .stock-out {
+        color: var(--red-soft);
+    }
+
+    .stock-bar {
+        height: 4px;
+        border-radius: 3px;
+        background: var(--line);
+        width: 80px;
+        overflow: hidden;
+    }
+
+    .stock-bar i {
+        display: block;
+        height: 100%;
+    }
+
+    .stock-bar.high i {
+        background: var(--green);
+        width: 80%;
+    }
+
+    .stock-bar.low i {
+        background: #c99a3d;
+        width: 22%;
+    }
+
+    .stock-bar.out i {
+        background: var(--red-soft);
+        width: 100%;
+        opacity: .5;
+    }
+
+    .orders-line {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .orders-line b {
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .pub-date {
+        font-size: 12.5px;
+        color: #4b5563;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .btn-view {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 7px;
+    }
+
+    .btn-view:hover {
+        background: var(--text);
+        color: #fff;
+        border-color: var(--text);
+    }
+
+    .menu-wrap {
+        position: relative;
+    }
+
+    .p-menu-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #4b5563;
+        cursor: pointer;
+    }
+
+    .p-menu-btn:hover {
+        background: var(--bg);
+    }
+
+    .p-menu-dd {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 34px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, .10);
+        min-width: 160px;
+        z-index: 10;
+        padding: 6px;
+    }
+
+    .p-menu-dd.show {
+        display: block;
+    }
+
+    .p-menu-dd a {
+        padding: 8px 10px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #374151;
+        text-decoration: none;
+    }
+
+    .p-menu-dd a:hover {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .p-menu-dd a.danger {
+        color: var(--red-soft);
+    }
+
+    .p-menu-dd a.danger:hover {
+        background: var(--red-bg);
+    }
+
+    .p-menu-dd hr {
+        margin: 5px 2px;
+        border-color: var(--line);
+    }
+
+    .result-count {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 12px;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="panel">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h1 class="page-title">Products <i class="fa-solid fa-ellipsis"></i></h1>
+        <button class="btn btn-add-product rounded-3 px-3 py-2 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Add Product
+        </button>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 border-bottom pb-3 mb-3">
+        <div class="d-flex gap-1 align-items-center">
+            <div class="tab-pill active" data-tab="all">All</div>
+            <div class="tab-pill" data-tab="active">Active</div>
+            <div class="tab-pill" data-tab="draft">Draft</div>
+            <div class="tab-pill" data-tab="archived">Archived</div>
+        </div>
+        <div class="view-settings d-flex align-items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> View Settings
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+        <label class="select-all-wrap d-flex align-items-center gap-2">
+            <input type="checkbox" id="selectAllCheckbox"> Select All
+        </label>
+        <div class="tb-search flex-grow-1 d-flex align-items-center gap-2" style="min-width:160px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search products" class="flex-grow-1">
+        </div>
+        <div class="tb-select d-flex align-items-center gap-2" id="categoryFilter">
+            <span id="categoryFilterLabel">Category</span>
+            <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+            <div class="filter-dd" id="categoryDD">
+                <a href="#" data-val="All Categories">All Categories</a>
+                <a href="#" data-val="Laptops">Laptops</a>
+                <a href="#" data-val="Accessories">Accessories</a>
+                <a href="#" data-val="Audio">Audio</a>
+                <a href="#" data-val="Cameras">Cameras</a>
+                <a href="#" data-val="Drones">Drones</a>
+            </div>
+        </div>
+        <div class="tb-select d-flex align-items-center gap-2" id="statusFilter">
+            <span id="statusFilterLabel">Status</span>
+            <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+            <div class="filter-dd" id="statusDD">
+                <a href="#" data-val="All Statuses">All Statuses</a>
+                <a href="#" data-val="Active" class="d-flex align-items-center gap-2"><span
+                        class="dd-dot status-active"></span>Active</a>
+                <a href="#" data-val="Draft" class="d-flex align-items-center gap-2"><span
+                        class="dd-dot status-draft"></span>Draft</a>
+                <a href="#" data-val="Archived" class="d-flex align-items-center gap-2"><span
+                        class="dd-dot status-archived"></span>Archived</a>
+                <a href="#" data-val="Scheduled" class="d-flex align-items-center gap-2"><span
+                        class="dd-dot status-scheduled"></span>Scheduled</a>
+            </div>
+        </div>
+        <div class="tb-select d-flex align-items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> Advance Filter
+        </div>
+    </div>
+
+    <!-- BULK ACTION BAR -->
+    <div class="bulk-bar align-items-center gap-3 rounded-3 mb-3" id="bulkBar">
+        <span class="me-auto" id="bulkCount">0 selected</span>
+        <button class="rounded-2 px-3 py-2 d-flex align-items-center gap-2 bulk-archive">
+            <i class="fa-solid fa-box-archive"></i> Archive
+        </button>
+        <button class="rounded-2 px-3 py-2 d-flex align-items-center gap-2 bulk-export">
+            <i class="fa-solid fa-file-export"></i> Export
+        </button>
+        <button class="rounded-2 px-3 py-2 d-flex align-items-center gap-2 bulk-delete">
+            <i class="fa-solid fa-trash"></i> Delete
+        </button>
+        <button class="rounded-2 px-2 py-2 bulk-clear" id="bulkClear">Clear</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-scroll">
+        <table class="p-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock &amp; Orders</th>
+                    <th>Published</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productBody"></tbody>
+        </table>
+    </div>
+    <div class="result-count" id="resultCount"></div>
+</div>
+@endsection
+
+@push('js')
+<script>
+    // ---------- Product data ----------
+    const products = [
+        {
+            id: "Mac-5006", name: "Macbook Pro 14 Inch 512GB Space Grey", sku: "Mac-5006", category: "Laptops", icon: "fa-brands fa-apple", status: "Active",
+            price: 220.00, wasPrice: 249.00, stockNum: 210, stockLevel: "high", orders: 184, ordersWindow: "30d",
+            discount: 12, variants: 6, rating: 4.8, ratingCount: 96, published: "12 Jun 2025"
+        },
+
+        {
+            id: "Logitech-9920", name: "Logitech MX Mechanical Mini Keyboard", sku: "Logitech-9920", category: "Accessories", icon: "fa-solid fa-keyboard", status: "Active",
+            price: 120.00, wasPrice: null, stockNum: 12, stockLevel: "low", orders: 41, ordersWindow: "30d",
+            discount: null, variants: 2, rating: 4.5, ratingCount: 38, published: "03 Jul 2025"
+        },
+
+        {
+            id: "JBL-9928", name: "JBL Go 2 Portable Speaker Blue", sku: "JBL-9928", category: "Audio", icon: "fa-solid fa-volume-high", status: "Draft",
+            price: 180.00, wasPrice: null, stockNum: 341, stockLevel: "high", orders: 0, ordersWindow: "30d",
+            discount: null, variants: 3, rating: null, ratingCount: 0, published: "—"
+        },
+
+        {
+            id: "Gopro-9912", name: "GoPro Hero 7 Action Camera", sku: "Gopro-9912", category: "Cameras", icon: "fa-solid fa-camera", status: "Active",
+            price: 45.00, wasPrice: 60.00, stockNum: 0, stockLevel: "out", orders: 212, ordersWindow: "30d",
+            discount: 25, variants: 1, rating: 4.2, ratingCount: 154, published: "22 Feb 2025"
+        },
+
+        {
+            id: "DJI-5006", name: "DJI Air 3 Fly More Combo", sku: "DJI-5006", category: "Drones", icon: "fa-solid fa-plane", status: "Active",
+            price: 120.00, wasPrice: null, stockNum: 32, stockLevel: "low", orders: 63, ordersWindow: "30d",
+            discount: null, variants: 8, rating: 4.9, ratingCount: 71, published: "05 May 2025"
+        },
+
+        {
+            id: "Logitech-5006", name: "Logitech C920 Webcam PRO", sku: "Logitech-5006", category: "Accessories", icon: "fa-solid fa-video", status: "Active",
+            price: 70.00, wasPrice: null, stockNum: 0, stockLevel: "out", orders: 98, ordersWindow: "30d",
+            discount: null, variants: 3, rating: 4.0, ratingCount: 44, published: "18 Jan 2025"
+        },
+
+        {
+            id: "LP1-8821", name: "Thinkplus LP1 Headset Earphones", sku: "LP1-8821", category: "Audio", icon: "fa-solid fa-headphones", status: "Active",
+            price: 240.00, wasPrice: null, stockNum: 76, stockLevel: "high", orders: 29, ordersWindow: "30d",
+            discount: 8, variants: 6, rating: 3.9, ratingCount: 22, published: "29 Jul 2025"
+        },
+
+        {
+            id: "JBL-1019", name: "JBL Charge 5 Portable Bluetooth Speaker", sku: "JBL-1019", category: "Audio", icon: "fa-solid fa-volume-high", status: "Archived",
+            price: 180.00, wasPrice: null, stockNum: 5, stockLevel: "low", orders: 8, ordersWindow: "30d",
+            discount: null, variants: 4, rating: 4.6, ratingCount: 11, published: "14 Nov 2024"
+        },
+
+        {
+            id: "Acer-9829", name: "Acer Aspire 5 Spin 14\" Convertible", sku: "Acer-9829", category: "Laptops", icon: "fa-solid fa-laptop", status: "Active",
+            price: 180.00, wasPrice: null, stockNum: 54, stockLevel: "high", orders: 17, ordersWindow: "30d",
+            discount: null, variants: 2, rating: 4.1, ratingCount: 9, published: "01 Aug 2025"
+        },
+
+        {
+            id: "Sony-4471", name: "Sony WH-1000XM5 Wireless Headphones", sku: "Sony-4471", category: "Audio", icon: "fa-solid fa-headphones", status: "Scheduled",
+            price: 329.00, wasPrice: null, stockNum: 60, stockLevel: "high", orders: 0, ordersWindow: "30d",
+            discount: null, variants: 3, rating: null, ratingCount: 0, published: "02 Sep 2026"
+        },
+    ];
+
+    const selectedIds = new Set();
+
+    function starString(rating) {
+        const full = Math.round(rating);
+        let out = "";
+        for (let i = 1; i <= 5; i++) {
+            out += i <= full ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-solid fa-star dim"></i>';
+        }
+        return out;
+    }
+
+    function renderProducts() {
+        const body = document.getElementById('productBody');
+        body.innerHTML = products.map(p => {
+            const rowClass = p.status === "Draft" ? "row-draft" : p.status === "Scheduled" ? "row-scheduled" : (p.stockLevel === "out" ? "out-of-stock" : "");
+            const checked = selectedIds.has(p.id) ? 'checked' : '';
+
+            const statusClassMap = { Active: "status-active", Draft: "status-draft", Archived: "status-archived", Scheduled: "status-scheduled" };
+            const statusClass = statusClassMap[p.status] || "status-draft";
+
+            let stockLine;
+            if (p.stockLevel === "out") {
+                stockLine = `<div class="d-flex flex-column gap-1">
+                        <span class="stock-info stock-out">Out of stock</span>
+                        <div class="stock-bar out"><i></i></div>
+                      </div>`;
+            } else {
+                const cls = p.stockLevel === "high" ? "stock-high" : "stock-low";
+                stockLine = `<div class="d-flex flex-column gap-1">
+                        <span class="stock-info ${cls}">${p.stockNum} in stock</span>
+                        <div class="stock-bar ${p.stockLevel}"><i></i></div>
+                      </div>`;
+            }
+            const stockOrdersCell = `<div class="stock-orders-cell d-flex flex-column gap-2">${stockLine}<span class="orders-line"><b>${p.orders}</b> orders${p.ordersWindow ? ` · ${p.ordersWindow}` : ''}</span></div>`;
+
+            const priceCell = `<div class="d-flex flex-column gap-1">
+                      <div><span class="price-val">$${p.price.toFixed(2)}</span>${p.wasPrice ? `<span class="price-was">$${p.wasPrice.toFixed(2)}</span>` : ''}</div>
+                      ${p.discount ? `<span class="discount-chip">-${p.discount}%</span>` : ''}
+                    </div>`;
+
+            const ratingInline = p.rating
+                ? `<span class="p-rating-inline d-inline-flex align-items-center gap-1"><i class="fa-solid fa-star"></i>${p.rating}</span>`
+                : `<span class="p-rating-none">No ratings</span>`;
+
+            const nameCell = `
+                    <div class="p-name-cell">
+                      <div class="d-flex align-items-center gap-2 mb-1">
+                        <p class="p-name" title="${p.name}">${p.name}</p>
+                        ${ratingInline}
+                      </div>
+                      <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="sku-txt">${p.sku}</span>
+                        <span class="meta-dot"></span>
+                        <span class="cat-chip">${p.category}</span>
+                        <span class="status-badge ${statusClass} d-inline-flex align-items-center gap-1"><span class="status-dot"></span>${p.status}</span>
+                        <span class="variant-chip">${p.variants} variant${p.variants > 1 ? 's' : ''}</span>
+                      </div>
+                    </div>`;
+
+            return `
+                  <tr class="${rowClass}" data-id="${p.id}">
+                    <td><input type="checkbox" class="p-check" data-id="${p.id}" ${checked}></td>
+                    <td><div class="p-thumb"><i class="${p.icon}"></i></div></td>
+                    <td>${nameCell}</td>
+                    <td>${priceCell}</td>
+                    <td>${stockOrdersCell}</td>
+                    <td><span class="pub-date">${p.published}</span></td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2 justify-content-end">
+                        <button class="btn-view d-inline-flex align-items-center gap-2" data-id="${p.id}"><i class="fa-regular fa-eye"></i> View</button>
+                        <div class="menu-wrap">
+                          <button class="p-menu-btn d-inline-flex align-items-center justify-content-center" data-id="${p.id}"><i class="fa-solid fa-ellipsis"></i></button>
+                          <div class="p-menu-dd" data-menu="${p.id}">
+                            <a href="#" class="d-flex align-items-center gap-2"><i class="fa-regular fa-pen-to-square"></i> Edit</a>
+                            <a href="#" class="d-flex align-items-center gap-2"><i class="fa-regular fa-copy"></i> Duplicate</a>
+                            <a href="#" class="d-flex align-items-center gap-2"><i class="fa-solid fa-box-archive"></i> Archive</a>
+                            <hr>
+                            <a href="#" class="danger d-flex align-items-center gap-2"><i class="fa-regular fa-trash-can"></i> Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>`;
+        }).join('');
+
+        document.getElementById('resultCount').textContent = `${products.length} products`;
+    }
+
+    renderProducts();
+    bindRowEvents();
+    updateBulkBar();
+
+    function bindRowEvents() {
+        document.querySelectorAll('.p-check').forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (this.checked) { selectedIds.add(this.dataset.id); }
+                else { selectedIds.delete(this.dataset.id); }
+                updateBulkBar();
+            });
+        });
+
+        document.querySelectorAll('.p-menu-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const dd = document.querySelector(`.p-menu-dd[data-menu="${this.dataset.id}"]`);
+                const isOpen = dd.classList.contains('show');
+                document.querySelectorAll('.p-menu-dd').forEach(d => d.classList.remove('show'));
+                if (!isOpen) dd.classList.add('show');
+            });
+        });
+    }
+
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.p-menu-dd').forEach(d => d.classList.remove('show'));
+    });
+
+    function updateBulkBar() {
+        const bar = document.getElementById('bulkBar');
+        const count = selectedIds.size;
+        document.getElementById('bulkCount').textContent = count + ' selected';
+        bar.classList.toggle('show', count > 0);
+
+        const selectAll = document.getElementById('selectAllCheckbox');
+        selectAll.checked = count > 0 && count === products.length;
+        selectAll.indeterminate = count > 0 && count < products.length;
+    }
+
+    document.getElementById('selectAllCheckbox').addEventListener('change', function () {
+        if (this.checked) { products.forEach(p => selectedIds.add(p.id)); }
+        else { selectedIds.clear(); }
+        renderProducts();
+        bindRowEvents();
+        updateBulkBar();
+    });
+
+    document.getElementById('bulkClear').addEventListener('click', function () {
+        selectedIds.clear();
+        renderProducts();
+        bindRowEvents();
+        updateBulkBar();
+    });
+
+    // ---------- Tab filtering ----------
+    document.querySelectorAll('.tab-pill').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // ---------- Category / Status filter dropdowns (visual only) ----------
+    function setupFilterDropdown(wrapId, ddId, labelId, defaultLabel) {
+        const wrap = document.getElementById(wrapId);
+        const dd = document.getElementById(ddId);
+        const label = document.getElementById(labelId);
+
+        wrap.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = dd.classList.contains('show');
+            document.querySelectorAll('.filter-dd').forEach(d => d.classList.remove('show'));
+            document.querySelectorAll('.tb-select').forEach(t => t.classList.remove('open'));
+            if (!isOpen) {
+                dd.classList.add('show');
+                wrap.classList.add('open');
+            }
+        });
+
+        dd.querySelectorAll('a').forEach(opt => {
+            opt.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dd.querySelectorAll('a').forEach(a => a.classList.remove('selected'));
+                this.classList.add('selected');
+                const val = this.dataset.val;
+                label.textContent = val.startsWith('All') ? defaultLabel : val;
+                dd.classList.remove('show');
+                wrap.classList.remove('open');
+            });
+        });
+    }
+
+    setupFilterDropdown('categoryFilter', 'categoryDD', 'categoryFilterLabel', 'Category');
+    setupFilterDropdown('statusFilter', 'statusDD', 'statusFilterLabel', 'Status');
+
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.filter-dd').forEach(d => d.classList.remove('show'));
+        document.querySelectorAll('.tb-select').forEach(t => t.classList.remove('open'));
+    });
+</script>
+@endpush

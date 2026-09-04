@@ -96,9 +96,10 @@
         </div>
 
         <div class="card-body px-0 py-3">
+
             <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between d-none" id="bulkBar">
                 <div class="align-content-center">
-                    <span class="me-auto fw-semibold" id="bulkCount">9 selected</span>
+                    <span class="me-auto fw-semibold bulk-count" id="bulkCount"></span>
                 </div>
                 <div class="btn-group ms-auto" role="group" aria-label="Bulk actions">
                     <button class="btn btn-sm btn-dark bulk-archive">
@@ -113,7 +114,6 @@
                     <button class="btn btn-sm btn-link text-white text-decoration-underline" id="bulkClear"> Clear
                     </button>
                 </div>
-
             </div>
 
             <table class="table table-bordered table-hover align-middle mb-0" id="categoryTable">
@@ -334,35 +334,6 @@
                     $toggle.prop('checked', !$toggle.is(':checked'));
                     notify('error', error.responseJSON?.message || 'Failed to update', 'toast');
                 }
-            });
-        });
-
-        $(function() {
-            $('[data-select-all]').each(function() {
-                const $master = $(this);
-                const targetSelector = $master.data('select-all');
-                const $scope = $master.closest('table').length ? $master.closest('table') : $(document);
-                const $bulkBar = $('#bulkBar');
-
-                function updateState() {
-                    const $rows = $scope.find(targetSelector);
-                    const checkedCount = $rows.filter(':checked').length;
-
-                    $master.prop('checked', $rows.length > 0 && checkedCount === $rows.length);
-                    $master.prop('indeterminate', checkedCount > 0 && checkedCount < $rows.length);
-
-                    // Show bulkBar if at least one row is checked, hide if none
-                    $bulkBar.toggleClass('d-none', checkedCount === 0);
-                }
-
-                $master.on('change', function() {
-                    $scope.find(targetSelector).prop('checked', $master.is(':checked'));
-                    updateState();
-                });
-
-                $scope.on('change', targetSelector, updateState);
-
-                updateState();
             });
         });
     </script>

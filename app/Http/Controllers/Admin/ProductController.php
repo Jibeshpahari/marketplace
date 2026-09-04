@@ -40,7 +40,8 @@ class ProductController extends Controller
         ];
 
         $categories = Category::active()->get();
-        return view('admin.product.form', compact('title', 'nav', 'categories'));
+        $notes = [];
+        return view('admin.product.form', compact('title', 'nav', 'categories', 'notes'));
     }
 
 }

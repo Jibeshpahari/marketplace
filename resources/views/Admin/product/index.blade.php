@@ -182,7 +182,7 @@
             {{-- Bulk Select Bar --}}
             <div class="bg-dark text-white rounded-3 mb-3 bulk-bar d-flex justify-conent-between d-none" id="bulkBar">
                 <div class="align-content-center">
-                    <span class="me-auto fw-semibold" id="bulkCount">9 selected</span>
+                    <span class="me-auto fw-semibold bulk-count" id="bulkCount">9 selected</span>
                 </div>
                 <div class="btn-group ms-auto" role="group" aria-label="Bulk actions">
                     <button class="btn btn-sm btn-dark bulk-archive">

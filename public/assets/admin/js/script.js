@@ -6,12 +6,37 @@ $(document).on('click', '[data-pw-toggle-btn]', function () {
 });
 
 
-// jQuery(document).ready(function ($) {
-//     $('[data-select2="tag"]').select2({
-//         allowClear: true,
-//         width: '100%',
-//         placeholder: function () {
-//             return $(this).data('placeholder') || 'Select options';
-//         }
-//     });
-// });
+$(function () {
+    $('[data-select-all]').each(function () {
+        const $master = $(this);
+        const rowSelector = 'tbody ' + $master.data('select-all');
+        const $scope = $master.closest('table');
+        const $bulkBar = $('#bulkBar');
+
+        function updateState() {
+            const $rows = $scope.find(rowSelector);
+            const checkedCount = $rows.filter(':checked').length;
+
+            $master.prop('checked', $rows.length > 0 && checkedCount === $rows.length);
+            $master.prop('indeterminate', checkedCount > 0 && checkedCount < $rows.length);
+
+            $bulkBar.find('.bulk-count').text(`${checkedCount} selected`);
+            $bulkBar.toggleClass('d-none', checkedCount === 0);
+        }
+
+        $master.on('change', function () {
+            $scope.find(rowSelector).prop('checked', $master.is(':checked'));
+            updateState();
+        });
+
+        $scope.on('change', rowSelector, updateState);
+
+        $bulkBar.on('click', '#bulkClear', function () {
+            $scope.find(rowSelector).prop('checked', false);
+            $master.prop('checked', false).prop('indeterminate', false);
+            updateState();
+        });
+
+        updateState();
+    });
+});

@@ -20,17 +20,15 @@
 
     <!-- Favicon set -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/global/images/favicon.ico') }}" />
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/global/images/favicon-32x32.png') }}" />
+    {{-- <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/global/images/favicon-32x32.png') }}" />
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/global/images/favicon-16x16.png') }}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/global/images/apple-touch-icon.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/global/images/apple-touch-icon.png') }}" /> --}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}">
     <!-- Font Awesome 7 -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-     --}}
     <link rel="stylesheet" href="{{ asset('assets/global/css/fontawesome-7.3.1.min.css') }}">
     <!-- Date Time Picker -->
     <link rel="stylesheet" href="{{ asset('assets/global/css/date-time-picker.css') }}">
@@ -38,7 +36,6 @@
     <link rel="stylesheet" href="{{ asset('assets/global/css/select2.min.css') }}">
 
     <!-- jQuery -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
     <script src="{{ asset('assets/global/js/jquery-3.7.1.min.js') }}"></script>
     <!-- WebFont Loader -->
     <script src="{{ asset('assets/admin/js/webfont.min.js') }}"></script>
@@ -68,6 +65,7 @@
     </script>
 
     <!-- App Stylesheets -->
+    <link rel="stylesheet" href="{{ asset('assets/global/css/plugins.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}?v={{ time() }}" />
 
@@ -141,6 +139,7 @@
     <script src="{{ asset('assets/global/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/script.js') }}"></script>
     <script src="{{ asset('assets/global/js/date-time-picker.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/summernote-lite.min.js') }}"></script>
 
     @stack('js')
     @stack('modal')
